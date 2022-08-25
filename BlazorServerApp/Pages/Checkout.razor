@@ -1,0 +1,655 @@
+﻿@page "/checkout"
+
+@inject ICartService cartService
+@inject ILocalStorageService localStore
+@inject AppState appState
+@inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime
+@inject IApiService apiService
+@inject IProfileService ProfileService
+@inject IPaymentService paymentService
+@inject IProfileService ProfileService
+@inject Security security
+@inject IConfiguration Configuration
+
+<div class="container topMargin mb-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <h1 class="mainTitles">CHECKOUT</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row fullHeight">
+            <div class="col-md-8">
+
+                <div class="loginBox loginBoxDeli mb-4 py-4">
+                    @if (orderStatus)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            Order Successful!
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-12">
+                            <h5><b>Delivery Method</b></h5>
+                        </div>
+                        <div class="col-12 mt-2 mb-2">
+                            @*     <RadzenRadioButtonList @bind-Value=@deliveryType TValue="int" Orientation="Orientation.Horizontal" @onclick="DeliveryTypeSelect">
+                                    <Items>
+                                        <RadzenRadioButtonListItem Text="Doorstep Delivery (Within 24hrs)" Value="1" />
+                                        <RadzenRadioButtonListItem Text="Customer Pick Up" Value="2" />
+                                    </Items>
+                                </RadzenRadioButtonList>*@
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <img src="images/Icons/Delivery.png" class="smallIcons" /> <input type="radio" class="form-check-input" name="deliType" checked="@(deliveryType==1)" @onclick="() => DeliveryTypeSelect(1)"> Doorstep Delivery (Within 3/5 Days)
+                                </label>
+                            </div>
+                            <div class="form-check-inline ml-md-5 mt-2 mt-md-0">
+                                <label class="form-check-label">
+                                    <img src="images/Icons/Pickup.png" class="smallIcons" /> <input type="radio" class="form-check-input" name="deliType" checked="@(deliveryType==2)" @onclick="() => DeliveryTypeSelect(2)"> Customer Pick Up
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    @if (deliveryOption > 0)
+                    {
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5><b>Delivery Option</b></h5>
+                                <p class="text-danger mb-0">*Note: If you are under quarantine, please select 'Leave at door/gate' option.</p>
+                            </div>
+                            <div class="col-12 mt-2 mb-2">
+                                @*<RadzenRadioButtonList @bind-Value=@deliveryOption TValue="int" Orientation="Orientation.Horizontal">
+                                        <Items>
+                                            <RadzenRadioButtonListItem Text="Meet at door/gate" Value="2" />
+                                            <RadzenRadioButtonListItem Text="Leave at door/gate (Contactless Delivery)" Value="1" />
+                                        </Items>
+                                    </RadzenRadioButtonList>*@
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <img src="images/Icons/Meet at door.png" class="smallIcons" /> <input type="radio" class="form-check-input" name="deliOption" checked="@(deliveryOption==2)" @onclick="() => DeliveryOptionSelect(2)"> Meet at door/gate
+                                    </label>
+                                </div>
+                                <div class="form-check-inline ml-md-5 mt-2 mt-md-0">
+                                    <label class="form-check-label">
+                                        <img src="images/Icons/Customer.png" class="smallIcons" /> <input type="radio" class="form-check-input" name="deliOption" checked="@(deliveryOption==1)" @onclick="() => DeliveryOptionSelect(1)"> Leave at door/gate (Contactless Delivery)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="loginBox">
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <h5><b>Customer Details</b></h5>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            @if (appState.user == null)
+                            {
+                                <a href="/login/Checkout"><button class="btn checkoutLoginBtns">Login</button></a>
+                                <a href="/register"><button class="btn checkoutLoginBtns">Register</button></a>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="userName">Name<span class="text-danger">*</span></label>
+                                <input type="text" @bind-value="name" disabled=@validated class="form-control checkoutForm" id="userName" placeholder="Enter name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nic">Email<span class="text-danger">*</span></label>
+                                <input type="email" @bind-value="userEmail" disabled=@validated class="form-control checkoutForm" id="userEmail" placeholder="Enter email">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nic">Phone<span class="text-danger">*</span></label>
+                                <input type="text" @bind-value="phone" disabled=@validated class="form-control checkoutForm" id="nic" placeholder="Enter phone">
+                            </div>
+                        </div>
+                    </div>
+                    @if (deliveryType == 1)
+                    {
+                        @if (ShippingAddress != null)
+                        {
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <p class="mb-2">Select an Address</p>
+                                </div>
+
+                                @foreach (var address in ShippingAddress)
+                                {
+                                    <div class="col-12 col-md-3 px-1">
+                                        @if (!validated)
+                                        {
+                                            <div class="addressBox @(selectedAddress == address ? "active" : "")" @onclick="() => SetAddress(address)">
+                                                <p class="mb-0"><i class="fas fa-home"></i> @address.FullAddress</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="addressBox @(selectedAddress == address ? "active" : "")">
+                                                <p class="mb-0"><i class="fas fa-home"></i> @address.FullAddress</p>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                @if (appState.user != null)
+                                {
+                                    <div class="col-12 col-md-3 px-1">
+                                        <NavLink href="/MyShippingAddress/set" class="linkHover">
+                                            <div class="addressBox">
+                                                <p class="mb-0"><i class="fas fa-plus"></i> Add a New Address</p>
+                                            </div>
+                                        </NavLink>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-12 col-md-3 px-1">
+                                        <NavLink href="/login/NewAddress" class="linkHover">
+                                            <div class="addressBox">
+                                                <p class="mb-0"><i class="fas fa-plus"></i> Add a New Address (Login)</p>
+                                            </div>
+                                        </NavLink>
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        <div class="form-group">
+                            <label for="userAddress">Address<span class="text-danger">*</span></label>
+                            <textarea class="form-control checkoutForm" disabled=@validated id="userAddress" placeholder="Address" @bind="address"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="userCity">City<span class="text-danger">*</span></label>
+                                    <input type="text" @bind-value="city" disabled=@validated class="form-control checkoutForm" id="userName" placeholder="Enter city">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="userPostalCode">Country<span class="text-danger">*</span></label>
+                                    <RadzenDropDown AllowClear="true" TValue="string" disabled=@validated FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                                    Placeholder="Select Country *" Data=@countryList TextProperty="CountryName" ValueProperty="CountryCode" Change=@OnCountryChange @bind-Value="country" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="userCity">State / Province<span class="text-danger"></span></label>
+                                    <RadzenDropDown AllowClear="true" TValue="string" disabled=@validated FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                                    Placeholder="Select State / Province *" Data=@stateList TextProperty="StateName" ValueProperty="StateCode" Change=@OnChangeState @bind-Value="province" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="userPostalCode">ZIP Code<span class="text-danger"></span></label>
+                                    <input type="text" @bind-value="postalCode" disabled=@validated class="form-control checkoutForm" id="userPostalCode" placeholder="Enter postal code">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4 mt-4 mt-md-0">
+                <div class="summeryBox">
+                    <h2>Order Summary</h2>
+                    <div class="row">
+                        <div class="col-12 d-flex">
+                            <div class="form-group">
+                                <label for="userName">Coupon Code</label>
+                                <input type="text" @bind-value="coupon" disabled=@validated class="form-control checkoutForm" id="userName" placeholder="Enter coupon code">
+                            </div>
+                            <button class="btn couponBtn" @onclick="AddCoupon"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="col-12">
+                            @if (discountStatus == -1)
+                            {
+                                <p class="text-danger m-0">No Discount!</p>
+                            }
+                            else if (discountStatus == 1)
+                            {
+                                <p class="text-success m-0">Coupon Added!</p>
+                            }
+                        </div>
+                    </div>
+                    <hr />
+                    @if (appState.currRate != null)
+                    {
+                        @if (cartProducts != null)
+                        {
+                            <h5>Total Items: <font class="text-right float-right">@cartService.GetTotalCount()</font></h5>
+                            <h5>Delivery Fee: <font class="text-right float-right">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(@deliveryFee / appState.currRate.BuyingRate, 2))).ToString("N")</font></h5>
+                            <h5>Item Total: <font class="text-right float-right">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(total / appState.currRate.BuyingRate, 2))).ToString("N")</font></h5>
+                            @if (discount > 0)
+                            {
+                                <h5>Discount: <font class="text-right float-right">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(discount / appState.currRate.BuyingRate, 2))).ToString("N")</font></h5>
+                            }
+                            <hr />
+                            <h2><b>Total: <font class="text-right float-right">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(fullTotal / appState.currRate.BuyingRate, 2))).ToString("N")</font></b></h2>
+                        }
+                        else
+                        {
+                            <p>Total Items: <font class="text-right float-right">0</font></p>
+                            <h3>Total: <font class="text-right float-right">$0</font></h3>
+                        }
+                    }
+                    <hr />
+                    <h5><b>Payment Method</b></h5>
+                    @*<RadzenRadioButtonList @bind-Value=@paymentType TValue="int" Orientation="Orientation.Vertical">
+                            <Items>
+                                <RadzenRadioButtonListItem Text="Cash On Delivery" Value="1" />
+                                <RadzenRadioButtonListItem Text="Card Payment" Value="2" />
+                            </Items>
+                        </RadzenRadioButtonList>*@
+                        @*<p><div class="form-check mt-3 pl-0 mb-2">
+                        <label class="form-check-label">
+                            <img src="images/Icons/CashPayments.png" class="smallIcons mr-4" /> <input type="radio" class="form-check-input marginTopRadio" name="pType" checked="@(paymentType==1)" @onclick="() => PaymentSelect(1)"> Cash On Delivery
+                        </label>
+                        </div></p>*@
+                    
+                    <div class="form-check pl-0 mb-3">
+                        <label class="form-check-label">
+                            <img src="images/Icons/CardPayments.png" class="smallIcons mr-4" /> <input type="radio" class="form-check-input marginTopRadio" name="pType" checked="@(paymentType==2)" @onclick="() => PaymentSelect(2)"> Card Payment
+                        </label>
+                    </div>
+                    @* <p class="termsText">
+                           Incase some of the products are out of stock, the respective Sathosa outlet will contact you to get acknowledge such situation and alternative items will be added to your order as per your preference. In case you are not willing to proceed with such alternative arrangements, your order will get cancelled and refund will be processed to your card within 3-5 working days from the cancellation date.
+                           *IPG Aggregator is Bellvantage Pvt Ltd (sme.lk)
+                        </p>*@
+                    <div class="form-check">
+                        <label class="form-check-label termsText">
+                            <input type="checkbox" class="form-check-input" @bind="@agreed"><span class="text-danger">I have read and agree to the website</span> <NavLink href="/termsConditions" class="text-dark">terms and conditions</NavLink><span class="text-danger">*</span>
+                        </label>
+                    </div>
+                    @if (!checkedOut)
+                    {
+                        <button class="btn checkoutBtn w-100 mt-4" @onclick="HandleCheckout">PROCEED TO PAYMENT</button>
+
+                        <p class="text-center mt-2"><NavLink href="@($"/allproducts/-1")" class="redText link">Continue Shopping</NavLink></p>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <img src="images/Loading.gif" width="50" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<CartItem> cartProducts = new List<CartItem>();
+    private List<Product> products;
+    private List<ListOrderDetail> listOrderDetail;
+    private List<Address> ShippingAddress = new List<Address>();
+    private string billingAdd { get; set; } = "";
+    private Address BillingAddress { get; set; }
+    private Address selectedAddress { get; set; }
+    private int selectedOutletId;
+    private string name = "";
+    private string phone = "";
+    private string userEmail = "";
+    private string address = "";
+    private string note = "";
+    private string city = "";
+    private string province = "";
+    private string postalCode = "";
+    private string country = "";
+    private bool orderStatus = false;
+    private int paymentType = 2;
+    private int deliveryType = 1;
+    private int deliveryOption = 2;
+    private string coupon = "";
+    private double total;
+    private double fullTotal;
+    private double discount = 0;
+    private int discountStatus;
+    private double deliveryFee;
+    private double totalWeight = 0;
+    private User user;
+    private RegisterUser userRegister = new RegisterUser();
+    private string response = "";
+    private bool agreed { get; set; } = false;
+    private bool checkedOut { get; set; } = false;
+    private bool validated { get; set; } = false;
+    private string paymentLink { get; set; }
+    private double abhimanaDiscount = 0;
+
+    private List<Country> countryList { get; set; }
+    private List<State> stateList { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        appState.OnChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        appState.OnChange -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            countryList = new List<Country>();
+            countryList = (await apiService.GetCountries()).ToList();
+            selectedOutletId = appState.selectedOutletId;
+            user = await localStore.GetItemAsync<User>("user");
+            SetCart();
+            if (user != null)
+            {
+                var registeruser = Task.Run(async () => await ProfileService.GetCustomer(user.CustomerId));
+                userRegister = registeruser.Result;
+
+                if (userRegister != null)
+                {
+                    name = userRegister.CustomerFirstName + " " + userRegister.CustomerLastName;
+                    phone = userRegister.CustomerMobileNo;
+                    userEmail = userRegister.CustomerEmailAddress;
+                    GetUserAddress(user.CustomerId);
+                }
+
+                cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + user.CustomerId);
+            }
+            else
+            {
+                cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+            }
+
+            if (cartProducts != null)
+                cartService.SetCart(cartProducts);
+            StateHasChanged();
+        }
+    }
+
+    private void Validate()
+    {
+        validated = true;
+    }
+
+    private async void HandleCheckout()
+    {
+        listOrderDetail = cartService.GetCheckoutItems();
+        if (listOrderDetail.Count() > 0)
+        {
+            @*if (total >= 2000)
+                {*@
+            var selectedCountry = "";
+            var selectedProvince = "";
+            if(country != "" && country != String.Empty && country != null)
+            {
+                selectedCountry = countryList.Where(a => a.CountryCode == country).FirstOrDefault().CountryName;                
+            }
+            if(province != "" && province != String.Empty && province != null)
+            {
+                selectedProvince = stateList.Where(a => a.StateCode == province).FirstOrDefault().StateName;               
+            }
+
+            string fullAddress = address + ", " + city + ", " + selectedCountry + ", "+ selectedProvince + ", " + postalCode;
+            if (billingAdd == null || billingAdd == "")
+            {
+                billingAdd = address + ", " + city + " ," + selectedCountry + ", " + selectedProvince + ", " + postalCode;
+            }
+            @*if (deliveryType == 1 && (name == String.Empty || name == "" || name == null || phone == String.Empty || phone == "" || phone == null || userEmail == String.Empty || userEmail == "" || userEmail == null || address == String.Empty || address == "" || address == null || city == String.Empty || city == "" || city == null || country == String.Empty || country == null || province == String.Empty || province == null))
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the data");
+            }*@
+            if (deliveryType == 2 && (name == String.Empty || name == "" || name == null || phone == String.Empty || phone == "" || phone == null || userEmail == String.Empty || userEmail == "" || userEmail == null ))
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the data");
+            }
+            else if (!phone.All(Char.IsDigit))
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid phone number (Should contain only digits)");
+            }
+            else if (!agreed)
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please read and accept the terms and conditions to proceed with your order.");
+            }
+            else
+            {
+                checkedOut = true;
+                CheckoutCart checkoutCart = cartService.GetCheckout(name, phone, fullAddress, billingAdd, paymentType.ToString(), fullTotal, selectedOutletId, deliveryFee, coupon, discount, deliveryType, deliveryOption);
+                await localStore.SetItemAsync("checkout", checkoutCart);
+                await localStore.SetItemAsync("userEmail", userEmail);
+                await localStore.SetItemAsync("orderType", "normal");
+                if (user != null)
+                    response = await apiService.Checkout(checkoutCart, user.CustomerId.ToString());
+                else
+                    response = await apiService.Checkout(checkoutCart, "0");
+
+                var orderId = response.Split(' ')[6];
+                orderId = orderId.Remove(orderId.Length - 1);
+                await localStore.SetItemAsync("orderId", orderId);
+
+                name = "";
+                address = "";
+                city = "";
+                phone = "";
+                userEmail = "";
+                postalCode = "";
+                orderStatus = true;
+
+                if (paymentType == 2)
+                {
+                    if(appState.currType == "LKR")
+                    { 
+                        PaymentSession PaymentResponse = await paymentService.CreateSession(orderId, checkoutCart.TotalAmount, fullAddress);
+                        await localStore.SetItemAsync("paymentIndicator", PaymentResponse.successIndicator);
+
+                        await JSRuntime.InvokeAsync<object>("PaymentGateway", PaymentResponse.SessionId.ToString());
+                        await JSRuntime.InvokeAsync<object>("Checkout.showPaymentPage");
+                        checkedOut = false;
+                    }
+                    else if(appState.currType == "USD")
+                    { 
+                        double USDTotal = Math.Round(Convert.ToDouble(checkoutCart.TotalAmount) / appState.currRate.BuyingRate, 2);
+                        PaymentSession PaymentResponse = await paymentService.CreateSessionUSD(orderId, USDTotal.ToString(), fullAddress);
+                        await localStore.SetItemAsync("paymentIndicator", PaymentResponse.successIndicator);
+
+                        await JSRuntime.InvokeAsync<object>("PaymentGateway", PaymentResponse.SessionId.ToString());
+                        await JSRuntime.InvokeAsync<object>("Checkout.showPaymentPage");
+                        checkedOut = false;
+                    }
+                }
+                else
+                {
+                    NavManager.NavigateTo("/paymentSuccess");
+                    checkedOut = false;
+                }
+            }
+            @*}
+                else
+                {
+                    await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Minimum order amount is Rs.2000!");
+                }*@
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Cart is empty!");
+        }
+    }
+
+    private async void AddCoupon()
+    {
+        if (coupon != null && coupon != "")
+        {
+            double total = cartService.GetTotal();
+            var dis = await apiService.GetDiscount(coupon, total.ToString());
+            if (dis == "0.0")
+            {
+                discountStatus = -1;
+                discount = 0;
+            }
+            else
+            {
+                discountStatus = 1;
+                discount = Convert.ToDouble(dis);
+            }
+            total = cartService.GetTotal() - discount - abhimanaDiscount;
+            fullTotal = total + deliveryFee;
+            StateHasChanged();
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Enter Coupon Code!");
+        }
+    }
+    private async void SetCart()
+    {
+        if (user != null)
+        {
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + user.CustomerId);
+        }
+        else
+        {
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+        }
+
+        if (cartProducts != null)
+        {
+            cartService.SetCart(cartProducts);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+        }
+        else
+        {
+            cartService.EmptyCart();
+            appState.SetCartItemCount(0);
+        }
+        total = cartService.GetTotal();
+        fullTotal = total;
+        totalWeight = cartService.GetTotalWeight();
+        SetDeliveryFee(1);
+        StateHasChanged();
+    }
+
+    private async void GetUserAddress(int customerId)
+    {
+        var customershipping = Task.Run(async () => await ProfileService.ShippingAddress(customerId));
+        var customerBilling = Task.Run(async () => await ProfileService.BillingAddress(customerId));
+        ShippingAddress = customershipping.Result;
+        BillingAddress = customerBilling.Result;
+        if (ShippingAddress.Count() > 0)
+        {
+            SetAddress(ShippingAddress[0]);
+        }
+        if (BillingAddress != null)
+        {
+            billingAdd = BillingAddress.FullAddress + ", " + BillingAddress.AdCity + ", " + " ," + BillingAddress.Country + "," + BillingAddress.PostalCode;
+        }
+    }
+
+    private void SetAddress(Address val)
+    {
+        selectedAddress = val;
+        address = val.FullAddress;
+        postalCode = val.PostalCode.ToString();
+        city = val.AdCity;
+        province = val.Province;
+        country = val.Country;
+        stateList = new List<State>();
+        stateList = countryList.Where(a => a.CountryCode == country).FirstOrDefault<Country>().ListState;
+        province = val.Province;
+        StateHasChanged();
+    }
+
+    private async void SetDeliveryFee(int type)
+    {
+        if (type == 1)
+        {
+            if (country != string.Empty && country != null)
+            {
+                //deliveryFee = await apiService.GetDeliveryFeeNormal("1");
+                deliveryFee = await apiService.GetDeliveryFee(totalWeight, country, province);
+            }
+            fullTotal = total + deliveryFee - discount;
+        }
+        else
+        {
+            deliveryFee = 0;
+            fullTotal = total - discount;
+        }
+        StateHasChanged();
+    }
+
+    private void OnCountryChange()
+    {
+        stateList = new List<State>();
+        province = "";
+        deliveryFee = 0;
+        fullTotal = total - discount;
+        if (country != String.Empty && country != "" && country != null)
+        {
+            stateList = countryList.Where(a => a.CountryCode == country).FirstOrDefault<Country>().ListState;
+        }
+    }
+
+    private void OnChangeState()
+    {
+        SetDeliveryFee(1);
+    }
+
+    private void DeliveryTypeSelect(int val)
+    {
+        deliveryType = val;
+        if (deliveryType == 1)
+        {
+            SetDeliveryFee(1);
+            deliveryOption = 2;
+        }
+        else
+        {
+            SetDeliveryFee(0);
+            deliveryOption = 0;
+        }
+    }
+
+    private void DeliveryOptionSelect(int val)
+    {
+        deliveryOption = val;
+    }
+
+    private void PaymentSelect(int val)
+    {
+        paymentType = val;
+    }
+
+    public async void ClearCart()
+    {
+        if (user != null)
+        {
+            await localStore.RemoveItemAsync("cart-" + user.CustomerId);
+        }
+        else
+        {
+            await localStore.RemoveItemAsync("cart-0");
+        }
+    }
+
+}

@@ -1,0 +1,132 @@
+﻿@page "/motherSriLankaAmbassadors"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Mother Sri Lanka Ambassadors</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1></h1>*@
+                        <h1 class="headingNew">Mother Sri Lanka <span class="redheading" style="color: #8B1E29;">Ambassadors</span></h1>
+                        <p>
+                            The MSL Ambassador Programme was thus launched in 2011, where over 80 business leaders, professionals, academics, sports personalities and entertainers were inducted as MSL Ambassadors to promote the mission of ‘Pride of Sri Lanka’.
+                        </p>
+
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px; font-style:italic">
+                            <li>Abbas Esufally</li>
+                            <li>Ajith De Zoysa</li>
+                            <li>Ajith Nivard Cabral</li>
+                            <li>Ajith Tudawe</li>
+                            <li>Ananda Perera (Dr)</li>
+                            <li>Angelo Wickramasuriya</li>
+                            <li>Armyne Wirasinha</li>
+                            <li>Arthur Senanayake</li>
+                            <li>Asela Gunawardena</li>
+                            <li>Ashroff Omar</li>
+                            <li>Aslam Omar</li>
+                            <li>Asoka Hettigoda</li>
+                            <li>R.L. Fernando</li>
+                            <li>Bandula Padmakumara</li>
+                            <li>Bathiya Jayakodi</li>
+                            <li>P. Siriwardena</li>
+                            <li>Chanaka Wickramasuriya</li>
+                            <li>Chandra Mohotti</li>
+                            <li>Cholani Weebadde (Dr)</li>
+                            <li>Dinal Peiris</li>
+                            <li>Duleendra Fernando</li>
+                            <li>Fouzal Hameed</li>
+                            <li>K. Dharmadasa (Late)</li>
+                            <li>Hans Wijesuriya (Dr)</li>
+                            <li>Hatim Akbarally</li>
+                            <li>Hemaka Amarasuriya</li>
+                            <li>Hemantha Perera (Dr)</li>
+                            <li>Hiran Cooray</li>
+                            <li>Hussain Esufally</li>
+                            <li>Jayampathi Bandaranayake</li>
+                            <li>Jayantha Sittampalam</li>
+                            <li>Jeewaka Edirisinghe</li>
+                            <li>Jit Warnakulasuriya</li>
+                            <li>Kalyani Guruge (Dr)</li>
+                            <li>Kimali Fernando</li>
+                            <li>Kshanika Hirimburegama (Prof)</li>
+                            <li>Kumar Sangakkara</li>
+                            <li>C.R. Wijetunga</li>
+                            <li>Lakith Peiris</li>
+                            <li>Lal Kurukulasuriya</li>
+                            <li>Lalith De Mel</li>
+                            <li>Mahendra Amarasuriya</li>
+                            <li>Manju Hattotuwa</li>
+                            <li>Mohamed Saheed</li>
+                            <li>Muttaih Muralitharan</li>
+                            <li>Nayana Dehigama</li>
+                            <li>Nirmal Madanayake</li>
+                            <li>Prabode Weebadde</li>
+                            <li>Priyath B Wickrama</li>
+                            <li>Ranjith Pandithage</li>
+                            <li>Ravi Dias</li>
+                            <li>Ravindra Randeniya</li>
+                            <li>Rohan Fernando (Dr)</li>
+                            <li>Rohan Masakorala</li>
+                            <li>Rohini Nanayakkara</li>
+                            <li>Roshan Mahanama</li>
+                            <li>Samantha Kumarasinghe</li>
+                            <li>Sanjeev Gardiner</li>
+                            <li>Santhush Weeraman</li>
+                            <li>Sarath Amunugama (Dr)</li>
+                            <li>Sarath Kotelawela</li>
+                            <li>Sena Yaddehige (Dr)</li>
+                            <li>Senaka Dharmatilleke (Dr)</li>
+                            <li>Shalin Balasuriya</li>
+                            <li>Shiwantha Dias</li>
+                            <li>Siromi Wickramasinghe</li>
+                            <li>Sohli E Captain</li>
+                            <li>Sumal Perera</li>
+                            <li>Sunil Jayantha Navarathne</li>
+                            <li>T B Ekanayake</li>
+                            <li>Tharaka Ranwala</li>
+                            <li>Tilak De Soysa</li>
+                            <li>Vasantha Kumar</li>
+                            <li>Veranja Karunarathne (Prof.)</li>
+                            <li>W A Nalini</li>
+                            <li>W B Ganagala</li>
+                            <li>W D Luxman (Prof)</li>
+                            <li>W K H Wegapitiya</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

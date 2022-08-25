@@ -1,0 +1,405 @@
+﻿@page "/"
+@namespace BlazorServerApp.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mother Sri Lanka is the story of how the people of one  resilient island nation in the Indian Ocean tell their family of twenty million to hold their heads high in pride, believing in themselves.">
+    <title>Mother Sri Lanka</title>
+    <base href="~/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/default.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/owl.carousel.js"></script>
+    <script src="js/owl.autoplay.js"></script>
+    <script src="_framework/blazor.server.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <script>
+        Blazor.defaultReconnectionHandler._reconnectCallback = function (d) {
+            document.location.reload();
+        }
+    </script>
+    <script>
+        function OnScrollEvent() {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+        }
+        window.ScrollButton = () => {
+            $(document).scroll(function () {
+                var $nav = $(".btnTop");
+                $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+            });
+        }
+
+        window.NavBar = () => {
+            @*$(function () {*@
+                $(".navbarFixedTop").removeClass("scrolled");
+                $(document).scroll(function () {
+                    var $nav = $(".navbarFixedTop");
+                    $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+                });
+            @*});*@
+        }
+        window.NavBarFixed = () => {
+            $(".navbarFixedTop").addClass("scrolled");
+            @*$(function () {*@
+                $(document).scroll(function () {
+                    $(".navbarFixedTop").addClass("scrolled");
+                });
+            @*})*@
+        }
+
+
+        window.setTitle = (title, description) => {
+            document.title = title;
+            document.querySelector('meta[name="description"]').setAttribute("content", description);
+        }
+
+        window.Privacy = () => {
+            $(document).ready(function () {
+                $('.paraHide').css('display', 'block');
+                $('.paraHide').hide();
+                $(".buttonPart").click(function () {
+                    if ($(this).hasClass("shown")) {
+                        $(this).removeClass("shown");
+                        $('.paraHide').slideUp();
+                        $(this).parent().find(".toggleIcon").html("+");
+                    }
+                    else {
+                        $(".buttonPart").removeClass("shown");
+                        $(this).addClass("shown")
+                        $('.paraHide').slideUp();
+                        $(".toggleIcon").html("+");
+                        $(this).parent().find(".paraHide").slideDown();
+                        $(this).parent().find(".toggleIcon").html("-");
+                    }
+                });
+            });
+        }
+
+        window.ClickImage = () => {
+            $(document).on("click",".clickImg",function () {
+                $("#modalImage").attr("src",$(this).attr("src"));
+            });
+        }
+
+        window.Star = () => {
+            $(".star2").hover(function () {
+                $(".star1").addClass("starHover");
+            }, function () {
+                $(".star1").removeClass("starHover");
+            });
+
+            $(".star3").hover(function () {
+                $(".star1").addClass("starHover");
+                $(".star2").addClass("starHover");
+            }, function () {
+                $(".star1").removeClass("starHover");
+                $(".star2").removeClass("starHover");
+            });
+
+            $(".star4").hover(function () {
+                $(".star1").addClass("starHover");
+                $(".star2").addClass("starHover");
+                $(".star3").addClass("starHover");
+            }, function () {
+                $(".star1").removeClass("starHover");
+                $(".star2").removeClass("starHover");
+                $(".star3").removeClass("starHover");
+            });
+
+            $(".star5").hover(function () {
+                $(".star1").addClass("starHover");
+                $(".star2").addClass("starHover");
+                $(".star3").addClass("starHover");
+                $(".star4").addClass("starHover");
+            }, function () {
+                $(".star1").removeClass("starHover");
+                $(".star2").removeClass("starHover");
+                $(".star3").removeClass("starHover");
+                $(".star4").removeClass("starHover");
+            });
+        }
+    </script>
+    <script>
+        window.LatestPost = () => {
+            $(document).ready(function () {
+                var c = 0;
+                $('#blog-archives1853380219 a.open_collapse').on('click', function (e) {
+                    e.preventDefault();
+                    var $this = jQuery(this);
+                    var $collapse = $this.closest('.blog-archive').find('.collapse');
+
+                    if ($collapse.length > 0) {
+                        $collapse.collapse('toggle');
+                    } else {
+                        var $collapse = $this.closest('.blog-archive').find('.in');
+                        $collapse.collapse('toggle');
+                        $collapse.addClass("collapse");
+                    }
+
+                    if ($this.data("clickEvent") == "open") {
+                        $this.data("clickEvent", "close");
+                        $this.html('<i class="topIcons fas fa-plus-circle"></i>');
+                    } else {
+                        $this.data("clickEvent", "open");
+                        $this.html('<i class="topIcons fas fa-minus-circle"></i>');
+                    }
+
+
+                });
+            });
+        }
+    </script>
+    <script>
+        window.CardImageHeader = () => {
+            setTimeout(function () {
+                $('.productSlider').owlCarousel({
+                    loop: true,
+                    margin: 15,
+                    nav: true,
+                    autoplay: true,
+                    autoplayHoverPause: true,
+                    responsive: {
+                        0: {
+                            items: 2
+                        },
+                        600: {
+                            items: 3
+                        },
+                        1000: {
+                            items: 4
+                        }
+                    }
+                })
+            }, 1000);
+
+            setTimeout(function () {
+                $('.productSlider2').owlCarousel({
+                    loop: true,
+                    margin: 15,
+                    nav: true,
+                    autoplay: true,
+                    autoplayHoverPause: true,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        600: {
+                            items: 2
+                        },
+                        1000: {
+                            items: 2
+                        }
+                    }
+                })
+            }, 1000);
+
+            setTimeout(function () {
+                $('.mainSlider').owlCarousel({
+                    loop: true,
+                    margin: 0,
+                    nav: true,
+                    dots: true,
+                    autoplay: true,
+                    autoplayHoverPause: true,
+                    autoplayTimeout: 5000,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        600: {
+                            items: 1
+                        },
+                        1000: {
+                            items: 1
+                        }
+                    }
+                })
+            }, 1000);
+
+        }
+        window.CategorySlider = () => {
+            setTimeout(function () {
+                $('.productSlider3').owlCarousel({
+                    loop: true,
+                    margin: 2,
+                    nav: true,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        600: {
+                            items: 3
+                        },
+                        1000: {
+                            items: 3
+                        }
+                    }
+                })
+            }, 1000);
+        }
+        window.ProjectSlider = () => {
+            setTimeout(function () {
+                $('.productSlider4').owlCarousel({
+                    loop: true,
+                    margin: 2,
+                    nav: true,
+                    autoplay: false,
+                    autoplayHoverPause: true,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        600: {
+                            items: 1
+                        },
+                        1000: {
+                            items: 1
+                        }
+                    }
+                })
+            }, 1000);
+        }
+        window.ErrorAlert = (icon, title, msg) => {
+            Swal.fire({
+                icon: icon,
+                title: title,
+                text: msg,
+            })
+        }
+    </script>
+    <script>
+        window.CategoryBtnClickMobile = () => {
+            var shownStatus = false;
+            $(document).on("click", ".categoryBtn", function () {
+                if ($(this).attr('id') != "catViewBtn") {
+  @*                      $(".categoryBtn").removeClass("active");
+                        $(this).addClass("active");
+*@
+                    if (screen.width < 576) {
+                        //shownStatus = true;
+                        //$("#catViewBtn").click();
+                        shownStatus = false;
+                        $("#categoryContainer").slideUp();
+                    }
+                }
+            });
+            $(document).on("click", "#catViewBtn", function () {
+                //$(this).removeClass("active");
+                if ($("#categoryContainer").hasClass("d-none")) {
+                    $("#categoryContainer").hide();
+                    $("#categoryContainer").removeClass("d-none");
+                }
+                if (shownStatus == true) {
+                    $("#categoryContainer").slideUp();
+                    shownStatus = false;
+                }
+                else {
+                    $("#categoryContainer").slideDown();
+                    shownStatus = true;
+                }
+            });
+        }
+
+        var shownStatusNav = false;
+        window.NavToggle = () => {
+            $(document).on("click", ".navDropBtn", function () {
+                //$(this).removeClass("active");
+                if ($(".navbarMain").hasClass("d-none")) {
+                    shownStatusNav = false;
+                    $(".navbarMain").hide();
+                    $(".navbarMain").removeClass("d-none");
+                }
+                if (shownStatusNav == true) {
+                    $(".navbarMain").slideUp();
+                    shownStatusNav = false;
+                }
+                else {
+                    $(".navbarMain").slideDown();
+                    shownStatusNav = true;
+                }
+
+            });
+            $(document).on("click", ".nav-itemMobile", function () {
+                if (screen.width < 769) {
+                    $(".navbarMain").slideUp();
+                    shownStatusNav = false;
+                }
+            });
+        }
+    </script>
+    <script>
+        window.dropdown = () => {
+@*            $('.dropdown').hover(function () {
+                $(this).find('.dropdown-menu').addClass('show');
+            });
+            $('.dropdown-menu').mouseout(function () {
+                $(this).removeClass('show');
+            });*@
+        }
+    </script>
+    <script src="https://cbcmpgs.gateway.mastercard.com/checkout/version/61/checkout.js" data-error="errorCallback" data-cancel="cancelCallback" data-afterRedirect="Checkout.restoreFormFields"></script>
+    <script>
+        function errorCallback(error) {
+            console.log(JSON.stringify(error));
+        }
+        function cancelCallback() {
+            console.log('Payment cancelled');
+        }
+
+        window.PaymentGateway = (sessionId) => {
+            Checkout.configure({
+                session: {
+                    id: sessionId
+                },
+                interaction: {
+                    merchant: {
+                        name: 'BELLVANTGLKR',
+                        address: {
+                            line1: '200 Sample St',
+                            line2: '1234 Example Town'
+                        }
+                    }
+                }
+            });
+
+        }
+    </script>
+
+</body>
+</html>

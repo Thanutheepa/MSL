@@ -1,0 +1,118 @@
+﻿@page "/sendEmails"
+@using System.Net.Mail;
+@inject ISendEmails sendEmails
+@inject ICartService ItemsInCart
+@using System.Text
+@inject ILocalStorageService localStore
+@inject IProfileService ProfileService
+
+<h4>Sub total: @totalPrice</h4>
+@if (billingAddress != null)
+{
+    <h4>Billing Address: @billingAddress.FullAddress</h4>
+    @*<h4>Shipping Address: @ShippingAddress[0].District</h4>*@
+}
+
+<h2>Items You Orderd</h2>
+
+@*<h2>User Name:
+    @userDetail.
+    </h2>*@
+
+
+
+<button @onclick="sendingEmail">Send Email</button>
+<span>@screenMessage</span>
+<br />
+
+@code{
+    private string ResponseMessage { get; set; } = "";
+    private string receiverEmail = "thisshandharmakeerthi@gmail.com"; //userDetail.UserNme;
+    private string content = "<h2>Email Sending From Me</h2> <p>This is the body</p>";
+    private string screenMessage { get; set; } = "";
+    private User userDetail = new User();
+
+    private double totalPrice { get; set; }
+    @*private List<ListOrderDetail> allItems;*@
+private List<CartItem> allItems;
+private StringBuilder message = new StringBuilder();
+private int customerId;
+private int orderId =100112;
+private Address billingAddress = new Address();
+private Address ShippingAddress = new Address();
+
+private string customerName = "C name";
+private string OrderId = "Order ID";
+private string TotalPrice { get; set; } = "2000";
+private string today = "2021-10-18";
+private string customerAddress = "37-A, Kotigamgoda, Padukka.";
+private string paymentType = "1";
+
+
+public void sendingEmail()
+{
+    //message = sendEmails.GetEmailBody(allItems, "", "", customerName, TotalPrice, today, OrderId, "", customerAddress, paymentType);
+    //screenMessage = sendEmails.SendEmail("djayalath@outlook.com", ResponseMessage, message, customerName);
+}
+
+protected override void OnInitialized()
+{
+    base.OnInitialized();
+
+    totalPrice = ItemsInCart.GetTotal();
+    allItems = ItemsInCart.GetCartProducts();
+
+    @*message = sendEmails.GetEmailBody(allItems, billingAddress, orderId);*@
+
+
+        @*message.Append("<h1> Total Price:" + totalPrice.ToString() + "</h1>");*@
+
+        var customerbilling = Task.Run(async () => await ProfileService.BillingAddress(customerId));
+        billingAddress = customerbilling.Result;
+        var customershipping = Task.Run(async () => await ProfileService.ShippingAddress(customerId));
+
+      @*  ShippingAddress = customershipping.Result[0];*@
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            userDetail = await localStore.GetItemAsync<User>("user");
+            //cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart");
+            //if(cartProducts != null)
+            //cartService.SetCart(cartProducts);
+            customerId = userDetail.CustomerId;
+           @* StateHasChanged();*@
+        }
+    }
+
+    @*private void sendEmail()
+        {
+            try {
+                using (MailMessage mail = new MailMessage() )
+                { mail.From = new MailAddress("2018cs039@stu.ucsc.cmb.ac.lk");
+                    mail.To.Add(receiverEmail);
+                    mail.Subject = "Sample Email Subject";
+                    mail.Body = "<h2>Email Sending From Me</h2> <p>This is the body</p>";
+                    mail.IsBodyHtml = true;
+
+                    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                    {
+                        smtp.Credentials = new System.Net.NetworkCredential("2018cs039@stu.ucsc.cmb.ac.lk", "$0112757726$");
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                        Message = "mail sent";
+                    }
+                }
+            }
+
+            catch(Exception ex)
+            {
+                Message = ex.Message;
+                throw;
+            }
+        }*@
+
+
+}

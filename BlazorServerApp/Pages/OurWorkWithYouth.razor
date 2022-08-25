@@ -1,0 +1,78 @@
+﻿@page "/OurWorkWithYouth"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Our Work with Youth</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1>Our Work With Youth</h1>*@
+                        <h1 class="headingNew">Our Work With <span class="redheading" style="color: #8B1E29;">Youth</span></h1>
+                        <h3 style="text-align:left">Reconciliation and Peace Building Projects</h3>
+                        <h3 style="text-align:left">North – South Friendship Bridge</h3>
+                        <p>
+                            The objective of this project is to develop trust, build new friendships and heal hearts and minds to stand strong as one nation
+                            embracing change with renewed hope. We had to build faith in mutual understanding, friendship and bonding that breaks through
+                            social stigma and racial barriers to enjoy happiness that only comes with lasting peace.
+                        </p>
+
+                        <div class="img-Container">
+                            <img class="img-fluid" src="images/OurWorkWithYouth/1-5-768x341.jpg" />
+                            <div class="bottomleftimg container-fluid">The first 5 day camp was held in 2011 to coincide with the World Children’s Day on October 1st at a residential training facility in the suburbs of Colombo. This camp brought together 200 youth from the directly war effected areas such as Kilinochchi with 200 children from the Western Province.</div>
+                        </div>
+
+                        <div class="img-Container">
+                            <img class="img-fluid" src="images/OurWorkWithYouth/1-4-768x170.jpg" />
+                            <div id="interfaith" class="bottomleftimg container-fluid">The second such camp was held to celebrate Deepavali in October 2014. This was also the first time that the services of the famous ‘Yal Devi’ train recommenced after a lapse of over 30 years due to the war. Hence, 200 youth consisting of school children and university students, teachers and MSL officers took a trip on the ‘Yal Devi’ to visit the brothers and sisters of the war-affected areas. A four day camp for this group of 400 people was held in Jaffna in the Northern province.</div>
+                        </div>
+
+                        <h3 style="text-align:left">Interfaith Dialog</h3>
+                        <p>Celebrating freedom, initiating reconciliation and strengthening values of religious expression was the platform we built on to promote inter-ethnic harmonious co-existence within the country.</p>
+                        <p>The programs called “Interfaith Music Festivals” are designed to create acceptance, impart knowledge, instill respect and promote tolerance in valuing each religion and its religious observances for the goodwill of mankind.  The program would also celebrate the long sought-after peace in our country.</p>
+                        <p>In celebration of the 64th Independence Day of the country, Mother Sri Lanka is proud to have organized Asia’s largest Inter Faith Music Festival in 2012, named “Celebrate Freedom”.  Through this event, MSL brought together over 5000 children from all 9 provinces in the country to participate in a song and dance festival which represented all 4 religions, namely Buddhism, Christianity, Islam and Hinduism.</p>
+
+                        <img class="img-fluid d-block mb-2" src="images/OurWorkWithYouth/1-3-768x170.jpg" />
+                        <img class="img-fluid d-block" src="images/OurWorkWithYouth/2-3-768x170.jpg" />
+
+                        <h3 style="text-align:left">Mother Sri Lanka Pirivena Program</h3>
+                        <img class="img-fluid d-block pb-2" src="images/OurWorkWithYouth/2012-06-14-17-1-22-56-1.jpg" />
+                        <p>MSL was soon to realize the need for the participation of religious leaders in spreading the message of responsible citizenship.  In line with the same objective of inter faith dialog and peaceful reconciliation, the Mother Sri Lanka movement launched a project among 750 Buddhist pirivena education institutions in 2011, with 9 specific activities designed by the monks themselves to be implemented in the institutions.  The MSL is currently working on expanding the program to Catholic institutions and have also started discussions with Muslim and Hindu educational institutions.</p>
+                        <img class="img-fluid d-block mb-2" src="images/OurWorkWithYouth/1-6-768x170.jpg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

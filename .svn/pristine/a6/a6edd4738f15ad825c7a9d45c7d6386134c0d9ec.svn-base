@@ -1,0 +1,110 @@
+﻿@page "/AboutUs"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                        <li class="breadcrumb-item active" aria-current="page">About Us</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">About <span class="redheading" style="color: #8B1E29;">Us</span></h1>
+                        <h3 style="text-align:left">The Mother Sri Lanka Story</h3>
+                        <p>
+                            Mother Sri Lanka is the story of how the people of one resilient island nation in the Indian Ocean did not allow thirty long years
+                            of terrorism drown their hopes and dreams for their motherland. It is the story of a small group of patriotic citizens who wanted
+                            to tell their family of twenty million to hold their heads high in pride, believing in themselves. The story of how a country can
+                            overcome bloodshed and rise from the ashes of war, learning from the mistakes of the past, uniting under one flag, as one nation,
+                            as one people who believe in their country.
+                        </p>
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>Our approach is holistic. We touch the lives of our future generation from pre-school, through school to university.  Our aim is to make them believe in themselves.</li>
+                            <li>We believe that economic empowerment is a great equalizer. Hence, our work with urban and rural communities covers gender equality, livelihood development</li>
+                            <li>We have a bottom up approach starting at grass root level with a network across all 25 districts of the country</li>
+                            <li>We operate with minimum overheads and hence giving the maximum returns to our partners</li>
+                            <li>An organization that is transparent in our work and our finances with an unblemished track record since 2008</li>
+                            <li>It is a unique movement started by a group of professionals from private & public sectors</li>
+                            <li>We urge you to join us on this journey of love, towards building a better Sri Lanka</li>
+                        </ul>
+                        <p>
+                            The Mother Sri Lanka (MSL) movement was started in 2008 by the Mother Sri Lanka Trust which is a non-profit, independent charity using a unique operational model of private funding, public sector infrastructure and managed by a team of professionals from all sectors.  The movement is managed by a group of patriotic, dedicated passionate individuals from the public, private and non-profit sectors.  In 2016, the Board and the Management of the Mother Sri Lanka movement expanded its’ scope and established the Mother Lanka Foundation which is set up as a non-profit organisation responsible for the movements programs and activities.
+                        </p>
+                        <p>
+                            The foundation and the trust carries out work under the brand name “Mother ஸ்ரீ ලංකා” (read as Mother Sri Lanka, and mean to represent the Motherland) with the logo/name written in all three languages and the tagline “My family of twenty million people” has being designed to resemble a movement for everyone from all ethnic and religious groups to work in unity to build a successful future for all.
+                        </p>
+
+                        @*vision*@
+                        <h3 style="text-align:left">Our Vision</h3>
+                        <p>
+                            Our dream is to see the people of this land believe in themselves and hold their heads high as citizens of one proud nation.
+                        </p>
+
+                        @*Our Mission *@
+                        <h3 style="text-align:left">Our Mission </h3>
+                        <p>
+                            To be a catalyst to generate “Good Citizenry” behavior patterns among Sri Lankans through their Spiritual, Educational, Socio-Economic and Cultural development.
+                        </p>
+
+                        @*Our Focus *@
+                        <h3 style="text-align:left">Our Focus </h3>
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>To inculcate and promote ‘responsible citizenry behavior’ that supports nation building</li>
+                            <li>To Empower Sri Lankans by engaging in livelihood development activities</li>
+                            <li>To rekindle the pride of being Sri Lankan</li>
+                            <li>To heal the hearts and minds disillusioned due to the war and instead, build reconciliation and peaceful co-existence among all ethnicities in the country</li>
+                            <li>To promote the overall welfare of children and engage in the promotion of their rights, benefits, education, health and other related issues</li>
+                            <li>To promote gender equality and the empowerment of women thereby enabling them to play a positive role in nation building</li>
+                        </ul>
+
+                        @*Our Values*@
+                        <h3 style="text-align:left">Our Values</h3>
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li><strong>P</strong>roud to be Sri Lankan</li>
+                            <li><strong>R</strong>esponsible citizens</li>
+                            <li><strong>I</strong>ntegrity</li>
+                            <li><strong>D</strong>iversity</li>
+                            <li><strong>E</strong>thical</li>
+                        </ul>
+
+                        @*Our Motto*@
+                        <h3 style="text-align:left">Our Motto</h3>
+                        <p>
+                            “I must change for my country to change”
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

@@ -1,0 +1,507 @@
+﻿@page "/MyShippingAddress/{status}"
+
+@using System.Text.RegularExpressions;
+@inject ILocalStorageService localStore
+@inject AppState appState
+@inject IProfileService ProfileService
+@inject NotificationService NotificationService
+@inject NavigationManager NavManager
+@inject IApiService apiService
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Shipping Address</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row mt-5 mt-md-4 my-2">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 centerCol">
+            <div class="loginBox">
+                <h2 class="mainTitles" style="margin-bottom:30px">Shipping Address</h2>
+
+                @if (resultstatus == 0)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <p>@errorMessage</p>
+                        <p>@emailerror</p>
+                        <p>@phonenoerror </p>
+                        <p>@landnoerror</p>
+                    </div>
+                }
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="adno">Address No</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="AdNo" class="form-control" id="adno" placeholder="Address Number *" required></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="adroad">Road</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="AdRoad" class="form-control" id="adroad" placeholder="Road" required></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="adcity">City</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="AdCity" class="form-control" id="city" placeholder="City *" required></div>
+                    </div>
+                </div>
+                @*<div class="form-group">
+                        <label for="fulladdress">Full Address</label>
+                        <input type="text" @bind-value="FullAddress" class="form-control" id="fulladdress" placeholder="Full Address" required>
+                    </div>*@
+                @*<div class="form-group">
+                        <label for="province">Province</label>
+                        <input type="text" @bind-value="Province" class="form-control" id="province" placeholder="Province" minlength="8" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" @bind-value="Country" class="form-control" id="country" placeholder="Country" required>
+                    </div>*@
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="country">Country</label></div>
+                        <div class="col-md-8">
+                            @* <input class="form-control" list="countrybrowsers" name="countrybrowser" id="countrybrowser" placeholder="Country *" @bind-value="Country">
+                                <datalist id="countrybrowsers">
+                                    @foreach (var country in countires)
+                                    {
+                                        <option value=@country>@country</option>
+                                    }
+                                </datalist>*@
+                            <RadzenDropDown AllowClear="true" TValue="string" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                            Placeholder="Select Country *" Data=@countryList TextProperty="CountryName" ValueProperty="CountryCode" @bind-Value="Country" Change=@OnCountryChange />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="province">State / Province</label></div>
+                        <div class="col-md-8">
+                            <RadzenDropDown AllowClear="true" TValue="string" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                            Placeholder="State / Province *" Data=@stateList TextProperty="StateName" ValueProperty="StateCode" @bind-Value="Province" />
+                            @* <datalist id="browsers">
+                                    @foreach (var province in provinces)
+                                    {
+                                        <option value=@province>@province</option>
+                                    }
+                                </datalist>*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="mobile">Mobile Number</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="MobileNo" class="form-control" id="mobile" placeholder="Mobile Number *" required></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="land">Land Number</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="LandNo" class="form-control" id="land" placeholder="Land Number"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="email">Email</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="EmailAddress" class="form-control" id="email" placeholder="Email Address *" required></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="pcode">ZIP Code</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="PostalCode" class="form-control" id="pcode" placeholder="ZIP Code *" required></div>
+                    </div>
+                </div>
+
+
+                @if (Status == "set")
+                {
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col-8"><button type="submit" class="btn checkoutBtn w-100" @onclick="HandleSet">Set Shipping Address</button></div>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8"><button type="submit" class="btn checkoutBtn w-100" @onclick="HandleEdit">Edit Shipping Address</button></div>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Status { get; set; }
+
+    private int Id;
+    private int CustomerId;
+    private string AdNo;
+    private string AdRoad;
+    private string AdCity;
+    private string Province = "";
+    private string Country = "";
+    private string MobileNo = "";
+    private string LandNo = "";
+    private string EmailAddress;
+    private string PostalCode = "";
+    private string Longitude = "";
+    private string Latitude = "";
+    private string UserName;
+    private string FullAddress;
+    private int District = 0;
+    private int billingid;
+    private int result;
+    int resultstatus = 1;
+    private string errorMessage = "";
+    private string emailerror = "";
+    private string phonenoerror = "";
+    private string landnoerror = "";
+
+    private List<Country> countryList { get; set; }
+    private List<State> stateList { get; set; }
+    private Address setShippingAddress = new Address();
+    private List<Address> getShippingAddress = new List<Address>();
+
+    List<string> countires = new List<string>() { "SriLanka", "Australia", "United Kingdom", "New Zealand" };
+    List<string> provinces = new List<string>() { "Western province", "Central province", "Southern province", "Uva province", "Sabaragamuwa province", "North western province", "North central province", "Northern province", "eastern province" };
+
+    public User user { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            countryList = new List<Country>();
+            countryList = (await apiService.GetCountries()).ToList();
+            user = await localStore.GetItemAsync<User>("user");
+            appState.SetUser(user);
+            CustomerId = appState.user.CustomerId;
+            UserName = appState.user.UserName;
+            EmailAddress = appState.user.UserName;
+
+            if (Status != "set")
+            {
+                var customershipping = Task.Run(async () => await ProfileService.GetCustomerShipping(CustomerId));
+                getShippingAddress = customershipping.Result;
+
+                foreach (var shippingaddress in getShippingAddress)
+                {
+                    if (shippingaddress.Id == Convert.ToInt32(Status))
+                    {
+                        Id = shippingaddress.Id;
+                        AdNo = shippingaddress.AdNo;
+                        AdCity = shippingaddress.AdCity;
+                        AdRoad = shippingaddress.AdRoad;
+                        Province = shippingaddress.Province;
+                        Country = shippingaddress.Country;
+                        MobileNo = shippingaddress.MobileNo;
+                        if (shippingaddress.LandNo == "0")
+                        {
+                            LandNo = "";
+                        }
+                        else
+                        {
+                            LandNo = "0" + shippingaddress.LandNo;
+                        }
+
+                        PostalCode = shippingaddress.PostalCode.ToString();
+
+                        if (PostalCode == "0")
+                        {
+                            PostalCode = "";
+                        }
+
+                        FullAddress = shippingaddress.FullAddress;
+                    }
+                }
+
+            }
+            //  CustomerId = appState.user.CustomerId;
+            //  UserName = appState.user.UserName;
+            //  EmailAddress = appState.user.UserName;
+            StateHasChanged();
+        }
+    }
+
+    protected override async void OnInitialized()
+    {
+        base.OnInitialized();
+
+        //  user = login.GetUsers();
+        //user = await localStore.GetItemAsync<User>("user");
+        //appState.SetUser(user);
+    }
+
+    protected void HandleSet()
+    {
+        resultstatus = 1;
+        errorMessage = "";
+        emailerror = "";
+        phonenoerror = "";
+        landnoerror = "";
+
+        if (AdNo == string.Empty || AdNo == null || AdCity == string.Empty || AdCity == null || Country == string.Empty || Country == null || MobileNo == string.Empty || MobileNo == null || EmailAddress == string.Empty || EmailAddress == null || PostalCode == string.Empty || PostalCode == null || Province == string.Empty || Province == null)
+        {
+            resultstatus = 0;
+            errorMessage = "Fill the all the required fields";
+        }
+
+        else
+        {
+            if (EmailValidate() == false)
+            {
+                resultstatus = 0;
+                emailerror = "Email address is invalid!";
+                EmailAddress = "";
+            }
+
+            if (LandNo != string.Empty)
+            {
+                if (LandPhoneValidate() == false)
+                {
+                    resultstatus = 0;
+                    landnoerror = "Land phone number is invalid!";
+                    LandNo = "";
+                }
+            }
+
+            if (PhoneValidate() == false)
+            {
+                resultstatus = 0;
+                phonenoerror = "Phone number is invalid!";
+                MobileNo = "";
+            }
+
+            else if (resultstatus == 1)
+            {
+                resultstatus = 1;
+                setShippingAddress.Id = 0;
+                setShippingAddress.CustomerId = CustomerId;
+                setShippingAddress.AdNo = AdNo;
+                setShippingAddress.AdCity = AdCity;
+                setShippingAddress.AdRoad = AdRoad;
+                setShippingAddress.Province = Province;
+                setShippingAddress.Country = Country;
+                setShippingAddress.MobileNo = MobileNo;
+
+                if (LandNo == null)
+                {
+                    LandNo = "";
+                }
+
+                setShippingAddress.LandNo = LandNo;
+                setShippingAddress.EmailAddress = EmailAddress;
+                if (PostalCode == "")
+                {
+                    setShippingAddress.PostalCode = 0;
+                }
+                else
+                {
+                    setShippingAddress.PostalCode = Convert.ToInt32(PostalCode);
+                }
+                setShippingAddress.Longitude = Longitude;
+                setShippingAddress.Latitude = Latitude;
+                setShippingAddress.UserName = UserName;
+                FullAddress = "No " + AdNo + ", " + AdRoad + ", " + AdCity;
+                setShippingAddress.FullAddress = FullAddress;
+                setShippingAddress.District = District;
+
+                var customershipping = Task.Run(async () => await ProfileService.CreateCustomerShipping(setShippingAddress));
+                billingid = customershipping.Result;
+
+                if (billingid > 0)
+                {
+                    NavManager.NavigateTo("/MyAddress");
+                }
+                else
+                {
+                    Id = 0;
+                    AdNo = "";
+                    AdRoad = "";
+                    AdCity = "";
+                    Province = "";
+                    Country = "";
+                    MobileNo = "";
+                    LandNo = "";
+                    PostalCode = "";
+                    Longitude = "";
+                    Latitude = "";
+                    FullAddress = "";
+
+                    resultstatus = 0;
+                    errorMessage = "Something wrong! Please Resubmit";
+                }
+
+            }
+
+        }
+    }
+
+    protected void HandleEdit()
+    {
+        resultstatus = 1;
+        errorMessage = "";
+        emailerror = "";
+        phonenoerror = "";
+        landnoerror = "";
+
+        if (AdNo == string.Empty || AdNo == null || AdRoad == string.Empty || AdRoad == null || AdCity == string.Empty || AdCity == null || Province == string.Empty || Province == null || Country == string.Empty || Country == null || MobileNo == string.Empty || MobileNo == null || EmailAddress == string.Empty || EmailAddress == null)
+        {
+            resultstatus = 0;
+            errorMessage = "Fill the all the required fields";
+        }
+
+        else
+        {
+            if (EmailValidate() == false)
+            {
+                resultstatus = 0;
+                emailerror = "Email address is invalid!";
+                EmailAddress = "";
+            }
+
+            if (LandNo != string.Empty)
+            {
+                if (LandPhoneValidate() == false)
+                {
+                    resultstatus = 0;
+                    landnoerror = "Land phone number is invalid!";
+                    LandNo = "";
+                }
+            }
+
+            if (PhoneValidate() == false)
+            {
+                resultstatus = 0;
+                phonenoerror = "Phone number is invalid!";
+                MobileNo = "";
+            }
+
+            else if (resultstatus == 1)
+            {
+                setShippingAddress.Id = Id;
+                setShippingAddress.CustomerId = CustomerId;
+                setShippingAddress.AdNo = AdNo;
+                setShippingAddress.AdCity = AdCity;
+                setShippingAddress.AdRoad = AdRoad;
+                setShippingAddress.Province = Province;
+                setShippingAddress.Country = Country;
+                setShippingAddress.MobileNo = MobileNo;
+                if (LandNo == null)
+                {
+                    LandNo = "";
+                }
+                setShippingAddress.LandNo = LandNo;
+                setShippingAddress.EmailAddress = EmailAddress;
+
+                if (PostalCode == "")
+                {
+                    setShippingAddress.PostalCode = 0;
+                }
+                else
+                {
+                    setShippingAddress.PostalCode = Convert.ToInt32(PostalCode);
+                }
+
+                setShippingAddress.Longitude = Longitude;
+                setShippingAddress.Latitude = Latitude;
+                setShippingAddress.UserName = UserName;
+                FullAddress = "No " + AdNo + ", " + AdRoad + ", " + AdCity;
+                setShippingAddress.FullAddress = FullAddress;
+                setShippingAddress.District = District;
+
+                var customershipping = Task.Run(async () => await ProfileService.UpdateCustomerShipping(setShippingAddress));
+                result = customershipping.Result;
+
+                NavManager.NavigateTo("/MyAddress");
+
+                if (result == 200)
+                {
+                    NavManager.NavigateTo("/MyAddress");
+                }
+                else
+                {
+                    resultstatus = 0;
+                    errorMessage = "Something wrong! Please Resubmit";
+                }
+            }
+        }
+
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+    private bool EmailValidate()
+    {
+
+        if (Regex.IsMatch(EmailAddress, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    private bool PhoneValidate()
+    {
+        Regex phone = new Regex("[0-9]{10}");
+        if (phone.IsMatch(MobileNo))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool LandPhoneValidate()
+    {
+        Regex phone = new Regex("[0-9]{10}");
+        if (phone.IsMatch(LandNo))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void OnCountryChange()
+    {
+        stateList = new List<State>();
+        Province = "";
+        if (Country != String.Empty && Country != "" && Country != null)
+        {
+            stateList = countryList.Where(a => a.CountryCode == Country).FirstOrDefault<Country>().ListState;
+        }
+    }
+
+}

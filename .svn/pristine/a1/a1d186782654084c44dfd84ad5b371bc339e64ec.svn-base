@@ -1,0 +1,77 @@
+﻿@page "/SocialAccountabilityPolicy"
+
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Social Accountability Policy</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <h1 class="mainTitles" style="font-family: solomonsansnormal,sans-serif; font-weight:normal">SOCIAL ACCOUNTABILITY POLICY</h1>
+        </div>
+    </div>
+    <div class="terms-conditions">
+        <p>Stassen is committed to comply with all the requirements stipulated in the SA8000-2014 standard and to implement the same in effective and efficient manner, under the patronage of its employees and other interested parties. </p>
+        <p>Stassen respects international instruments (ILO Conventions on Child Labour, Social Security and Minimum Wage Fixation etc.) that are related to SA8000 and complies with national laws, other applicable laws and the requirements to which the organization subscribes. </p>
+        <p>Changes in legislation, in company’s own code-of-conduct requirements and any other company requirement are considered during the policy reviewing process for continual improvement. </p>
+        <p>Our management is committed to see whether the policy is effectively documented, implemented, maintained, communicated and made accessible in a comprehensible form to all personnel including management and staff, contracted employees and employees those who are representing the company.</p>
+        <p>Stassen’s Social Accountability Policy is publicly available to any of its interested parties.</p>
+        <p>
+            D.H.S Jayawardena<br>
+            Chairman
+        </p>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-12 " style="border-radius:0px">
+            <div class="terms-conditions">
+                <p>
+                    Social Accountability International,<br>
+                    6th Floor,	<br>
+                    New York, NY 10036	<br>
+                    USA
+                </p>
+                <p>
+                    Telephone: <a href="tel:+12126841414">+1-212-684-1414</a><br>
+                    Email: <a href="mailto:info@sa-intl.org">info@sa-intl.org</a>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-12 p-0">
+            <div class="terms-conditions" style="border-radius:0px">
+                <p>
+                    SGS Lanka (PVT) Ltd,<br>
+                    140, Vauxhall Street,<br>
+                    Colombo 2,<br>
+                    Sri Lanka.
+                </p>
+                <p>
+                    Telephone: <a href="tel:+94112341255">+94 11 234 1255</a><br>
+                    Website: <a href="http://www.sgs.com/" target="_blank">www.sgs.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

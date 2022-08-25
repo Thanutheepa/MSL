@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <History>True|2022-07-05T05:00:43.8626903Z;False|2022-07-05T10:29:35.2939339+05:30;</History>
+    <_PublishTargetUrl>O:\Bellvantage\MSL\BlazorServerApp\bin\Release\netcoreapp3.1\publish\</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>

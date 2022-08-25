@@ -1,0 +1,71 @@
+﻿@page "/eventsDynamic"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IApiService apiService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">News</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">Events</h1>
+                        @foreach (var item in news)
+                        {
+                            @if (item.MainImage != "")
+                            {
+                                <div class="row mt-5">
+                                    <img class="d-block w-100" src="@item.MainImage" />
+                                </div>
+                            }
+
+                            <h3 style="text-align:left"><a href="viewPostDynamic/@item.PostId" style="color:black">@item.Title</a></h3>
+                            <p>Posted on @item.CreatedDate, Edited on @item.EditedDate by Mother Srilanka</p><br />
+                            <p class="mb-3"> @item.SubDescription</p>
+                            <hr />
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+
+@code {
+
+    private List<BlogPosts> news = new List<BlogPosts>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            news = (await apiService.GetAllPosts()).ToList();
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+    }
+}

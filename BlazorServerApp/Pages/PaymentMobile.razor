@@ -1,0 +1,60 @@
+﻿@page "/paymentMobile/{orderId}"
+
+@inject IApiService ApiService
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IPaymentService paymentService
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12 centerCol pt-5">
+            <img src="images/Loading.gif" width="200"/>
+        </div>
+    </div>
+    <p>@err</p>
+    @if(checkoutCart != null)
+    {
+        <p>@checkoutCart[0].TotalAmount</p>
+    }
+    @if(paymentSession != null)
+    {
+        <p>@paymentSession</p>
+    }
+</div>
+
+@code {
+
+    private List<CheckoutCart> checkoutCart { get; set; }
+    private string err = "";
+    private string paymentSession = "";
+
+    [Parameter]
+    public string orderId { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                await JSRuntime.InvokeAsync<object>("NavBarFixed");
+                checkoutCart = await ApiService.GetOrderDetails(orderId);
+
+                PaymentSession PaymentResponse = await paymentService.CreateSessionMobile(orderId, checkoutCart[0].TotalAmount);
+                paymentSession = PaymentResponse.SessionId;
+                StateHasChanged();
+                await localStore.SetItemAsync("paymentIndicator", PaymentResponse.successIndicator);
+                await localStore.SetItemAsync("orderId", orderId);
+
+                await JSRuntime.InvokeAsync<object>("PaymentGateway", PaymentResponse.SessionId.ToString());
+                await JSRuntime.InvokeAsync<object>("Checkout.showPaymentPage");
+            }
+            catch(Exception e)
+            {
+                err = e.Message;
+            }
+        }
+    }
+
+}

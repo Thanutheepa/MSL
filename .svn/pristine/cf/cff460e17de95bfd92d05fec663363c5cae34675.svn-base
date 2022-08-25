@@ -1,0 +1,394 @@
+﻿@page "/joinasVolunteer"
+
+@inject ILogin login
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject IFavProduct favProduct
+@inject NavigationManager NavManager
+@inject IRegisterService RegisterService
+@inject ISupportUsService SupportService
+@inject AppState appState
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+@using System.Text.RegularExpressions;
+@using System.Globalization;
+
+<div class="container topMargin mt-10 mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Join as Volunteer</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="loginBox">
+                        <h1 class="headingNew">Join as <span class="redheading" style="color: #8B1E29;">Volunteer</span></h1>
+                        <h3 style="margin-bottom:40px">Join Us as Volunteer</h3>
+                        <p>
+                            You have the power to change Sri Lanka — by learning, volunteering, speaking out, and donating. Your involvement with Mother Sri Lanka
+                            enables you to make a positive impact in your community. Join us today. We can change tomorrow.
+                        </p>
+                        <div class="form-group" style="margin-bottom:20px">
+                            <div class="row">
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>First Name <span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="First Name *" @bind-value="fname"></div>
+                                </div>
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Last Name <span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="Last Name *" @bind-value="lname"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Occupation/Profession <span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="Occupation/Profession *" @bind-value="occupation"></div>
+                                </div>
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Job/Position title <span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="Job/Position title *" @bind-value="job"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Firm Or Institution Name <span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="Firm Or Institution Name *" @bind-value="firm"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>I am active or have been previously active in the profession listed above:</label></div>
+                                    <div class="row">
+                                        <RadzenRadioButtonList TValue="int" @bind-Value="list1" Orientation="Orientation.Vertical">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Yes" Value="1" />
+                                                <RadzenRadioButtonListItem Text="No" Value="2" />
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>I am willing to commit time to service and advocacy projects in my community:</label></div>
+                                    <div class="row">
+                                        <RadzenRadioButtonList TValue="int" @bind-Value="list2" Orientation="Orientation.Vertical">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Yes" Value="1" />
+                                                <RadzenRadioButtonListItem Text="No" Value="2" />
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>I am willing to contribute financially to and raise money for local & international projects:</label></div>
+                                    <div class="row">
+                                        <RadzenRadioButtonList TValue="int" @bind-Value="list3" Orientation="Orientation.Vertical">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Yes" Value="1" />
+                                                <RadzenRadioButtonListItem Text="No" Value="2" />
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>Bussiness Address</label></div>
+                                    <div class="row">
+                                        <textarea rows="6" style="width:90%" @bind="bussinessAdd"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>Residence Address</label></div>
+                                    <div class="row">
+                                        <textarea rows="6" style="width:90%" @bind="residenceAdd"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Telephone Number (Residence)<span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="Telephone Number *" @bind-value="residenceTel"></div>
+                                </div>
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Telephone Number (Business)<span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="Telephone Number *" @bind-value="bussinessTel"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Fax Number <span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" placeholder="Fax Number *" @bind-value="Fax"></div>
+                                </div>
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Email <span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="email" class="form-control" placeholder="Email *" @bind-value="Email"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>Please contact me by:</label></div>
+                                    <div class="row">
+                                        <RadzenRadioButtonList TValue="int" @bind-Value="contactby" Orientation="Orientation.Vertical">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Phone (residence)" Value="1" />
+                                                <RadzenRadioButtonListItem Text="Phone (business)" Value="2" />
+                                                <RadzenRadioButtonListItem Text="E-mail" Value="3" />
+                                                <RadzenRadioButtonListItem Text="Fax" Value="4" />
+                                                <RadzenRadioButtonListItem Text="Mail" Value="5" />
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>The best time to contact me is:</label></div>
+                                    <div class="row">
+                                        <RadzenRadioButtonList TValue="int" @bind-Value="timetocontact" Orientation="Orientation.Vertical">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Morning" Value="1" />
+                                                <RadzenRadioButtonListItem Text="Afternoon" Value="2" />
+                                                <RadzenRadioButtonListItem Text="Evening" Value="3" />
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>I heard about Mother Lanka Foundation through:</label></div>
+                                    <div class="row">
+                                        <RadzenRadioButtonList TValue="int" @bind-Value="heardThrough" Orientation="Orientation.Vertical">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="A friend" Value="1" />
+                                                <RadzenRadioButtonListItem Text="A business associate" Value="2" />
+                                                <RadzenRadioButtonListItem Text="A current member" Value="3" />
+                                                <RadzenRadioButtonListItem Text="Mother Sri Lanka Website" Value="4" />
+                                                <RadzenRadioButtonListItem Text="Other" Value="5" />
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-11 col-12 m-3">
+                                    <div class="row"><label>If you select "other option" in the above section please fill this</label></div>
+                                    <div class="row"><input type="text" class="form-control" @bind-value="heardfrom"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 col-12 m-3">
+                                    <div class="row"><label>Comments</label></div>
+                                </div>
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Signature<span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="text" class="form-control" @bind-value="signature"></div>
+                                </div>
+                                <div class="col-md-5 col-12 m-3">
+                                    <div class="row"><label>Date<span style="color:red">*</span></label></div>
+                                    <div class="row"><input type="date" class="form-control" @bind-value="date"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-12"><button type="submit" class="btn checkoutBtn w-100" @onclick="onClick_Submit">Send</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+    private string fname = "";
+    private string lname = "";
+    private string occupation = "";
+    private string job = "";
+    private string firm = "";
+
+    private int list1 = 1;
+    private int list2 = 1;
+    private int list3 = 1;
+
+    private string bussinessAdd = "";
+    private string residenceAdd = "";
+    private string bussinessTel = "";
+    private string residenceTel = "";
+    private string Fax = "";
+    private string Email = "";
+
+    private int contactby = 1;
+    private int timetocontact = 1;
+    private int heardThrough = 1;
+
+    private string heardfrom = "";
+    private string signature = "";
+    private DateTime date = DateTime.Today;
+    private string formatdate = "";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+    private async void onClick_Submit()
+    {
+        bool valid = true;
+        bool success = false;
+        if (fname == string.Empty || fname == null || lname == string.Empty || lname == null || occupation == string.Empty || occupation == null || job == string.Empty || job == null ||
+        firm == string.Empty || firm == null || bussinessTel == string.Empty || bussinessTel == null || residenceTel == string.Empty || residenceTel == null || Fax == string.Empty || Fax == null ||
+        Email == string.Empty || Email == null || signature == string.Empty || signature == null)
+        {
+            valid = false;
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the required data");
+        }
+        else if (PhoneValidate(residenceTel) == false)
+        {
+            valid = false;
+            residenceTel = "";
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid Telephone Number (Residence)");
+        }
+        else if (PhoneValidate(bussinessTel) == false)
+        {
+            valid = false;
+            bussinessTel = "";
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid Telephone Number (Business)");
+        }
+        else if (EmailValidate(Email) == false)
+        {
+            valid = false;
+            Email = "";
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid Email");
+        }
+
+        if (valid)
+        {
+            var dt = DateTime.ParseExact(date.ToString(), "M/dd/yyyy h:mm:ss tt", CultureInfo.InvariantCulture);
+            var formatted = dt.ToString("yyyy/MM/dd");
+            formatdate = formatted;
+
+            Volunteer volunteer = new Volunteer();
+
+            volunteer.FirstName = fname;
+            volunteer.LastName = lname;
+            volunteer.OccupationOrProfession = occupation;
+            volunteer.JobOrPosition = job;
+            volunteer.FirmOrInstitution = firm;
+            volunteer.ActiveOrPreviouslyActive = list1;
+            volunteer.WillingCommitTime = list2;
+            volunteer.WillingContriFinancially = list3;
+            volunteer.BusinessAddress = bussinessAdd;
+            volunteer.ResidenceAddress = residenceAdd;
+            volunteer.ResidenceContNum = residenceTel;
+            volunteer.BusinessContNum = bussinessTel;
+            volunteer.FaxNumber = Fax;
+            volunteer.EmailAddress = Email;
+            volunteer.ContactBy = contactby;
+            volunteer.BestTime = timetocontact;
+            volunteer.HeardFrom = heardThrough;
+            volunteer.HeardFromOther = heardfrom;
+            volunteer.Signature = signature;
+            volunteer.RegDate = formatdate;
+
+
+
+            var registerVolunteer = Task.Run(async () => await SupportService.SaveVolunteer(volunteer));
+            string savevolunteers = registerVolunteer.Result;
+
+            if (savevolunteers == "Volunteer created successfully.")
+            {
+                success = true;
+                clear();
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "success", "", " Send successfully");
+            }
+            else
+            {
+                success = false;
+                clear();
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Error occured while saving. Please try again.");
+            }
+
+        }
+    }
+
+    private void clear()
+    {
+        fname = "";
+        lname = "";
+        occupation = "";
+        job = "";
+        firm = "";
+        list1 = 1;
+        list2 = 1;
+        list3 = 1;
+        bussinessAdd = "";
+        residenceAdd = "";
+        bussinessTel = "";
+        residenceTel = "";
+        Fax = "";
+        Email = "";
+        contactby = 1;
+        timetocontact = 1;
+        heardThrough = 1;
+        heardfrom = "";
+        signature = "";
+        date = DateTime.Today;
+        formatdate = "";
+    }
+
+    private bool EmailValidate(string email)
+    {
+
+        if (Regex.IsMatch(email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    private bool PhoneValidate(string mobile)
+    {
+        Regex phone = new Regex("[0-9]{10}");
+        if (phone.IsMatch(mobile))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}

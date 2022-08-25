@@ -1,0 +1,49 @@
+﻿@page "/supportUsAttachment"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Support Us</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-lg-10">
+            <div class="row">
+                <div class="col-md-12 col-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 style="border-bottom:none">MSL sponsor’s logo</h1>
+                        <p style="border-bottom: 1px solid #c1c1c1; font-weight: normal; font-size: 14px; font-family: Montserrat, sans-serif; ">Posted on June 1, 2018 by Mother Sri Lanka</p>
+                        <img class="d-block pt-3" src="images/Patners/MSL-sponsors-logo.jpg" width="300" height="240" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

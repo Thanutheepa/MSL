@@ -1,0 +1,51 @@
+﻿@inject IProductService ProductService
+@inject ILocalStorageService localStore
+@inject IJSRuntime JSRuntime
+
+<div class="container latestProducts">
+    <div class="row">
+        <div class="col-12 text-center pt-md-5 pb-5">
+            <br/>
+            <br/>@*#8B1E29;*@
+            <h1 class="headingNew text-center">Best <span class="redheading" style="color: #FFB554;">Sellers</span></h1>
+          @*  <p>
+                Full range of items available at our head office and our online shop. Selected range of items available at Arpico, Laksala, Lakkam Sales Center,
+                Cotton Collection, Odel , Kandygs and Cool Planet.
+            </p>*@
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        @if (mostBuying != null)
+        {
+            <div class="owl-carousel productSlider2 owl-theme">
+                @foreach (var product in mostBuying)
+                {
+                    <div class="item p-2">
+                        <NewProductItem Product="product"></NewProductItem>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    private int selectedOutletId;
+
+    [Parameter]
+    public IEnumerable<Product> mostBuying { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            selectedOutletId = await localStore.GetItemAsync<int>("outlet");
+            await JSRuntime.InvokeAsync<object>("CardImageHeader");
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,77 @@
+﻿@page "/fav"
+
+@inject ILocalStorageService localStore
+@inject AppState appState
+@inject NavigationManager NavManager
+@inject IFavProduct favProduct
+@inject IJSRuntime JSRuntime
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Favourite Products</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <h1 class="mainTitles">FAVORITE PRODUCTS</h1>
+        </div>
+
+        @if (favproducts != null)
+        {
+            @foreach (var product in favproducts)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    <ProductItem Product="product" OnFavRemove="Reload"></ProductItem>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private List<Product> favproducts;
+    private User user;
+    private int displayCount;
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        //favproducts = favProduct.GetFavProducts();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            user = await localStore.GetItemAsync<User>("user");
+            if(user != null)
+            {
+                favproducts = await localStore.GetItemAsync<List<Product>>("fav-" + user.CustomerId);
+            }
+            else
+            {
+                favproducts = await localStore.GetItemAsync<List<Product>>("fav-0");
+            }
+            if (favproducts != null)
+            {
+                favProduct.SetFav(favproducts);
+            }
+            //favproducts = favProduct.GetFavProducts();
+        }
+        StateHasChanged();
+    }
+
+    private async void Reload()
+    {
+        favproducts = favProduct.GetFavProducts();
+    }
+
+}

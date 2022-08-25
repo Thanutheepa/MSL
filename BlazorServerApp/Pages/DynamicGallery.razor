@@ -1,0 +1,70 @@
+﻿@page "/dynamicGallery"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject IApiService apiService
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="terms-conditions" style="text-align:left">
+                        <h1>Gallery</h1>
+                    </div>
+
+                    <div class="row">
+                        @foreach (var gallery in allGallery)
+                        {
+                            <div class="col-md-3 col-6">
+                                <a href="/viewGallery/@gallery.galleryId/@gallery.Title" style="color: #8B1E29;text-decoration:none">
+                                    <div class="row p-3 img-hover-zoom">
+                                        <img src="@gallery.mainImage" class="blogImg" />
+                                    </div>
+                                    <div class="row blogDetailsBox p-3">
+                                        <p>
+                                            @gallery.Title
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    private List<Gallery> allGallery { get; set; } = new List<Gallery>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            allGallery = new List<Gallery>();
+            allGallery = (await apiService.GetAllGalleries()).ToList();
+            StateHasChanged();
+        }
+    }
+
+}

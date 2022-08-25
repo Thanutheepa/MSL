@@ -1,0 +1,215 @@
+﻿@page "/paymentSuccess"
+
+@inject NavigationManager NavManager
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject IApiService apiService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+@inject ISendEmails sendEmails
+@inject IProfileService ProfileService
+@inject IPaymentService paymentService
+@using System.Text
+
+
+@if ((resultIndicator != null && paymentIndicator != null) || (checkoutCart != null && checkoutCart.PaymentTypeId == "1"))
+{
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Payment Success</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-0 col-md-1 col-lg-2"></div>
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="summeryBox mt-4 text-center">
+                @if (((paymentIndicator == resultIndicator) || (checkoutCart.PaymentTypeId == "1")) && orderType == "normal")
+                {
+                    <h1 class="text-success"><i class="far fa-check-circle"></i></h1>
+                    <h1>Order Successfull!</h1>
+                }
+                else if (((paymentIndicator == resultIndicator) || (checkoutCart.PaymentTypeId == "1")) && orderType == "donate")
+                {
+                    <h1 class="text-success"><i class="far fa-check-circle"></i></h1>
+                    <h1>Thank you for your donation!</h1>
+                }
+                else
+                {
+                    <h1 class="text-danger"><i class="far fa-times-circle"></i></h1>
+                    <h1>Order Failed!</h1>
+                }
+                @if (orderType == "normal")
+                {
+                    <h4>Order Id: @orderId</h4>
+                    @foreach (var product in cartProducts)
+                    {
+                        <CartItems CartItem="product" ShowDelete="false"></CartItems>
+                    }
+                }
+                <h2 class="text-right">Total: Rs.@checkoutCart.TotalAmount</h2>
+            </div>
+        </div>
+    </div>
+</div>
+}
+else
+{
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Payment Success</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 centerCol pt-5">
+            <img src="images/Loading.gif" width="150" />
+        </div>
+    </div>
+</div>
+}
+
+@code {
+
+    private CheckoutCart checkoutCart;
+    private List<CartItem> cartProducts;
+    private string resultIndicator;
+    private string paymentIndicator;
+    private string orderId;
+    private string orderType;
+
+    //variables for email
+    private User userDetail = new User();
+    private int customerId { get; set; }
+    private string customerName { get; set; }
+    private string OrderId { get; set; }
+    private string totalPrice { get; set; }
+    private string customerAddress { get; set; }
+    private string billingAdd { get; set; }
+    private string paymentType { get; set; }
+    private string today { get; set; }
+    private StringBuilder EmailBody = new StringBuilder();
+    private string receiverEmail { get; set; }
+    private string ResponseMessage { get; set; } = "";
+    private string screenMessage { get; set; } = "";
+
+    private Address billingAddress = new Address();
+    private Address ShippingAddress = new Address();
+
+    public void SetAttributes()
+    {
+        customerName = checkoutCart.CustomerName;
+        totalPrice = checkoutCart.TotalAmount;
+        today = checkoutCart.OrderDate;
+        OrderId = orderId;
+        customerAddress = checkoutCart.CustomerAddress;
+        billingAdd = checkoutCart.BillingAddress;
+        paymentType = SetPaymentType(checkoutCart.PaymentTypeId);
+    }
+
+    public string SetPaymentType(string str)
+    {
+        if (str == "1")
+            return "Cash on delivery";
+        else
+            return "Card payment";
+    }
+
+    public void sendingEmail()
+    {
+        screenMessage = sendEmails.SendEmail(receiverEmail, ResponseMessage, EmailBody, customerName, "New Order!");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+    protected override async void OnInitialized()
+    {
+        checkoutCart = await localStore.GetItemAsync<CheckoutCart>("checkout");
+        orderId = await localStore.GetItemAsync<string>("orderId");
+        orderType = await localStore.GetItemAsync<string>("orderType");
+
+        userDetail = await localStore.GetItemAsync<User>("user");
+        if (userDetail != null)
+        {
+            receiverEmail = userDetail.UserName;
+            customerId = userDetail.CustomerId;
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + userDetail.CustomerId);
+        }
+        else
+        {
+            receiverEmail = await localStore.GetItemAsync<string>("userEmail");
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+        }
+
+        if (checkoutCart.PaymentTypeId == "2")
+        {
+            var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+            var param = uri.ToString().Split('?')[1];
+            var resultIndicatorParam = param.Split('&')[0];
+            resultIndicator = resultIndicatorParam.Split('=')[1];
+
+            paymentIndicator = await localStore.GetItemAsStringAsync("paymentIndicator");
+            paymentIndicator = paymentIndicator.Remove(0, 1);
+            paymentIndicator = paymentIndicator.Remove(paymentIndicator.Length - 1);
+
+            if (paymentIndicator == resultIndicator)
+            {
+                await apiService.UpdateOrder(orderId);
+                //await paymentService.CapturePayment(orderId, totalPrice);
+                @*await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", st);*@
+            }
+        }
+        StateHasChanged();
+
+        if ((checkoutCart.PaymentTypeId == "1") || ((resultIndicator != null && paymentIndicator != null) && (paymentIndicator == resultIndicator)))
+        {
+            if (receiverEmail != null && receiverEmail != "" && orderType == "normal")
+            {
+                SetAttributes();
+                EmailBody = sendEmails.GetEmailBody(cartProducts, customerName, totalPrice, today, orderId, customerAddress, paymentType);
+                sendingEmail();
+            }
+            cartService.EmptyCart();
+            ClearAll();
+        }
+        StateHasChanged();
+    }
+
+    public async void ClearAll()
+    {
+        if (userDetail != null)
+        {
+            await localStore.RemoveItemAsync("cart-" + userDetail.CustomerId);
+        }
+        else
+        {
+            await localStore.RemoveItemAsync("cart-0");
+        }
+        await localStore.RemoveItemAsync("checkout");
+        await localStore.RemoveItemAsync("orderId");
+        await localStore.RemoveItemAsync("paymentIndicator");
+        await localStore.RemoveItemAsync("userEmail");
+        await localStore.RemoveItemAsync("orderType");
+        appState.SetCartItemCount(0);
+    }
+
+}

@@ -1,0 +1,301 @@
+﻿@page "/login/{page}"
+
+@inject ILogin login
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject IFavProduct favProduct
+@inject NavigationManager NavManager
+@inject IRegisterService RegisterService
+@inject AppState appState
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="loginBox">@*#8B1E29;*@
+                        <h1 class="headingNew">My <span class="redheading" style="color:#FFB554;">Account</span></h1>
+                        <h2 style="margin-bottom:40px">Login</h2>
+
+                        @if (!loginStatus)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @errorMessage
+                            </div>
+                        }
+
+                        <div class="form-group" style="margin-bottom:20px">
+                            <div class="row">
+                                <div class="col-md-4"><label for="exampleInputEmail1">Email Address</label></div>
+                                <div class="col-md-6"><input type="email" @bind-value="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email Address *"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px">
+                            <div class="row">
+                                <div class="col-md-4"><label for="exampleInputPassword1"> Password</label></div>
+                                <div class="col-md-6">
+                                    <div id="passwordBox">
+                                        <input type="@passwordType" @bind-value="password" class="form-control" id="exampleInputPassword1" placeholder="Password *">
+                                        <button class="btn" @onclick="HandlePasswordIcon"><i class="topIcons @iClass"></i></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="row" style="margin-bottom:20px">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-6"><button type="submit" @onclick="HandleLogin" class="btn checkoutBtn w-100">Login</button></div>
+                        </div>
+
+                        @*<div class="form-group">
+                            <div class="row">
+                                <div class="col-md-5"></div>
+                                <div class="col-md-6"><input type="checkbox"> <label for="pcode">REMEMBER ME</label></div>
+                            </div>
+                        </div>*@
+
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-6">
+                                <div class="form-group" style="padding-top:20px ; font-size:14px">
+                                    <label for="SignUp" style="text-align:left; padding-left:3px">Don't you have an account?</label>
+                                    <a href="/register" style="color: #FFB554; margin-left: 10px">Sign up</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-0">
+                            <div class="col-md-4 m-0"></div>
+                            <div class="col-md-6 m-0">
+                                <div class="form-group m-0" style="font-size:14px">
+                                    <a href="/forgetPassowrd/0" style="color: #FFB554; text-align:left">Lost your password ?</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<RecentPosts />*@
+    </div>
+</div>
+
+@code {
+
+    private string email;
+    private string password;
+    private User user = new User();
+    private bool loginStatus = true;
+    private string errorMessage = "";
+    private string iClass = "fas fa-eye-slash";
+    private string passwordType = "password";
+
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+
+    [Parameter]
+    public string page { get; set; }
+
+    protected override async void OnInitialized()
+    {
+        base.OnInitialized();
+
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            user = await localStore.GetItemAsync<User>("user");
+            if (user != null)
+                NavManager.NavigateTo("/");
+            StateHasChanged();
+        }
+    }
+
+    protected void HandleLogin()
+    {
+
+        loginStatus = true;
+        errorMessage = "";
+
+        if (email == null || email == string.Empty || password == string.Empty || password == null)
+        {
+            loginStatus = false;
+            errorMessage = "Email and Password is required. Please fill all the fields.";
+        }
+
+        else
+        {
+            loginStatus = true;
+            var logincustomer = Task.Run(async () => await RegisterService.LoginUser(email, password));
+            user = logincustomer.Result;
+
+            if (user.LoginId != 0 && user.CustomerId != 0)
+            {
+                email = "";
+                password = "";
+                // user = login.LoginUser(user);
+                Layout.User = user;
+                UpdateCart();
+                UpdateFav();
+                SaveLogin(user);
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfuly", Detail = "Login", Duration = 1000 });
+                if (page == "null")
+                {
+                    NavManager.NavigateTo("/");
+                }
+                else if (page == "NewAddress")
+                {
+                    NavManager.NavigateTo("/MyShippingAddress/set");
+                }
+                else if (page == "Donate")
+                {
+                    NavManager.NavigateTo("/Donate");
+                }
+                else if (page == "Checkout")
+                {
+                    NavManager.NavigateTo("/checkout");
+                }
+            }
+
+            else
+            {
+                loginStatus = false;
+                email = "";
+                password = "";
+                errorMessage = "Invalid email or password. Please enter correct email and password";
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Invalid", Detail = "User Name or Password", Duration = 1000 });
+            }
+
+        }
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+    public async void SaveLogin(User user)
+    {
+        appState.SetUser(user);
+        await localStore.SetItemAsync("user", user);
+    }
+
+    private void HandlePasswordIcon()
+    {
+        if (iClass == "fas fa-eye-slash")
+        {
+            iClass = "fas fa-eye";
+            passwordType = "text";
+        }
+        else
+        {
+            iClass = "fas fa-eye-slash";
+            passwordType = "password";
+        }
+    }
+
+    private async void UpdateCart()
+    {
+        var guestCartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+        var userCartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + user.CustomerId);
+        if (userCartProducts != null && userCartProducts.Count() > 0)
+        {
+            cartService.SetCart(userCartProducts);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+        }
+        if (guestCartProducts != null && guestCartProducts.Count() > 0)
+        {
+            if (userCartProducts != null && userCartProducts.Count() > 0)
+            {
+                foreach (var guestCartItem in guestCartProducts)
+                {
+                    var found = false;
+                    for (int i = 0; i < userCartProducts.Count(); i++)
+                    {
+                        if (userCartProducts[i].Product.productId == guestCartItem.Product.productId)
+                        {
+                            found = true;
+                            if (userCartProducts[i].Product.MaxQtyPurchase < (userCartProducts[i].Qty + guestCartItem.Qty))
+                            {
+                                userCartProducts[i].Qty = userCartProducts[i].Product.MaxQtyPurchase;
+                            }
+                            else
+                            {
+                                userCartProducts[i].Qty += guestCartItem.Qty;
+                            }
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        userCartProducts.Add(guestCartItem);
+                    }
+                }
+                await localStore.SetItemAsync("cart-" + user.CustomerId, userCartProducts);
+                cartService.SetCart(userCartProducts);
+                appState.SetCartItemCount(cartService.GetTotalCount());
+            }
+            else
+            {
+                await localStore.SetItemAsync("cart-" + user.CustomerId, guestCartProducts);
+                cartService.SetCart(guestCartProducts);
+                appState.SetCartItemCount(cartService.GetTotalCount());
+            }
+            await localStore.RemoveItemAsync("cart-0");
+        }
+    }
+
+    private async void UpdateFav()
+    {
+        var guestFavproducts = await localStore.GetItemAsync<List<Product>>("fav-0");
+        var userFavproducts = await localStore.GetItemAsync<List<Product>>("fav-" + user.CustomerId);
+        if (userFavproducts != null && userFavproducts.Count() > 0)
+        {
+            favProduct.SetFav(userFavproducts);
+            appState.SetFavProductCount(favProduct.GetTotalCount());
+        }
+
+        if (guestFavproducts != null && guestFavproducts.Count() > 0)
+        {
+            if (userFavproducts != null && userFavproducts.Count() > 0)
+            {
+                foreach (var guestFavItem in guestFavproducts)
+                {
+                    var found = false;
+                    for (int i = 0; i < userFavproducts.Count(); i++)
+                    {
+                        if (userFavproducts[i].productId == guestFavItem.productId)
+                        {
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        userFavproducts.Add(guestFavItem);
+                    }
+                }
+                await localStore.SetItemAsync("fav-" + user.CustomerId, userFavproducts);
+                favProduct.SetFav(userFavproducts);
+                appState.SetFavProductCount(favProduct.GetTotalCount());
+            }
+            else
+            {
+                await localStore.SetItemAsync("fav-" + user.CustomerId, guestFavproducts);
+                favProduct.SetFav(guestFavproducts);
+                appState.SetFavProductCount(favProduct.GetTotalCount());
+            }
+            await localStore.RemoveItemAsync("fav-0");
+        }
+    }
+
+}

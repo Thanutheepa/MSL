@@ -1,0 +1,180 @@
+﻿@page "/MyOrders"
+
+@inject ILogin login
+@inject IProfileService ProfileService
+@inject ILocalStorageService localStore
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Orders</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div> 
+    <div class="row mt-5 mt-md-4 my-2">
+        <div class="col-xl-12">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="profile">Account Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="MyOrders">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="MyAddress">Address</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row fullHeight">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 ">
+            <div class="ordersBox loginBox">
+                <h2 class="mainTitles" style="margin-bottom:40px">My Order Details</h2>
+
+                @if (isnoofOrder == false)
+                {
+                    <div class="alert alert-success" role="alert">
+                        No Order Has Been Made Yet..
+                    </div>
+                }
+
+                else
+                {
+                    @if (appState.currRate != null)
+                    {
+                        @foreach (var order in orders)
+                        {
+
+                            <div class="card w-100" style="margin-bottom:20px">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="row">
+                                                @if (order.OrderStatusId == 0)
+                                                {
+                                                    <div class="col-5 col-md-12"><h4 class="card-title mb-0" style="color: #ffa200">Pending</h4></div>
+                                                }
+                                                @if (order.OrderStatusId == 1)
+                                                {
+                                                    <div class="col-5 col-md-12"><h4 class="card-title mb-0" style="color: green">Processing</h4></div>
+                                                }
+                                                @if (order.OrderStatusId == 2)
+                                                {
+                                                    <div class="col-5 col-md-12"><h4 class="card-title mb-0" style="color: darkblue">Ready to Pick-Up</h4></div>
+                                                }
+                                                @if (order.OrderStatusId == 3)
+                                                {
+                                                    <div class="col-5 col-md-12"><h4 class="card-title mb-0" style="color: #ff0054 ">Dispatched</h4></div>
+                                                }
+                                                @if (order.OrderStatusId == 4)
+                                                {
+                                                    <div class="col-5 col-md-12"><h4 class="card-title mb-0" style="color: #fb5607 ">Delivered</h4></div>
+                                                }
+                                                @if (order.OrderStatusId == 5)
+                                                {
+                                                    <div class="col-5 col-md-12"><h4 class="card-title mb-0" style="color: red">Order Cancel</h4></div>
+                                                }
+                                                <div class="col-7 d-md-none justify-content-end"><p class="card-text" style="font-weight:bold">@order.OrderDate.Replace('T', ' ')</p></div>
+                                                <div class="col-6 col-md-12"><p class="card-text mt-2">Total:  <span style="font-weight:bold">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(Convert.ToDouble(order.TotalAmount) / appState.currRate.BuyingRate, 2))).ToString("N")</span></p></div>
+                                                <div class="col-6 d-md-none"><p class="card-text mt-2">Delivery: <span style="font-weight:bold">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(Convert.ToDouble(order.DeliveryFee) / appState.currRate.BuyingRate, 2))).ToString("N")</span></p></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="row">
+                                                <div class="col-12 d-none d-md-block justify-content-end"><p class="card-text" style="font-weight:bold">@order.OrderDate.Replace('T', ' ')</p></div>
+                                                <div class="col-12 d-none d-md-block"><p class="card-text mt-2">Delivery: <span style="font-weight:bold">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(Convert.ToDouble(order.DeliveryFee) / appState.currRate.BuyingRate, 2))).ToString("N")</span></p></div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-12 col-md-4 pt-2">
+                                            @if (order.OrderStatusId == 0)
+                                            {
+                                                <a href="@($"MyOrders/{order.OrderID}")" class="btn checkoutBtn w-100">Pay Now</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@($"MyOrders/{order.OrderID}")" class="btn checkoutBtn w-100">View Order</a>
+                                            }
+
+                                        </div>
+
+                                        @*<div class="col-12"><h6 class="card-title" style="color: darkorange">Order Id: @order.OrderID</h6></div>*@
+
+                                    </div>
+
+                                    <div class="row">
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        }
+                        }
+                    }
+                </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private bool isnoofOrder;
+    private List<Orders> orders = new List<Orders>();
+    //  private User user = new User();
+    private int customerid;
+    private RegisterUser userRegister = new RegisterUser();
+    private int orderId;
+    private string orderdate;
+
+    public User user { get; set; }
+
+    protected override void OnInitialized()
+    {
+        appState.OnChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        appState.OnChange -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            user = await localStore.GetItemAsync<User>("user");
+            appState.SetUser(user);
+            customerid = appState.user.CustomerId;
+
+            var customerorders = Task.Run(async () => await ProfileService.OrderDetails(customerid));
+            orders = customerorders.Result;
+
+            if (orders.Count == 0)
+            {
+                isnoofOrder = false;
+            }
+            else
+            {
+                isnoofOrder = true;
+            }
+            //  customerid = appState.user.CustomerId;
+            StateHasChanged();
+        }
+    }
+}

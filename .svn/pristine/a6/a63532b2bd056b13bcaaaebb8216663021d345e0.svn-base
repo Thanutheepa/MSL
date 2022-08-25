@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "dgSpecHash": "KqHRloq+LRk54Wz/QL1QaziDvIVjuWUV9hvLxKieYMBaSAIXzRnEstfXs7OXW9gP7sJqENR00q8uaTQDmWiMug==",
+  "success": true,
+  "projectFilePath": "D:\\MSL\\ShoppinCart.DataStore\\ShoppinCart.DataStore.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\acer\\.nuget\\packages\\blazored.localstorage\\4.1.5\\blazored.localstorage.4.1.5.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.aspnetcore.authorization\\3.1.14\\microsoft.aspnetcore.authorization.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.aspnetcore.components\\3.1.14\\microsoft.aspnetcore.components.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\3.1.14\\microsoft.aspnetcore.components.analyzers.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\3.1.14\\microsoft.aspnetcore.components.forms.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.aspnetcore.components.web\\3.1.14\\microsoft.aspnetcore.components.web.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.aspnetcore.metadata\\3.1.14\\microsoft.aspnetcore.metadata.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\3.1.14\\microsoft.extensions.dependencyinjection.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\3.1.14\\microsoft.extensions.dependencyinjection.abstractions.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\3.1.14\\microsoft.extensions.logging.abstractions.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.options\\3.1.14\\microsoft.extensions.options.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.primitives\\3.1.14\\microsoft.extensions.primitives.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.jsinterop\\3.1.14\\microsoft.jsinterop.3.1.14.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

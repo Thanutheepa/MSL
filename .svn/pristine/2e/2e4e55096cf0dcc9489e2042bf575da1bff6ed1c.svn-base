@@ -1,0 +1,221 @@
+﻿@page "/FAQ"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container">
+        <div class="row">
+            <img class="d-block w-100" src="images/FAQ.jpg" alt="First slide" />
+        </div>
+ </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <h1 class="mainTitles">FAQ'S</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>I have paid for the order but have not received the confirmation email, what do I do?</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        Your order payments are confirmed on-screen as well as by an order confirmation email. Leave a few minutes after payment and check your inbox and spam folder for your order confirmation. If you encounter any error message on-screen or did not receive an order confirmation, please contact us at <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> before attempting a new order.
+                        If you have already placed multiple orders and wish to cancel, please contact us at <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> within 24 hours of placing the order.
+                        Please add <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> to your spam filter whitelist.
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>Once I have placed my order, can I amend/change items?</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        Please note that once you have progressed through the payment webpage or received your order confirmation you are unable to amend products on your order.
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>I have given the wrong address, how can I change it?</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        If you find that you have given the wrong address details, please contact our customer services team within 24 hours via <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> quoting your order reference number and the address it has to be changed to.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>Bulk orders for Establishments</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        The prices offered are for individual consumers and if you require larger quantities of our Stassen Brand products, please contact us at <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> for a custom quote.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>Privacy and security of your payments and credit card numbers</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        When you pay for your order, the information is directly typed on to the bank’s (payment gateway) secure websites; we do not receive or retain your payment or credit card information on our website.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>Invoice for Orders</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        Your order confirmation contains all the necessary information for an invoice. However, if you require a special invoice for reimbursement or documentation purposes please contact us at <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> with your order number.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>Extra Charges after initial payment (Customs duty/taxes)</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        Each of the countries we ship to, have their own regulatory laws in place. Therefore, they may levy certain taxes on your purchase, and it is your responsibility to check on these prior to placing your order, as local duty/taxes imposed by the customs office will have to be borne by the customer.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>My order has been damaged, what do I do?</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        We make sure that items are packed securely with necessary padding and support. However, we have noticed that some boxes have been opened by local customs for inspection and have been damaged in the process.
+                        Our international courier partners are trustworthy, hence when they deliver your package to your door-step they will request for a signatory to sign and claim the parcel. If however there is no such possibility, you can also request that the package be left outside although doing so will be entirely at your own risk.
+                        If you receive any items that are damaged please contact us at <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> with a few pictures of the damaged items within 3 days of delivery so that we could arrange for compensation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>Special Documents for Custom/FDA Clearance</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        We include FDA Prior Notification Forms for all Tea orders shipped to USA or Canada and Phytosanitary Certificates for all orders shipped to Europe and South America.
+                        Please contact us at <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> should you require any other documents which may help to clear your teas faster and cheaper.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>Can I reuse my tea bags?</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        We don’t recommend re-using your tea bags. Our tea bags are meant for a single use and will yield the proper flavour and colour when following the directions on the box.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>I have another question that’s not answered in this FAQ, what do I do?</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        Please email us at <a href="mailto:sales@stassentea.com" style="color: #006400">sales@stassentea.com</a> if you have any further questions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-5">
+        <div class="col-12">
+            <div class="privacyBox">
+                <div class="buttonPart" style="background-color: #dee2e6; color: #006400 ">
+                    <font>How long will it take to process my order?</font>
+                    <font class="toggleIcon">+</font>
+                </div>
+                <div class="paraHide pt-4">
+                    <p>
+                        We aim to process and ship your order within 5 working days.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("Privacy");
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,88 @@
+﻿@page "/OurWorkwiththeCommunity"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Our Work with Community</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1>Our Work with </h1>*@
+                        <h1 class="headingNew">Our Work With <span class="redheading" style="color: #8B1E29;">the Community</span></h1>
+                        <h3 style="text-align:left">Mother Sri Lanka Future Forum</h3>
+                        <p>
+                            We seem to be in a time where much attention is focused on business or corporate related issues or political topics, with an obvious dearth of discussion on topics of vital social and personal importance to us.  In this context, the MSL movement as a socially-conscious organization working towards the socio-economic development of Sri Lankans, have conceptualized and designed a series of talks targeting various focus groups on current topics of interest.
+                        </p>
+                        <p>
+                            The series of talks will be held under the theme <strong style="font-style:italic">Mother Sri Lanka ‘Future Forum’</strong>  and will
+                            consist of at least three types of programs as follows.
+                        </p>
+
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>Topics of National interest targeting professionals</li>
+                            <li>Topics of Personal Interest targeting males, females and parents</li>
+                            <li>Topics of interest to low income households</li>
+                        </ul>
+
+                        <img id="livelihood" class="img-fluid d-block mb-2" src="images/OurWorkwiththeCommunity/forum.jpg" />
+
+                        <h3 style="text-align:left">Women’s Empowerment & Livelihood Development</h3>
+                        <p style="font-style:italic">For the hand that rocks the cradle, is the hand that rules the world.</p>
+                        <p>–  William Ross Wallace</p>
+
+                        <p>
+                            Needless to say, empowered and educated women will pave the way to changing the world.  After all, isn’t it also true that it will be
+                            these same women who will in turn do the same for their own sons and daughters?
+                        </p>
+                        <p>
+                            We believe that economic empowerment of women is the one of the most successful approaches to gender equality.  Hence, we are engaged in
+                            livelihood development projects in Small and Medium Entrepreneurship development sector as well as through agri business sector and other
+                            selected sectors.
+                        </p>
+
+                        <p>
+                            The backbone of our economy is the small and Medium Entrepreneur.  However, most small and medium entrepreneurs in our country are
+                            unable to continue their ventures or are at risk of losing their livelihood due to their lack of understanding market trends such as
+                            supply and demand and new consumer needs.  Mother Sri Lanka is engaged in projects that give a helping hand to self-employed men and
+                            women by guiding them in design, packaging and marketing of their products.
+                        </p>
+
+                        <img class="img-fluid d-block mb-2" src="images/OurWorkwiththeCommunity/1-8-768x170.jpg" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

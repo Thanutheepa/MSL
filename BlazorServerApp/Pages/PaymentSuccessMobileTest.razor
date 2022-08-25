@@ -1,0 +1,63 @@
+﻿@page "/paymentSuccessMobileTest"
+
+@inject NavigationManager NavManager
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject IApiService apiService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+@inject ISendEmails sendEmails
+@inject IProfileService ProfileService
+@using System.Text
+
+@if ((resultIndicator != null && paymentIndicator != null))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-0 col-md-1 col-lg-2"></div>
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="summeryBox mt-4 text-center">
+                    @if ((paymentIndicator == resultIndicator))
+                    {
+                        <h1 class="text-success"><i class="far fa-check-circle"></i></h1>
+                        <h1>Order Successfull!</h1>
+                    }
+                    else
+                    {
+                        <h1 class="text-danger"><i class="far fa-times-circle"></i></h1>
+                        <h1>Order Failed!</h1>
+                    }
+                    @if (orderId != null)
+                    {    <p>@orderId</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    private CheckoutCart checkoutCart;
+    private List<CartItem> cartProducts;
+    private string resultIndicator;
+    private string paymentIndicator;
+    private string orderId;
+
+    protected override async void OnInitialized()
+    {
+        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        var param = uri.ToString().Split('?')[1];
+        var resultIndicatorParam = param.Split('&')[0];
+        resultIndicator = resultIndicatorParam.Split('=')[1];
+
+        orderId = await localStore.GetItemAsync<string>("orderId");
+        paymentIndicator = await localStore.GetItemAsStringAsync("paymentIndicator");
+        paymentIndicator = paymentIndicator.Remove(0, 1);
+        paymentIndicator = paymentIndicator.Remove(paymentIndicator.Length - 1);
+
+        StateHasChanged();
+    }
+
+
+}

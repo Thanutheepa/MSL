@@ -1,0 +1,367 @@
+﻿@page "/PatriotCollectionCatalogue"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Patriot Collection Catalogue</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1></h1>*@
+                        <h1 class="headingNew">Mother Sri Lanka <span class="redheading" style="color: #8B1E29;">Patriot Collection Catalogue</span></h1>
+                        <h3 style="text-align:left">Ceramic Two Elephant Design Mugs</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-1-270x300.png" />
+                        <p>
+                            Specially designed by a talented local artist,  these ceramic mugs are unique, distinctive and elegant design.
+                            Packed in a box, ideal gift for your loved one.
+                        </p>
+                        <p>
+                            Weight: – 312g
+                        </p>
+                        <p>
+                            Height: – 9.5cm
+                        </p>
+
+                        <h3 style="text-align:left">Ceramic Kandy Perahera Design Mugs</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-283x300.png" />
+                        <p>
+                            These ceramic mugs come with a unique, distinctive and elegant design. The mug is especially designed by a
+                            talented local artist. Packed in a gift box
+                        </p>
+                        <p>
+                            Weight: – 312g
+                        </p>
+                        <p>
+                            Height: – 9.5cm
+                        </p>
+
+                        <h3 style="text-align:left">Stoneware Kandy Perahara Design Mug</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-3-300x210.png" />
+                        <p>
+                            The MSL Stoneware mug is our new printed design that has turned out cool! What’s more, you can read about the
+                            Kandy Perahera, Sri Lanka’s largest and most glamorous parade printed on the cup while enjoying your drink.
+                            Whatever beverage will look appetizing in this Stoneware mug
+                        </p>
+                        <p>
+                            Weight: – 394g
+                        </p>
+                        <p>
+                            Height: – 9.5cm
+                        </p>
+
+                        <h3 style="text-align:left">Stoneware Elephant Handle Design Mug</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-4-300x281.png" />
+                        <p>
+                            Another elegantly trendy mug with an elephant handle design. In Sri Lanka no other animal has been more
+                            associated with the people in their traditional and religious activities as the elephant. A selection of these
+                            elephant design mugs will be perfect for homes and as Corporate gifts.
+                        </p>
+                        <p>
+                            Weight: – 404g
+                        </p>
+                        <p>
+                            Height: – 9.5cm
+                        </p>
+
+                        <h3 style="text-align:left">V Shaped Glass</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/Screenshot_2019-05-17-12-25-21-300x287.png" />
+                        <p>
+                            Beautiful V – shaped glass with the Sri Lankan Flag and name will be an ideal souvenir or  gift for locals as well as foreigners.
+                        </p>
+                        <p>
+                            Weight: – 107g
+                        </p>
+                        <p>
+                            Height: – 6cm
+                        </p>
+
+                        <h3 style="text-align:left">Note Books – Large</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-5.png" />
+                        <p>
+                            Reduce, reuse and recycle. Cute notebook with elephants printed all over, handmade book made out of recycled
+                            elephant dung paper.   Ideal for office or home use or even as a Co-Branded Corporate gift. Let’s save paper and
+                            trees together!
+                        </p>
+                        <p>Large Note Book</p>
+                        <p>
+                            Height:-  20.2cm
+                        </p>
+                        <p>
+                            Width: –  14.5cm
+                        </p>
+                        <p>Weight 272g</p>
+
+
+                        <h3 style="text-align:left">Note Books – Medium</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-7.png" />
+                        <p>
+                            Cute notebook for everyday use, handmade book made out of recycled elephant dung paper.
+                            Ideal as a Co-Branded Corporate gift. Let’s Reduce, reuse and recycle –  Let’s save paper and trees together!
+                        </p>
+
+                        <h3 style="text-align:left">Note Book Raw Silk</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-8.png" />
+                        <p>
+                            Reduce , reuse and recycle. These notebooks are made out of recycle paper for your office and home. Let’s save paper and trees together!!
+                        </p>
+                        <p>Height: – 11 cm  Width: – 9 cm</p>
+
+
+                        <h3 style="text-align:left">Paper Dispenser</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/New-Picture-9-300x240.png" />
+                        <p>
+                            These products are made women living around Luwana in Moratuwa. They are trained in this skill and most of the work is done from home.
+                        </p>
+
+                        <h3 style="text-align:left">Paper Weight – Turtle</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/paper-weight-turtle-300x209.jpg" />
+                        <p>
+                            Turtle – This Sri Lankan product is beautifully hand crafted, hand painted to the most intricate details,
+                            to resemble a miniature version of a turtle..
+                        </p>
+                        <p>Weight :- 99g</p>
+
+                        <h3 style="text-align:left">Paper Weight Elephant</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/paper-weight-elephant-1-e1498623606783-300x226.jpg" />
+                        <p>
+                            Elephant – An elephant paperweight souvenir which is just a cute and simple gift for your loved ones wherever
+                            they may be. Our small scale female entrepreneurs have made it just perfectly for you to enjoy an elephant
+                            replica
+                        </p>
+                        <p>Weight :- 54g</p>
+
+                        <h3 style="text-align:left">Pin your patriotism in your heart!</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/pin-badge-300x267.jpg" />
+                        <p>
+                            Solid Brass, colour filled Lapel pin with engraved lion and Epoxy resin coating in a  presentation box.
+                            An ideal gift and souvenir for Locals and Foreigners.
+                        </p>
+
+                        <p>
+                            Height:-  1.5cm
+                        </p>
+                        <p>
+                            Width:- 2.5cm
+                        </p>
+                        <p>Weight:-  5g</p>
+
+                        <h3 style="text-align:left">Fridge Magnets</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/fridge_magnet_map-2-300x300.jpg" />
+                        <p>
+                            Fridge magnet souvenirs with traditional symbols of rich Sri Lankan culture.  Intricately hand crafted and hand painted by Sri Lankan rural Craftsmen. Tea plucker, fisherman, traditional mask, elephant and the Sri Lankan map and many other designs are available. These small traditional symbol fridge magnet design collections will be reminders of your country  even if you are miles away. Ideal as souvenirs for foreigners too.
+                        </p>
+                        <p>Weight:-  36g</p>
+
+                        <h3 style="text-align:left">Fridge Magnets</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/fridge-magnet-pck.png" />
+                        <p>
+                            Fridge magnet souvenirs with traditional symbols of rich Sri Lankan culture.  Intricately hand crafted and hand painted by Sri Lankan rural Craftsmen. Tea plucker, fisherman, traditional mask, elephant and the Sri Lankan map and many other designs are available. These small traditional symbol fridge magnet design collections will be reminders of your country  even if you are miles away. Ideal as souvenirs for foreigners too.
+                        </p>
+                        <p>Weight:-  36g</p>
+
+                        <h3 style="text-align:left">Fridge Magnets</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/fridge-magnet-srilanka-map-1-180x180.jpg" />
+                        <p>
+                            Fridge magnet souvenirs with traditional symbols of rich Sri Lankan culture.  Intricately hand crafted and hand painted by Sri Lankan rural Craftsmen. Tea plucker, fisherman, traditional mask, elephant and the Sri Lankan map and many other designs are available. These small traditional symbol fridge magnet design collections will be reminders of your country  even if you are miles away. Ideal as souvenirs for foreigners too.
+                        </p>
+                        <p>Weight:-  36g</p>
+
+                        <h3 style="text-align:left">Fridge Magnets</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/DSC_1356-300x300.jpg" />
+                        <p>
+                            Fridge magnet souvenirs with traditional symbols of rich Sri Lankan culture.  Intricately hand crafted and hand painted by Sri Lankan rural Craftsmen. Tea plucker, fisherman, traditional mask, elephant and the Sri Lankan map and many other designs are available. These small traditional symbol fridge magnet design collections will be reminders of your country  even if you are miles away. Ideal as souvenirs for foreigners too.
+                        </p>
+                        <p>Weight:-  36g</p>
+
+                        <h3 style="text-align:left">Fridge Magnets</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/fridge-magnet-pack-244x300.jpg" />
+                        <p>
+                            Fridge magnet souvenirs with traditional symbols of rich Sri Lankan culture.  Intricately hand crafted and hand painted by Sri Lankan rural Craftsmen. Tea plucker, fisherman, traditional mask, elephant and the Sri Lankan map and many other designs are available. These small traditional symbol fridge magnet design collections will be reminders of your country  even if you are miles away. Ideal as souvenirs for foreigners too.
+                        </p>
+                        <p>Weight:-  36g</p>
+
+
+                        <h3 style="text-align:left">Icon of the Breed</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/keytag-1-300x300.jpg" />
+                        <p>
+                            Stainless steel Sri Lanka map shaped key tag. Epoxy Resin coating is light weight ideal for vehicle tag.
+                        </p>
+                        <p>Weight:-  15g</p>
+
+                        <h3 style="text-align:left">Provincial Flag – Crew Neck T-Shirt</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/province-crew-teshirt.png" />
+                        <p>
+                            Sri Lanka consists of nine (9) provinces, all of which have a unique flag design based on cultural symbols unique to that geographical province. This 100% cotton, crew neck T- Shirt in attractive modern black and white designs is the first of its kind depicting provincial flags of our country.
+                        </p>
+                        <p>Available Sizes: – M, L , XL, XXL</p>
+
+                        <h3 style="text-align:left">The Smart Lankans – Polo T- Shirt</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/polo-teshirt.png" />
+                        <p>
+                            The national flag of Sri Lanka depicts a Lion carrying a sword. Enjoy the new experience of the unisex polo T- Shirt which carries a HD embroider Lion.  These T- Shirts are available in many colours
+                        </p>
+                        <p>Available sizes: – M, L , XL, XXL</p>
+
+                        <h3 style="text-align:left">Crew Neck T-shirt – Unity</h3>
+
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/Crew Neck T-shirt – Unity.jpg" />
+                        <p>
+                            These quality short – sleeved crew neck, 100% pre – shrunk cotton t shirt. The “ Unity & Diversity
+                            “ design depicts all the religions in the country. Fit is unisex standard.
+                            Treat yourself and make this a perfect gift on Independence Day or for any occasion.
+                        </p>
+                        <p>Available sizes: – M, L , XL, XXL</p>
+
+
+                        <h3 style="text-align:left">Crew Neck T-shirt – Lion</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/lion-shirt.jpg" />
+                        <p>
+                            These quality short – sleeved crew neck, 100% pre – shrunk cotton t shirt. The “ Lion “ design depicts Sri Lanka’s most popular national symbol of a lion in bands of the national flag. Fit is unisex standard.
+                        </p>
+                        <p>
+                            Treat yourself and make this a perfect gift on Independence Day or for any occasion.
+                        </p>
+
+                        <p>Available Sizes – Lion Face:- ,M ,L , XL, XXL</p>
+
+
+                        <h3 style="text-align:left">Cap</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/cap-1-300x300.jpg" />
+                        <p>Brushed twill cap with full colour embroidered Lion logo on the front and backs of the cap.</p>
+
+                        <p>Weight :- 82g</p>
+
+                        <h3 style="text-align:left">Soft Toys – Large</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/soft-toy-large-300x293.jpg" />
+                        <p>
+                            The Cutest big and small elephant soft toys will put a smile on your kids face. Handmade using bright colourful
+                            handloom material to brighten up any kid as well as adults.
+                        </p>
+
+                        <p>Large Elephant</p>
+                        <p>Height :-  9cm</p>
+                        <p>Width :-  11cm</p>
+                        <p>Weight :- 58g</p>
+
+                        <h3 style="text-align:left">Soft Toys – Small</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/YEP_69342-300x300.jpg" />
+                        <p>
+                            The Cutest small elephant soft toys will put a smile on your kids face. Hand made out of colourful,
+                            bright handloom material to brighten up any kid as well as adults.
+                        </p>
+
+                        <p>Small Elephant</p>
+                        <p>Height :-  7cm</p>
+                        <p>Width :-  9.5cm</p>
+                        <p>Weight :- 17g</p>
+
+                        <h3 style="text-align:left">OCTAPUS</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/octopus-handloom-300x201.jpg" />
+                        <p>
+                            Handcrafted made out of colorful handloom material.
+                            <em>Colourful cute item ideal for a gift to bring out smile on your kid.</em>
+                        </p>
+
+                        <h3 style="text-align:left">Handloom Pencil case – Fish Design</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/pencilcase_fishshaped_handloom-1-300x300.jpg" />
+                        <p>
+                            High quality handmade pencil case in unique designs made out of colourful and loom material. Ideal gift for students.
+                        </p>
+
+                        <h3 style="text-align:left">Handloom Pencil case – Fish Design</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/pencilcase_fishshaped_handloom-2-300x300.jpg" />
+                        <p>
+                            High quality handmade pencil case in unique designs made out of colourful and loom material. Ideal gift for students.
+                        </p>
+
+                        <h3 style="text-align:left">Batik Wall Hangings</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/hanging-300x297.jpg" />
+                        <p>
+                            Batik printing is another conventional industry and these prints have been made by women entrepreneurs in rural Sri Lanka.
+                            These beautiful batik wall hangings are available in 3 designs. Those are Peacock, Perahera & Elephant.
+                        </p>
+                        <p>
+                            Peacock is one of the most beautiful birds on earth. This staggering bird is frequently found in dry zones of the
+                            country. Sri Lanka’s largest and most glamorous Kandy Perahera and Elephant with casket are the other beautiful handmade batik wall hangings.
+                        </p>
+
+                        <h3 style="text-align:left">MSL Tea Caddy</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/Tea_cabby-1-300x300.jpg" />
+                        <p>
+                            Gift pack of high quality Dimbulla Pure Ceylon tea in a unique tin which has the shape of Sri Lanka map.
+                        </p>
+                        <p>Weight :-  150g</p>
+
+                        <h3 style="text-align:left">Patriotic Song Collection</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/patriotic_song_cd-2-300x300.jpg" />
+                        <p>
+                            A collection of twenty (20) Golden Oldies Sri Lankan Patriotic Songs that has been cherished by generations.
+                        </p>
+
+                        <h3 style="text-align:left">Deshabhimani Book</h3>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/deshabhamini-book.jpg" />
+                        <p>
+                            A book which contains descriptions meanings of all the national symbols that help our country make its mark among other countries in the world.
+                        </p>
+                        <p>Length:- 21cm</p>
+                        <p>Width :-14.8cm</p>
+                        <p>Weight :- 95g</p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

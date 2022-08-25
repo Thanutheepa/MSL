@@ -1,0 +1,313 @@
+﻿@page "/joinSchoolsClubs"
+
+@inject ILogin login
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject IFavProduct favProduct
+@inject NavigationManager NavManager
+@inject IRegisterService RegisterService
+@inject AppState appState
+@inject NotificationService NotificationService
+@inject ISupportUsService SupportService
+@inject IJSRuntime JSRuntime
+@using System.Text.RegularExpressions;
+
+@if (ShowDialog == true)
+{
+    <div class="container" style="width:100% ">
+        <div class="modal" id="exampleModal" tabindex="-1" role="dialog" style="display: @(ShowDialog ? "block" : "none")">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="titleLabel">Mother Sri Lanka Schools Club Application Form</h5>
+                        <button type="button" class="close" @onclick="Close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin-bottom:20px">
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>Name Of School <span style="color:red">*</span></label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="schoolname"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>Education Zone <span style="color:red">*</span></label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="eduZone"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>Education Division <span style="color:red">*</span></label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="eduDivision"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>District</label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="district"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>Telephone Number </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="tel"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>Fax Number </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="fax"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>Email <span style="color:red">*</span></label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="email"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-5"><label>Address </label></div>
+                                <div class="col-md-6"><textarea rows="5" style="width:100%; border:1px solid #ddd" @bind="Add"></textarea></div>
+                            </div>
+
+                            <h3 style="margin-bottom: 40px; text-align: center; margin-top: 40px; font-weight: bold">Structure</h3>
+
+                            <div class="row mb-2 mt-1">
+                                <div class="col-md-5"><label>Principle Cheif Advisor </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="principal"></div>
+                            </div>
+
+                            <h3 style="margin-bottom:40px; margin-top:40px; text-align:center ; font-weight:bold">Deputy Advisors 03</h3>
+
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Religious </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="religious"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Deputy Principal </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="deputyPrincipal"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Teacher in Charge </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="teachInCharge"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>President(Student) </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="stdPresident"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Secretary (Student) : </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="stdSecretary"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Treasurer Staff </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="treasurerStaff"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Assistant Treasurer (Student) </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="assistentTreasurer"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Vice President (Student) </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="stdVicePresident"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-5"><label>Assistant Secretary (Student) </label></div>
+                                <div class="col-md-6"><input type="text" class="form-control" @bind-value="stdAssistentSecretary"></div>
+                            </div>
+
+                            <p class="mt-2 mb-2">
+                                COMMITTEE MEMBERS 07 (GRADE 6-13) STUDENT (A MINIMUM REPRESENTATION OF AT LEAST ONE GRADE) COMMITTEE MEMBERS 03 (GRADE 6-13) A
+                                MINIMUM OF 3 TEACHERS TO REPRESENT EACH :
+                            </p>
+
+                            <div class="row mb-2">
+                                <div class="col-md-12 col-12"><textarea rows="5" style="width:100%; border:1px solid #ddd" @bind="commitee"></textarea></div>
+                            </div>
+
+                            <div class="row mt-3" style="margin-bottom:20px;">
+                                <div class="col-md-4 col-12"><button type="submit" class="btn-sm checkoutBtn w-100" @onclick="onClick_Submit">Submit</button></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<div class="container topMargin mt-10 mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Join School Clubs</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="loginBox">
+                        <h1 class="headingNew">Join Mother Sri Lanka <span class="redheading" style="color: #8B1E29;">Schools Clubs</span></h1>
+                        <h3 style="margin-bottom:40px">Join Mother Sri Lanka Schools Clubs</h3>
+                        <p>
+                            Register your school club as a Mother Sri Lanka School Club to take the first step towards making a change by working towards the betterment of your community and school, and taking pride in being a Sri Lankan.
+                        </p>
+                        <div class="row">
+                            <div class="col-md-3 col-12"><button type="submit" class="btn checkoutBtn w-100" @onclick="Open">Join Today</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+
+@code {
+    private bool ShowDialog = false;
+    private string schoolname = "";
+    private string eduZone = "";
+    private string eduDivision = "";
+    private string district = "";
+    private string tel = "";
+    private string fax = "";
+    private string email = "";
+    private string Add = "";
+    private string principal = "";
+    private string religious = "";
+    private string deputyPrincipal = "";
+    private string teachInCharge = "";
+    private string stdPresident = "";
+    private string stdSecretary = "";
+    private string treasurerStaff = "";
+    private string assistentTreasurer = "";
+    private string stdVicePresident = "";
+    private string stdAssistentSecretary = "";
+    private string commitee = "";
+
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+    protected void Close()
+    {
+        ShowDialog = false;
+    }
+
+    protected void Open()
+    {
+        ShowDialog = true;
+    }
+
+    private async void onClick_Submit()
+    {
+        bool valid = true;
+
+        if (schoolname == string.Empty || schoolname == null || eduZone == string.Empty || eduZone == null || eduDivision == string.Empty || eduDivision == null)
+        {
+            valid = false;
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the required data");
+        }
+        else if (EmailValidate(email) == false)
+        {
+            valid = false;
+            email = "";
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid Email");
+        }
+        else if (PhoneValidate(tel) == false)
+        {
+            valid = false;
+            tel = "";
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid Telephone Number (Business)");
+        }
+        else if (valid)
+        {
+            SchoolClub club = new SchoolClub();
+            club.NameOfSchool = schoolname;
+            club.EducationZone = eduZone;
+            club.EducationDivision = eduDivision;
+            club.District = district;
+            club.TelephoneNumber = tel;
+            club.FaxNumber = fax;
+            club.Email = email;
+            club.Address = Add;
+            club.PrinciplaChiefAdvisor = principal;
+            club.Religious = religious;
+            club.DeputyPrincipal = deputyPrincipal;
+            club.TeacherInCharge = teachInCharge;
+            club.PresidentStudent = stdPresident;
+            club.SecretaryStudent = stdSecretary;
+            club.TreasurerStaff = treasurerStaff;
+            club.AssisTreasurerStudent = assistentTreasurer;
+            club.VicePresidentStudent = stdVicePresident;
+            club.AssisSecretaryStudent = stdAssistentSecretary;
+            club.CommitteeMembers = commitee;
+
+            var registerclub = Task.Run(async () => await SupportService.SaveSchoolClub(club));
+            string saveclubs = registerclub.Result;
+
+            if (saveclubs == "School Club created successfully.")
+            {
+                clear();
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "success", "", " Send successfully");
+            }
+            else
+            {
+                clear();
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Error occured while saving. Please try again.");
+            }
+        }
+    }
+
+    private void clear()
+    {
+        ShowDialog = false;
+        schoolname = "";
+        eduZone = "";
+        eduDivision = "";
+        district = "";
+        tel = "";
+        fax = "";
+        email = "";
+        Add = "";
+        principal = "";
+        religious = "";
+        deputyPrincipal = "";
+        teachInCharge = "";
+        stdPresident = "";
+        stdSecretary = "";
+        treasurerStaff = "";
+        assistentTreasurer = "";
+        stdVicePresident = "";
+        stdAssistentSecretary = "";
+        commitee = "";
+    }
+
+    private bool EmailValidate(string email)
+    {
+
+        if (Regex.IsMatch(email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    private bool PhoneValidate(string mobile)
+    {
+        Regex phone = new Regex("[0-9]{10}");
+        if (phone.IsMatch(mobile))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+}

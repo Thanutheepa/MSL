@@ -1,0 +1,136 @@
+﻿@page "/BestRunProjects"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Best Run Projects</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1></h1>*@
+                        <h1 class="headingNew">Some of the  <span class="redheading" style="color: #8B1E29;">Best Run Projects</span></h1>
+                        <h3 style="text-align:left">DEVELOPING RESPONSIBLE CITIZENSHIP</h3>
+
+                        <img class="img-fluid d-block" src="images/BestRunProject/MSL-Image.png" />
+
+                        <h3 style="text-align:left">Man will not survive without the environment</h3>
+
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>
+                                The Minipe Yoda Ela is an essential resource for the people of Hettipola in their daily lives. It is the only source of water
+                                fulfilling the water requirements of those living in its vicinity and also depend on it for agricultural use.  The pollution of this
+                                useful canal system owing to various activities of man was a contentious issue.   Wilgamuwa Naminioya Secondary School, selected the
+                                purification of the urban parts of Minipe Yoda Ela as their Project RUN.
+                            </li>
+                            <li>
+                                Sadly, some segments of society are still ignorant of the grave dangers we face due to the callous destruction of the environment.
+                                The conscientious and responsible children of Mathugama Weediyabanda Maha Vidyalaya are working hard to convert the school into a
+                                pleasant place while cleaning the Palen Ganga and its banks which have been polluted by people who make use of the river.
+                            </li>
+                            <li>
+                                Kandy Lake, an integral part of the beauty of the city of Kandy, was threatened with the prospect of continued pollution due to the
+                                callous acts of people dumping refuse, unconcerned with safeguarding it. DS Senanayake College, Kandy was recognized by Mother Sri Lanka
+                                for taking the initiative to increase awareness among the general public of the damage done, affecting the beauty of the city.
+                            </li>
+                            <li>
+                                Nuwara eliya is featured as a major tourist attraction in Sri Lanka, as it is beautifully laid out, in the salubrious hills, blessed
+                                with a cool climate. Gregory Lake is one of the most beautiful locations in Nuwara eliya. Unfortunately due to the ignorance and
+                                indifference of the people, Gregory lake constantly gets polluted due to chemicals and waste materials which are dumped or syphoned
+                                into it. The manner in which the Mother Sri Lanka club of Gamini Central College intervened to save this lake was highly commendable.
+                            </li>
+                        </ul>
+
+                        <h3 style="text-align:left">Looking after the sick is equivalent to looking after me: Lord Buddha</h3>
+
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>
+                                Walisinghe Harischandra Maha Vidyalaya of Anuradapura undertook the reconstruction of the Ayurvedic Ward of the Anuradhapura General
+                                Hospital to show their commitment towards Responsible Citizenship.
+                            </li>
+                            <li>
+                                The Government Central Dispensary in Pinnawela, is the only dispensary available for the villagers of Pinnawela, Kelimadala and
+                                Diddeniya to obtain medicines from, the hospital being 12 Km away. Fortunately because of its close proximity to the Rajapola Maha
+                                Viduhala it became the endeavor of the MSL Club, to have it render the service it was meant for, by cleaning and maintaining the
+                                premises to make it suitable and pleasant for patients.
+                            </li>
+                            <li>
+                                The highly commendable act of kindness towards improving the conditions of the OPD of the Nuwara Eliya General Hospital by the girls
+                                of Girls High School-Nuwara Eliya was highly appreciated by hospital authorities. It will be etched in the memory of the students,
+                                the hospital staff and the people, that these duties were performed with cooperation, mutual respect and commitment in a multi
+                                ethnic community.
+                            </li>
+                            <li>
+                                The cleanliness of some of the government institutions which are committed to serving the public are gravely lacking, owing to the
+                                heavy use of these facilities by the general public. As the orthopedic unit of the Colombo National Hospital was in dire need of a
+                                facelift, the students of Asoka Vidyalaya recognized this need and proceeded to engage in renovating the ward with the cooperation
+                                of the principal of the school, teachers, parents and the community at large.
+                            </li>
+                        </ul>
+
+                        <h3 style="text-align:left">United we stand strong</h3>
+
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>
+                                Situated in Gajaneggama in the historical city of Yapahuwa, Gajaneggama Maha Vidyalaya – Rideebendiella joined hands and entered
+                                into a project with the Babul Adam Muslim College with a view to emphasizing the social and cultural links of brotherhood.
+                                The students of the two schools communicated well, using the universal language of humanity although they could not understand
+                                each other’s mother tongue. They held many programs and activities together thereby building long lasting bonds.
+                            </li>
+                            <li>
+                                Due to no fault of theirs, students of the war-torn North lost the opportunity of enjoying the freedom enjoyed by students in the
+                                South, for over 30 years. With the dawn of peace, they are now fully able to enjoy the same freedom. So it was with great warmth
+                                that the students of the Thirumurukkandi Vidyalaya welcomed the helping hands extended by the students of Ganemulla Kelaniya
+                                Jayakodi Maha Vidyalaya who travelled to the North, with happy smiles and loving hearts.
+                            </li>
+                        </ul>
+
+                        <h3 style="text-align:left">Our Roads to Success</h3>
+
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>
+                                The Southern Expressway is the first highway in the country and it introduced many novel experiences to Sri Lankans. The students
+                                of the Mother Sri Lanka school club of the Janadhipathi Vidyalaya, Galle which is situated facing the southern highway, took action
+                                to clean and beautify the underground access road of the school which was hitherto used for illegal purposes.
+                            </li>
+                            <li>
+                                Mathugama Kumburawala Maha Vidyalaya faced the challenge of implementing a programme to reconstruct the derelict Baduraliya main Bus
+                                stand which had been neglected by the thousands using it daily, by converting it into an attractive, comfortable one.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

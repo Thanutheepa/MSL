@@ -1,0 +1,458 @@
+﻿@inherits LayoutComponentBase
+
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject IApiService apiService
+@inject AppState appState
+@implements IDisposable
+@inject NavigationManager NavManager
+@inject IFavProduct favProduct
+@inject IJSRuntime JSRuntime
+
+<CascadingValue Value="this">
+    <div class="main" id="main">
+        @*<div class="row p-0 m-0">
+                <div class="col-12 p-0 m-0">
+                    <div class="covidBox">
+                        <ul class="navbar-nav d-inline">
+                            @if (appState.user != null)
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Profile">
+                                    My Account
+                                </a>
+                            </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link" href="/fav">
+                                    Wishlist
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/cart">
+                                    My Cart
+                                </a>
+                            </li>
+                            @if (appState.user == null)
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/register">
+                                    Register
+                                </a>
+                            </li>
+
+                            }
+                            @if (appState.user == null)
+                            {
+                            <li class="nav-item">
+                                <a href="/login/null" class="nav-link">Login</a>
+                            </li>
+                            }
+                            @if (appState.user != null)
+                            {
+                            <li class="nav-item">
+                                <button class="btn nav-link p-0" @onclick="Logout"><span class="d-inline-flex">Logout</span></button>
+                            </li>
+
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>*@
+        <div class="top-row px-4 mobileRow d-lg-none">
+            <div class="container">
+                <div class="row pt-2">
+                    <div class="col-12 centerColLeft">
+                        <div class="row pt-2 pt-md-0 w-100 m-0">
+                            <div class="col-12 col-md-4 pt-3 pb-1 pb-md-0 pt-md-0 mobileCurr">
+                                <div class="leftSideItems d-lg-none">
+                                    <button class="btn navDropBtn"><i class="fas fa-bars"></i></button>
+                                </div>
+                                <a href="/" class="topBtn ml-5"><img src="images/logo.png" class="logo" /></a>
+                                <div class="form-group p-0 currencyDrop d-lg-none">
+                                    <select class="form-control" id="currType" value="@currType" @onchange="CurrencyChange">
+                                        <option value="LKR">LKR</option>
+                                        <option value="USD">USD</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-8 pt-1 pt-md-0 pb-3 pb-md-0 centerColRightNav">
+                                <div class="text-center">
+                                    @if (appState.user == null)
+                                    {
+                                        <a href="/login/null" class="nav-link"><i class="fas fa-user"></i></a>
+                                    }
+                                    @if (appState.user != null)
+                                    {
+                                        <a href="/Profile" class="nav-link"><i class="fas fa-user"></i></a>
+                                        <button class="btn nav-link" @onclick="Logout"><i class="fas fa-sign-out-alt"></i></button>
+
+                                    }
+                                    <a href="/cart" class="topBtn cartBtn"><i class="topIcons fas fa-shopping-cart"></i> <span class="cartCount">@appState.cartItemCount</span></a>
+                                    <a href="fav" class="topBtn cartBtn ml-2"><i class="topIcons fas fa-heart"></i> <span class="cartCount">@appState.favProductCount </span></a>
+                                    @*<span><a href="fav" class="topBtn cartBtn ml-2"><i class="topIcons fas fa-heart"></i> <span class="cartCount">@appState.favProductCount </span></a></span>
+                                        @if (appState.user != null)
+                                        {
+                                            <button class="btn topBtn" @onclick="Logout"><i class="topIcons fas fa-sign-out-alt"></i> <span class="d-none d-md-inline-flex">Logout</span></button>
+                                        }*@
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid navbarFixedTop scrolled fixed-top pb-md-0">
+            <div class="navItemsBar row">
+                <div class="col-12 text-center currCon">
+                    <ul class="navbar-nav navbarMain d-none d-lg-inline">
+                        <li class="nav-item d-none d-lg-inline">
+                            <a href="/" class="topBtn d-none d-lg-inline"><img src="images/logo.png" class="logo" /></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link whiteText" @onclick:preventDefault data-bs-toggle="dropdown">  Who We Are <i class="fas fa-caret-down"></i>  </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item nav-itemMobile" href="/ChairpersonMessage"> Letter from the Chairperson</a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/aboutus"> About Us</a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/executiveteam"> Executive Team </a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/motherSriLankaAmbassadors"> Mother Sri Lanka Ambassadors </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link whiteText" @onclick:preventDefault data-bs-toggle="dropdown">  What We Do <i class="fas fa-caret-down"></i>  </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item nav-itemMobile" href="/OurWorkWithChildren"> Our Work With Children</a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/OurWorkWithYouth"> Our Work With Youth </a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/OurWorkwiththeCommunity"> Our Work With the Community </a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/BestRunProjects"> Some of the Best Run Projects </a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/LoveSriLanka"> Love Sri Lanka Festival </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-itemMobile" href="/OurPartners">
+                                Our partners
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link whiteText" @onclick:preventDefault data-bs-toggle="dropdown">  Support Us <i class="fas fa-caret-down"></i> </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item nav-itemMobile" href="/joinasVolunteer"> Join as Volunteer</a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/joinSchoolsClubs"> Join Mother Sri Lanka Schools Clubs </a></li>
+                                <li><a class="dropdown-item nav-itemMobile" href="/supportUs"> Support Us</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-itemMobile" href="/dynamicGallery">
+                                Gallery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-itemMobile" href="/eventsDynamic">
+                                What's New
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-itemMobile" href="/contact">
+                                Contact Us
+                            </a>
+                        </li>
+                        <li class="nav-item pr-0">
+                            <a class="nav-link nav-itemMobile shopNow" href="/allproducts/-1">
+                                Shop Now
+                            </a>
+                        </li>
+                        @if (appState.user == null)
+                        {
+                            <li class="nav-item">
+                                <a href="/login/null" class="nav-link d-none d-lg-inline"><i class="fas fa-user"></i></a>
+                            </li>
+                        }
+                        @if (appState.user != null)
+                        {
+                            <li class="nav-item">
+                                <a href="/Profile" class="nav-link d-none d-lg-inline"><i class="fas fa-user"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <button class="btn nav-link p-0 d-none d-lg-inline" @onclick="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                            </li>
+
+                        }
+                        <li class="nav-item p-0">
+                            <a href="/cart" class="topBtn cartBtn d-none d-lg-inline"><i class="topIcons fas fa-shopping-cart"></i> <span class="cartCount">@appState.cartItemCount</span></a>
+                        </li>
+                        <li class="nav-item p-0">
+                            <a href="/fav" class="topBtn cartBtn d-none d-lg-inline"><i class="topIcons fas fa-heart"></i> <span class="cartCount">@appState.favProductCount </span></a>
+                        </li>
+                        <li class="nav-item pl-0">
+                            <div class="form-group p-0 currencyDrop d-none d-lg-inline">
+                                <select class="" id="currType" value="@currType" @onchange="CurrencyChange">
+                                    <option value="LKR">LKR</option>
+                                    <option value="USD">USD</option>
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            @Body
+        </div>
+
+        <div class="footerBack">
+            <div class="container-fluid footer">
+                <div class="row m-0 py-4">
+                    <div class="col-12">
+                        <div class="container upperPart">
+                            <div class="row">
+                                <div class="col-12 col-md-7 col-lg-7 centerColLeft">
+                                    <div>
+                                        <img src="images/logo.png" class="footerLogo mb-4" />
+                                        <p class="footerParas"><i class="fas fa-map-marker-alt"></i> Address <br />&nbsp;&nbsp;&nbsp;NO : 614, SRI JAYAWARDENEPURA ROAD, KOTTE</p>
+                                        <p class="footerParas"><i class="fas fa-phone-alt"></i> TEL: <a href="tel:0112867505">011 286 7505</a></p>
+                                        <p class="footerParas"><i class="fas fa-envelope-open"></i> Email - <a href="mailto:mothersrilankatrust2015@gmail.com">mothersrilankatrust2015@gmail.com</a></p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3 col-lg-5 centerCol2">
+                                    <div class="">
+                                        <h4>Quick Links</h4>
+                                        <p><a href="/WhatWeDo">What We Do</a></p>
+                                        <p><a href="/joinasVolunteer">Join Us</a></p>
+                                        <p><a href="/supportUs">Support Us</a></p>
+                                        <p><a href="/gallery">Gallery</a></p>
+                                        <p><a href="/news">News</a></p>
+                                        <p><a href="/Projects" target="_top">Project Run</a></p>
+                                        <p><a href="/events">Events</a></p>
+                                        <p><a href="https://www.slaccom.com/" target="_blank">Sri Lanka America Chamber </a></p>
+                                        <div class="socialIcons d-inline-flex">
+                                            <a href="https://www.facebook.com/mothersrilanka.lk/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                            <a href="https://www.youtube.com/channel/UCntDodMs28DE1A-pTG9du6A" target="_blank"><i class="fab fa-youtube"></i></a>
+                                            <a href="https://www.instagram.com/mothersrilankaofficial" target="_blank"><i class="fab fa-instagram"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid copyRightsFull">
+                <div class="container copyRights">
+                    <div class="row m-0 pt-3">
+                        <div class="col-12 text-center d-lg-block">
+                            <p>© <b>@year</b> All Rights Reserved | Mother Sri Lanka. <a class="footerLink" target="_blank" href="http://melstasoft.com/">Powered by Bellvantage  Pvt Ltd.</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (cartService.GetCartPopup())
+        {
+            <div class="cartPopup">
+                <div class="row">
+                    <div class="col-12 cartPopupTop">
+                        <h3 class="pt-4 text-center">Cart</h3>
+                        <button class="btn cartPopupCloseBtn" @onclick="ClosePopup"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+
+                <div class="cartPopupItems">
+                    @if (cartService.GetCartProducts().Count() > 0)
+                    {
+                        @foreach (var cartProduct in cartService.GetCartProducts())
+                        {
+                            <div class="row">
+                                <div class="col-4" style="margin:0;padding:0">
+                                    <a href="@($"product/{cartProduct.Product.productId}")">
+                                        <span class="product-image" style="margin:0;padding:0">
+                                            <img src="@cartProduct.Product.ImageUrl" alt="" style="width:100%">
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="col-8">
+                                    <div class="product-block" style="color:black">
+                                        <div class="product-info">
+                                            <p class="product-name2">
+                                                <a href="@($"product/{cartProduct.Product.productId}")" style="color:black">
+                                                    @cartProduct.Product.name
+                                                </a>
+                                            </p>
+                                            <div class="price-box2">
+                                                <span class="regular-price" id="product-price-92-viewed">
+                                                    <span class="price" style="margin-left:5px">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(cartProduct.Product.SellingPrice / appState.currRate.BuyingRate, 2))).ToString("N")</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="cartPopupBtns">
+                    <div class="row">
+                        <div class="col-12 px-5 pb-4">
+                            <hr />
+                            <button class="btn checkoutBtn w-100" @onclick="GoToCheckout">VIEW CART</button>
+                            <button class="redText link btn w-100" @onclick="CountinueShopping">Continue Shopping</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button @onclick="OnButtonClick" class="btn btnTop"><i class="fas fa-chevron-up"></i></button>
+
+</CascadingValue>
+
+@code {
+
+    private List<CartItem> cartProducts = new List<CartItem>();
+    public User User { get; set; }
+    private List<Product> favproducts = new List<Product>();
+
+    private string currType = "LKR";
+
+    DateTime myDateTime = DateTime.Now;
+    string year;
+
+    protected override void OnInitialized()
+    {
+        appState.OnChange += StateHasChanged;
+        year = myDateTime.Year.ToString();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            User = await localStore.GetItemAsync<User>("user");
+            currType = await localStore.GetItemAsync<string>("currency");
+            if(currType == "" || currType == null)
+            {
+                currType = "LKR";
+            }
+
+            
+            GetRate();
+
+            appState.SetUser(User);
+            appState.SetCurrType(currType);
+
+
+            if (User != null)
+            {
+                cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + User.CustomerId);
+                favproducts = await localStore.GetItemAsync<List<Product>>("fav-" + User.CustomerId);
+            }
+            else
+            {
+                cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+                favproducts = await localStore.GetItemAsync<List<Product>>("fav-0");
+            }
+
+            if (cartProducts != null)
+            {
+                cartService.SetCart(cartProducts);
+                appState.SetCartItemCount(cartService.GetTotalCount());
+            }
+            else
+            {
+                cartService.EmptyCart();
+                appState.SetCartItemCount(0);
+            }
+
+            int selectedOutletId = await localStore.GetItemAsync<int>("outlet");
+
+
+            if (favproducts != null)
+            {
+                favProduct.SetFav(favproducts);
+                appState.SetFavProductCount(favProduct.GetTotalCount());
+            }
+
+            //appState.SetOutlet(selectedOutletId);
+            try
+            {
+                await JSRuntime.InvokeAsync<object>("dropdown");
+                await JSRuntime.InvokeAsync<object>("NavToggle");
+                await JSRuntime.InvokeAsync<object>("ScrollButton");
+            }
+            catch (Exception e)
+            {
+
+            }
+            StateHasChanged();
+        }
+    }
+
+    private void GoToCheckout()
+    {
+        cartService.SetCartPopup(false);
+        NavManager.NavigateTo("/cart");
+    }
+
+    private void CountinueShopping()
+    {
+        cartService.SetCartPopup(false);
+        NavManager.NavigateTo("/allproducts/-1");
+    }
+
+    private void ClosePopup()
+    {
+        cartService.SetCartPopup(false);
+    }
+
+    private async void Logout()
+    {
+        User = null;
+        appState.SetUser(null);
+        cartService.EmptyCart();
+        appState.SetCartItemCount(0);
+        favProduct.EmptyFav();
+        appState.SetFavProductCount(0);
+        await localStore.RemoveItemAsync("user");
+
+        NavManager.NavigateTo("/");
+    }
+
+    public void Dispose()
+    {
+        appState.OnChange -= StateHasChanged;
+    }
+
+    private async void OnButtonClick()
+    {
+        await JSRuntime.InvokeVoidAsync("OnScrollEvent");
+    }
+
+    @functions {
+
+        async void CurrencyChange(ChangeEventArgs e)
+        {
+            currType = e.Value.ToString();
+            await localStore.SetItemAsync("currency", currType);
+            appState.SetCurrType(currType);
+            GetRate();
+            StateHasChanged();
+        }
+    }
+
+    private async void GetRate()
+    {
+        Rate rate = await apiService.GetRate(currType);
+        if(rate.Id == 0 || currType == "LKR")
+        {
+            rate.CurrencySymbol = "Rs.";
+            rate.BuyingRate = 1;
+        }
+        appState.SetCurrRate(rate);
+        StateHasChanged();
+    }
+}

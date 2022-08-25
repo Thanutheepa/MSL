@@ -1,0 +1,328 @@
+﻿@page "/executiveteam"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Executive Team</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">Our <span class="redheading" style="color: #8B1E29;">Work</span></h1>
+                        <p>
+                            Established in 2008, ‘Mother Sri Lanka’ is an initiative to inspire Positive Thinking and Responsible Citizen behavior among Sri Lankans One of our main focuses is to promote economic empowerment of vulnerable segments of society and thereby enable them to play a positive role in nation building.
+                        </p>
+                        <h1 class="headingNew">Executive <span class="redheading" style="color: #8B1E29;">Team</span></h1>
+
+
+                        @*Our Board of Trustees & Executive Team*@
+                        <h3 style="text-align:left">Our Board of Trustees/Directors  & Executive Team</h3>
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>Dr.Janaki Kuruppu – <b>Founder/Chairperson</b></li>
+                            <li>Mr.Thushantha Karunanayake – <b>Director/Trustee</b></li>
+                            <li>Prof.Ananda Jayawardena – <b>Director</b> </li>
+                            <li>Mr.Riaz Saban – <b>Director</b></li>
+                            <li>Mr.Piyadasa Marabage – <b>Trustee</b></li>
+                            <li>Admiral Thisara Samarasinghe – <b>Trustee</b></li>
+                            <li>Mr.Eastman Narangoda – <b>Trustee</b></li>
+                            <li>Mr.Amrit Canagaretna - <b>Senior Executive Committee Member</b></li>
+                            <li>Ms.Priyadharshini Karunarathne - <b>Senior Executive Committee Member</b></li>
+                            <li>Mr.Devaka Wickramasuriya - <b>Senior Executive Committee Member</b></li>
+                            <li>ACM Gagan Bulathsinghala - <b>Senior Executive Committee Member</b> </li>
+                            <li>Ms.Samantha De Silva – <b>Member</b></li>
+                            <li>Ms.Chandrika Kannangara - <b>Member</b></li>
+                            <li>Mr.Ali Nawaz – <b>Member</b></li>
+                            <li>Major General Kumudu Perera - <b>Member</b></li>
+                            <li>Ms.Shiromi Masakorale - <b>Member</b></li>
+                            <li>Mr.Mohideen Saheed - <b>Member</b></li>
+                            <li>Ms.Surangi Fernando - <b>Member</b></li>
+                            <li>Ms.Shameena Pallie - <b>Member</b></li>
+                            <li>Mr.Sunimal Opatha – <b>Member</b></li>
+
+                        </ul>
+                        <div class="row">
+                            <img class="d-block w-100" src="images/Executive/executiveTeam-2010.jpg" />
+                        </div>
+                        <p>EXECUTIVE COMMITTEE – 2010</p>
+
+                        <div class="row">
+                            <img class="d-block w-100" src="images/Executive/IMG_0116.jpg" />
+                        </div>
+                        <p>EXECUTIVE COMMITTEE – 2019</p>
+
+                        @*Former Board Members*@
+                        <h3 style="text-align:left">Founders</h3>
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li>Dr Janaki Kuruppu</li>
+                            <li>Mr. Lalith Weeratunga</li>
+                            <li>(The late) Prof. Uditha Liyanage</li>
+                            <li>Dr. Ravi Fernando</li>
+                            <li>Mr. Renton de Alwis</li>
+                        </ul>
+
+
+                        <h3 style="text-align:left">ABOUT THE FOUNDER</h3>
+                        <h3 style="text-align:left">Dr. JANAKI KURUPPU</h3>
+                        <img class="d-block" src="images/Executive/janaki-kuruppu-240x300.jpg" style="width:240px" />
+                        <br />
+                        <p>
+                            Dr. Janaki Kuruppu is the Founder/ Settler of the Mother Sri Lanka Trust and the current Chairperson of Mother Lanka
+                            Foundation.Her sheer determination and resolve towards making a difference even in a small way, along with the
+                            support of an equally passionate team has helped this movement to become what it is today.  In 2016, she decided to
+                            use her 26 years of experience in the corporate world and the government, to expand and build a sustainable non-profit
+                            foundation that will be a helping hand to the not so privileged citizens of her motherland.
+                        </p>
+                        <p>
+                            Starting her career as an entrepreneur, Dr. Kuruppu was single handedly responsible for bringing Nielsen to Sri Lanka and
+                            was instrumental, as its first CEO/Managing Director, in transforming it to become the largest Market Research Company at
+                            the time.  Having achieved what she set out to do, she next served the Cargills Group as the Group Director-Strategic
+                            Planning and Business Development.
+                        </p>
+                        <p>
+                            After an illustrious career spanning over 19 years in the private sector, she joined the public sector in an advisory
+                            capacity.  Her tenure of 7 years in the Public Service is marked with many milestones. Namely, she has the distinct honour
+                            of being the first Chairperson of the Regional Development Bank which she set up after merging 6 provincial level banks
+                            and the first female Chairperson of the Sri Lanka Tea Board.  Dr. Kuruppu was also an Advisor to the cabinet Sub-Committee
+                            for Food Security and Cost of Living Management, Director of the Presidential Secretariat, Co-operative Wholesale
+                            Establishment, Commercial Bank and Colombo Dockyard Limited.
+                        </p>
+                        <p>
+                            Adding to the many accolades to her name, she is also the recipient of the All American Scholar Award – 1993, United States
+                            Achievement Academy Award – 1993, Most Outstanding Sri Lankan Award – 2010, The Global Commerce Excellence Award – 2011,
+                            Shramabhimani Award – 2012, Power Woman 2013 and the World Woman Leadership Award – 2014. Dr. Kuruppu is also the only
+                            Asian to be appointed to the honorary position of the Steering Committee of AgriFin, a joint project of Bill and Melinda
+                            Gates Foundation and the World Bank for agriculture financing.
+                        </p>
+                        <p>
+                            Dr. Kuruppu holds a PhD from the University of Colombo, an M.A. in Statistics and a B.Sc in Mathematics from the University
+                            of Missouri, USA.  At present, while spearheading the charity work of the Mother Sri Lanka Trust, she runs her own business
+                            ventures and also works as a freelance business strategy and development consultant while serving as a member of many
+                            corporate boards.
+                        </p>
+
+                        <h3 style="text-align:left">Prof. ANANDA JAYAWARDANE</h3>
+                        <img class="d-block" src="images/Executive/ananda-jayawardane-237x300.jpg" style="width:240px" />
+                        <br />
+                        <p>Former Vice Chancellor at University of Moratuwa</p>
+                        <p>
+                            Prof. Ananda Jayawardane is a Senior Professor in Civil Engineering, he was a Vice Chancellor of the University of
+                            Moratuwa. He is a Chartered Civil Engineer, International Professional Engineer and a Fellow of the Institution of Engineers,
+                            Sri Lanka. He is the immediate past NDB Bank Endowed Professor in Entrepreneurship at the University of Moratuwa,
+                            immediate past Dean Faculty of Engineering and a Past President of the Institution of Engineers, Sri Lanka. He is a Fellow of
+                            Institution of Project Managers Sri Lanka, a fellow of National Academy of Sciences of Sri Lanka, a member of Board of
+                            Management of Miloda Institute of Financial Studies, Sir Arthur C Clarke Institute for Modern Technologies, Open University
+                            of Sri Lanka and Sierra Cables and has been in the boards of several other institutes and organizations. He is a member of the
+                            Lions Club.
+                        </p>
+
+                        <h3 style="text-align:left">Mr.THUSHANTHA KARUNANAYAKE</h3>
+                        <img class="d-block" src="images/Executive/thushantha-karunanayake.jpg" style="width:240px" />
+                        <br />
+                        <p>Director at PCL Solutions Pvt Ltd</p>
+                        <p>
+                            Thushantha is a Fellow Certified Professional Marketer from the Asia Marketing Federation, a trained Six Sigma Green belt from 3M USA  and holds a MBA from University of Peradeniya.
+                        </p>
+                        <p>
+                            He is a lecturer in Marketing, a personal trainer and a member of the Packaging Advisory Committee of the Ministry of
+                            Industry & Commerce and serves as the General Secretary of the Sri Lanka Institute of PackagingThushantha has been a
+                            practicing marketer for last 22 years and experienced over a decade being in top Management with a strong background in
+                            Pharmaceutical, Health Care, FMCG, Automotive & Corporate Marketing with exposure working for both Local and Multinational
+                            organizations.He has worked for Hemas Pharmaceuticals and Multinationals such as Schering AG Germany ,3M USA and headed the
+                            local operation of 3M Lanka as Group Manager before moving to MJF Group or better known as “Dilmah “ to head a subsidiary
+                            company PCL Solutions which is engaged in Automotive, Health care , Post Harvest Technology and Green technology.
+                        </p>
+                        <p>
+                            He has the rare honour of being the only person to have been involved in all three major advertising awards in Sri Lanka as
+                            Chairman SLIM AWARDS 2004, Head of Moderators at The Chillies 2006  and  Chairman of Blueprint committee of the first ever
+                            Sri Lankan EFFIES 2008.
+                        </p>
+                        <p>
+                            He has been the President of Lions Club of Sri Jayewardenepura Kotte, International District 306C – and rose to be the
+                            Region Coordinator for District 306C1 of Lions International and has won many awards for best achievements in serving
+                            the community by Lions International.
+                        </p>
+
+                        <h3 style="text-align:left">Mr.RIAZ SABAN</h3>
+                        <img class="d-block" src="images/Executive/SabanPhoto.JPG" style="width:240px" />
+                        <br />
+                        <p>Chief Operating Officer of Pure Life Solutions (Pvt) Ltd</p>
+                        <p>
+                            Riaz Saban is a senior management executive with a wealth of experience in a diverse range of
+                            industries including manufacturing, retailing, consumer goods and hospitality. Being an
+                            unconventional thinker and effective leader, he brings to the table nearly three decades of
+                            expertise in the corporate sector and social entrepreneurial work. Saban has a deep belief in
+                            the notion that the corporate sector, and its leaders, can play a significant and profound role in
+                            enhancing people’s lives and society at large. This mindset has instilled in him a zest for
+                            entrepreneurship as well as futuristic technology – all of which have been well served by an
+                            instinctual think-out-of-the-box approach.
+                        </p>
+                        <p>
+                            Over the decades, he has shown a strong ability to strategize and execute on projects with
+                            precision. He is particularly adept at transforming businesses through their life-cycle, skillfully
+                            working in the ecosystem of startups through to the SME stage.
+                        </p>
+                        <p>
+                            Saban, who holds an MBA from Cardiff Metropolitan University, also brings a deep
+                            understanding of general administration, marketing, retail management, tourism management
+                            and airline through his professional education both in the UK and Sri Lanka.
+                            He is currently the Chief Operating Officer of Pure Life Solutions (Pvt) Ltd; a marketing and
+                            distribution company recognized as a market leader in distributing safe environmental-friendly
+                            household detergents. He is also the COO of Super Colloids Ltd; a manufacturing and import
+                            export-oriented business.
+                        </p>
+
+                        <h3 style="text-align:left">ADMIRAL THISARA SAMARASINGHE</h3>
+                        <img class="d-block" src="images/Executive/admiral.jpeg" style="width:240px" />
+                        <br />
+                        <p>
+                            Former High Commissioner of Sri Lanka to Australia, New Zealand and Pacific Islands<br />
+                            Former Commander of the Sri Lankan Navy
+                        </p>
+                        <p>
+                            Admiral Thisara Samarasinghe RSP, VSV, USP, ndc, psc, DISS, MNI, SLN was the Commander of the Sri
+                            Lankan Navy from 15 July 2009 to 15 January 2011 He had a distinguished 36-year career in the Sri
+                            Lankan Navy. His career included a wide range of key appointments at sea and ashore, including training
+                            with outstanding achievements in UK - 1976, India - 1978, 1983, 2005, USA - 1991, 2003 . Also he is a
+                            former High Commissioner of Sri Lanka to Australia, New Zealand and Pacific Islands.
+                        </p>
+                        <p>
+                            He was awarded Rana Sura Padakkama (RSP) for gallantry in combat, the service medals Vishista Seva
+                            Vibhushanaya (VSV) in recognition of his devotion and dedication to the country with and unblemished
+                            career record, Uttama Seva Padakkama (USP) for meritorious and distinguished service, the Sri Lanka
+                            Armed Services Long Service Medal and other medals that include the Purna Bhumi Padakkama and the
+                            North and East Operations Medal. Samarasinghe is a recipient of 5 commendation letters from four
+                            commanders of the navy for his outstanding performance throughout the long career.
+                        </p>
+                        <p>
+                            Admiral Thisara Samarasinghe was awarded the Honorary Doctorate Degree – Doctor of Business
+                            Administration (DBA) Specializing in Shipping and Port Management by the Commonwealth University in
+                            the UK, at a Top Executive Seminar organized by the London Graduate School. This award is in
+                            recognition of his exceptional meritorious service to Sri Lanka with distinction throughout his career in
+                            the Navy, and later as the Commander of the Navy.
+                        </p>
+                        <p>
+                            Currently he is the Senior Consultant of CINEC Campus and the member of the Senior Management
+                            Committee of CINEC the largest and most diversified non state university in Sri Lanka.He is also a
+                            member of the Governig Council of University of Ruhuna.
+                        </p>
+
+                        <h3 style="text-align:left">Mr.PIYADASA MARAMBAGE</h3>
+                        <img class="d-block" src="images/Executive/mr. Marambage.jpg" style="width:240px" />
+                        <br />
+                        <p>Former Director of Education</p>
+                        <p>
+                            Mr. Marambage is a former Director of Education (SLEAS Grade I) with a career as an education
+                            administror spanned over four decades. He also served as a Director cum CEO at National Child
+                            Protection Authority from 2010 to 2012 He rendered his services as a board member to Sri Lanka
+                            Institute of Local Governance, Vocational Training Authority and Academic consultant to J Lanka
+                            Technologies (pvt) Ltd.
+                        </p>
+                        <p>
+                            Mr. Marambage received his Bachelors of Commerce from University of Sri Jayawardhanapura and
+                            Masters of Science in Information Management from Asian Institute of Technology in Thailand.
+                        </p>
+
+                        <h3 style="text-align:left">Mr.EASTMAN NARANGODA</h3>
+                        <img class="d-block" src="images/Executive/Mr. Narangoda.jfif" style="width:240px" />
+                        <br />
+                        <p>
+                            Chairman of Asset Trust Management (pvt) Ltd/ Former Chairman of
+                            Seylan Bank PLC
+                        </p>
+                        <p>
+                            Mr. Eastman Narangoda currently serves as the chairman of Asset Trust
+                            Management (pvt) Ltd. Mr. Narangoda is the former Chairman of Seylan Bank PLC
+                            and George Steuart Finance PLC. He was the General Manager / Chief Executive
+                            Officer of the National Savings Bank for five years having served the bank in several
+                            capacities since 1975
+                        </p>
+                        <p>
+                            He is an Economic graduate from the University of Peradeniya and obtained a
+                            diploma in advanced bank management (Stockholm). He is also a fellow at Institute
+                            of Bankers (SL), Sri Lanka Institute of Training and Development and Institute of
+                            Management Specialists (UK).
+                        </p>
+                        <p>
+                            In recognition to his contribution to the banking sector and the country, Mr.
+                            Narangoda was awarded the “Most Outstanding Sri Lankan Award 2010” in the
+                            category of Business Management by the International Association of Lions Clubs
+                            and has also authored the Sri Lankan chapter of the book titled “Small Savings
+                            Mobilization and Asian Economic Development” which was sponsored by the United
+                            Nations.
+                        </p>
+                        <p>
+                            During his illustrious career, Mr. Narangoda has held various positions such as
+                            President of the Association of Professional Bankers of Sri Lanka (2005/2006),
+                            Director/Vice Chairman of Financial Ombudsman (Sri Lanka) Ltd, Director of NSB
+                            Fund Management Co, Asha Central Hospital Ltd, Mercantile Leasing Ltd and
+                            Director of Wealth Trust Corporation Ltd. Further he served on the Board of
+                            Directors of Easwaran Brothers, Deshodaya finance Company.
+                        </p>
+
+                        <h3 style="text-align:left">Mr.CHRISTOPHER AMRIT CANAGARETNA</h3>
+                        <img class="d-block" src="images/Executive/Amrith.jfif" style="width:240px" />
+                        <br />
+                        <p>Financial Consultant</p>
+                        <p>
+                            Mr. Christopher Amrit CanagaRetna is an experienced and qualified banker with over 35 years of
+                            international and local experience specializing in retail and corporate financing with the last 7 years
+                            heading Corporate & SME Business Banking areas of Islamic Financing. He has covering skills of financial
+                            advisory services relating to working capital funding to Financial Institutions, Corporates, Small &
+                            Medium sized Industries, Startups including Foreign Trade Financing and Construction Finance. Having
+                            commenced his career at European Asian Bank in 1981, he has since worked for over 8 banks both
+                            locally and internationally. Apart from his banking experience, he was the CEO / Director of a Central
+                            Bank approved Finance Company and has been a Financial Consultant to both private / government
+                            entities.
+                        </p>
+
+                        <h3 style="text-align:left">Mr.DEVAKA WICKRAMASURIYA</h3>
+                        <img class="d-block" src="images/Executive/Devaka.jpeg" style="width:240px" />
+                        <br />
+                        <p>A planter by profession, he has worked on some of the finest tea plantations in Sri Lanka</p>
+                        <p>
+                            During this period, he was actively involved in the social life normally associated with a planter and has served on the Committees of many clubs and associations in the plantation districts. He also served as Deputy President of the Ceylon Planters Society.
+                        </p>
+                        <p>
+                            His final posting in the plantation sector was as Chairman / Managing Director of Elkaduwa Plantations Limited, a Government of Sri Lanka owned and managed Regional Plantation Company.
+                        </p>
+                        <p>
+                            He has also served as a Consultant to the World Bank in their Tea Rehabilitation Project in Sri Lanka.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

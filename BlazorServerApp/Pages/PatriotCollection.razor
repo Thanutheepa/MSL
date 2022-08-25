@@ -1,0 +1,64 @@
+﻿@page  "/PatriotCollection"
+
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Patriot Collection</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1> </h1>*@
+                        <h1 class="headingNew">Mother Sri Lanka <span class="redheading" style="color: #8B1E29;">Patriot Collection</span></h1>
+                        <p>
+                            MSL community development projects are financed by the profits from sales of Sri Lanka souvenirs under the
+                            ‘Patriot Collection”.  By selling and purchasing these products you are not only contributing to a Social
+                            Enterprise, but also giving a helping hand to many small and medium entrepreneurs who make a livelihood out of
+                            making these items.
+                        </p>
+                        <p>
+                            Mother Sri Lanka Patriot Collection of Sri Lanka souvenirs is one of the most popular brands that has established
+                            as a leader in Sri Lankan souvenirs.  Mother Sri Lanka Patriot Collection has a wide range of products that will
+                            be an ideal gift for Sri Lankans and for tourists who want to take back with them a memento to remember this
+                            beautiful country.  Further, Mother Sri Lanka Patriot Collection has the most popular souvenir range for those die
+                            hard patriots of Sri Lanka.
+                        </p>
+                        <p>
+                            Merchandise items sold under the Mother Sri Lanka Patriot Collection are made in Sri Lanka by small scale
+                            entrepreneurs in rural and urban Sri Lanka.  While most of the entrepreneurs are female, they are all very
+                            talented craftsmen who are struggling to find a market for their products.  MSL’s objective is to give a helping
+                            hand to these small and medium entrepreneurs and self-employed men and women by guiding them in design, packaging
+                            and marketing of their products.
+                        </p>
+                        <img class="img-fluid d-block mb-2" src="images/PatriotCollection/p1dat0jkr516f08iqgd01cohhu54.jpg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

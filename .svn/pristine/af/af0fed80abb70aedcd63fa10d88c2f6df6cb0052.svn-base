@@ -1,0 +1,208 @@
+﻿@page "/forgetPassowrd/{verified}"
+
+@inject IJSRuntime JSRuntime
+@using System.Text.RegularExpressions;
+@inject IRegisterService RegisterService
+@inject NavigationManager NavManager
+@inject ILocalStorageService localStore
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="loginBox">
+                        @if (verified == "0")
+                        {
+                            <h1 class="headingNew">Lost <span class="redheading" style="color: #8B1E29;">Password</span></h1>
+                            <p>Lost your password? Please enter your email address. You will receive a otp code to create new password.</p>
+
+                            <div class="form-group" style="margin-bottom:20px">
+                                <div class="row">
+                                    <div class="col-md-5"><label for="exampleInputEmail1">Email Address</label></div>
+                                    <div class="col-md-6"><input type="email" @bind-value="email" class="form-control" placeholder="Email Address *"></div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom:20px">
+                                <div class="col-md-5"></div>
+                                <div class="col-md-6"><button type="submit" class="btn checkoutBtn w-100" @onclick="onClick_Submit">Submit</button></div>
+                            </div>
+                        }
+
+                        @if (verified == "1")
+                        {
+                            <h1 class="headingNew">Reset <span class="redheading" style="color: #8B1E29;">New Password</span></h1>
+
+                            <div class="form-group" style="margin-bottom:20px">
+                                <div class="row">
+                                    <div class="col-md-5"> <label for="exampleInputPassword1">New Password</label></div>
+                                    <div class="col-md-6">
+                                        <div id="passwordBox">
+                                            <input type="@passwordTypeforpassword" @bind-value="password" class="form-control" id="exampleInputPassword1" placeholder="Password *" minlength="8">
+                                            <button class="btn" @onclick="HandlePasswordIcon"><i class="topIcons @iClassforPassword"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom:20px">
+                                <div class="row">
+                                    <div class="col-md-5"><label for="exampleInputconfirmPassword1">Confirm Password</label></div>
+                                    <div class="col-md-6">
+                                        <div id="passwordBox">
+                                            <input type="@passwordTypeforconfirmPW" @bind-value="confirmPassword" class="form-control" id="exampleInputconfirmPassword1" placeholder="Confirm Password *" minlength="8">
+                                            <button class="btn" @onclick="HandleConfirmPasswordIcon"><i class="topIcons @iClassforconfirmPW"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom:20px">
+                                <div class="col-md-5"></div>
+                                <div class="col-md-6"><button type="submit" class="btn checkoutBtn w-100" @onclick="Reset_Click">Reset Password</button></div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string verified { get; set; }
+
+    private string email = "";
+    private string newPw = "";
+    private string password = "";
+    private string confirmPassword = "";
+    private string iClassforPassword = "fas fa-eye-slash";
+    private string passwordTypeforpassword = "password";
+    private string iClassforconfirmPW = "fas fa-eye-slash";
+    private string passwordTypeforconfirmPW = "password";
+
+    private void HandlePasswordIcon()
+    {
+        if (iClassforPassword == "fas fa-eye-slash")
+        {
+            iClassforPassword = "fas fa-eye";
+            passwordTypeforpassword = "text";
+        }
+        else
+        {
+            iClassforPassword = "fas fa-eye-slash";
+            passwordTypeforpassword = "password";
+        }
+    }
+    private void HandleConfirmPasswordIcon()
+    {
+        if (iClassforconfirmPW == "fas fa-eye-slash")
+        {
+            iClassforconfirmPW = "fas fa-eye";
+            passwordTypeforconfirmPW = "text";
+        }
+        else
+        {
+            iClassforconfirmPW = "fas fa-eye-slash";
+            passwordTypeforconfirmPW = "password";
+        }
+    }
+
+    private async void onClick_Submit()
+    {
+        bool valid = true;
+        if (email == "")
+        {
+            valid = false;
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the data");
+        }
+        else if (EmailValidate(email) == false)
+        {
+            valid = false;
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please enter correct email address");
+        }
+
+        if (valid)
+        {
+            var savelogin = Task.Run(async () => await RegisterService.LoginIdByUserName(email));
+            int id = savelogin.Result;
+
+            if (id > 0)
+            {
+                var resend = Task.Run(async () => await RegisterService.ResendOtp(id));
+                bool send = resend.Result;
+
+                if (send == true)
+                {
+                    await localStore.SetItemAsync("userIdforForgetPw", id);
+                    string url = "/forgetPasswordOTP";
+                    NavManager.NavigateTo(url);
+                }
+
+                else
+                {
+                    await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Unable to send OTP. Please check the email and try again");
+                }
+            }
+            else
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid email address");
+            }
+        }
+    }
+
+    private async void Reset_Click()
+    {
+        bool valid = true;
+        if(password == string.Empty || password == null || confirmPassword == string.Empty || confirmPassword == null)
+        {
+            valid = false;
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the data");
+        }
+        else if (string.Compare(password, confirmPassword) != 0)
+        {
+            valid = false;
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "password and confirm password are not matching");
+        }
+
+
+        else if (password.Length < 8 || confirmPassword.Length < 8)
+        {
+            valid = false;
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "password should contain more than 8 characters");
+            password = "";
+            confirmPassword = "";
+        }
+
+        if(valid)
+        {
+            var userid = await localStore.GetItemAsync<int>("userIdforForgetPw");
+            var update = Task.Run(async () => await RegisterService.UpdatePasswordByUserId(userid,password));
+            string result = update.Result;
+
+            if(result == "Successfully Updated")
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "success", "", "Successfully Updated");
+                NavManager.NavigateTo("/login/null");
+            }
+        }
+
+
+
+    }
+
+    private bool EmailValidate(string email)
+    {
+
+        if (Regex.IsMatch(email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+        {
+            return true;
+        }
+        else return false;
+    }
+}

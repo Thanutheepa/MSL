@@ -1,0 +1,63 @@
+﻿@page  "/ChairpersonMessage"
+
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Message from the Founder</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1> </h1>*@
+                        <h1 class="headingNew">Message from the <span class="redheading" style="color: #8B1E29;">Founder</span></h1>
+
+                        <div class="founderImage">
+                            <img src="images/janaki-kuruppu-240X300.png" />
+                            <p class="founderImageText">MESSAGE FROM <br />FOUNDER/CHAIRPERSON</p>
+                        </div>
+
+                        <p class="mt-4"><b>"I must Change for my country to change"</b></p>
+                        <p><b>~Dr.Janaki Kuruppu</b></p>
+                        <p><b>Founder, Chairperson</b></p>
+
+                        <p>
+                            When I was well into the rat race of the private sector, I had the realization to do something beyond myself and my family, for the benefit of my motherland. With this in mind, I joined the Public Sector in January 2008, at a time when the country was in the grip of war and crises. On the one hand, within the country we were facing the gruesome realities of terrorism, and on the other, a global financial crisis, a food crisis and an oil crisis, added to the gloom and doom. There was an acute lack of positive thinking and whoever had the means, were looking for ways to leave the country and ‘abandon ship’ so to speak. With our future so bleak, I couldn’t help but wonder about the prospects of our country, and if we would ever have the will to overcome. I felt deeply, the need to do something to make Sri Lankans believe in Sri Lanka and themselves, that together we could seek the light at the end of the tunnel. This is what inspired me to start the movement our very own Mother ஸ்ரீ ලංකා!
+                        </p>
+
+                        <p>
+                            Needless to say, it was an uphill task, as I had to face negativity and sheer indifference. Yet, I was determined. Although I had the passion and skills to do this, of deep pockets I had none, and I could not do it alone. So I found generous philanthropists and equal minded and passionate people to lend a hand. Then as if by design, within only one year into the program, our motherland’s fortunes changed. Peace became the new buzz word and as a result we have been able to take our message to over 3 million children, youth and adults in our family of 20 million people. We are proud to say that we were able to achieve this with a small team, with total funding from sponsors and without any significant infrastructure of our own. I earnestly believe this level of success was achieved as it came from deep within our hearts.
+                        </p>
+                        <p>
+                            Mother Sri Lanka is a journey of love. The journey which initially focused on positive thinking about the country during the war, expanded to reconciliation and mending hearts and minds after the war. In 2016, we entered into a new phase with expanded scope into uplifting the lives of the not so privileged among us. We will continue the movement as long as there are those who believe in our cause.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

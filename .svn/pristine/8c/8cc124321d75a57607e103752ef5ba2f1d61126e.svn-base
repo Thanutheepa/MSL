@@ -1,0 +1,242 @@
+﻿@page "/Livelihood"
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Love Sri Lanka Project</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">Love Sri Lanka <span class="redheading" style="color: #8B1E29;">Project</span></h1>
+                        <img src="images/heart.png" width="100%" />
+                        @*<h3 style="text-align:left">BUILDING LIVELIHOODS </h3>
+                <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                    <li>Entrepreneurship Development </li>
+                    <li>Protecting Farmers </li>
+                    <li>Protecting Local Artistes & Craftsmen </li>
+                    <li>Protecting Authentic Sri Lankan products</li>
+                </ul>
+                <p>
+                    Our products are made exclusively for MSL by very talented artisans who are struggling to find a market for their products.
+                </p>
+                <p>
+                    MSL’s objective is to help these small and medium entrepreneurs by guiding them in designing, packaging and marketing of their products.
+                </p>
+                <p>
+                    By purchasing these products you will be helping small and medium entrepreneurs who make a livelihood
+                </p>
+                <p>
+                    All proceeds from the sale of these products support our island wide programs with children and promote livelihood development.
+                </p>
+                <p>
+                    Full range of items available at our flagship showroom No. 614, Sri Jayawardenapura Mawatha, Kotte and on our online shop.
+                    Selected range of items available at Arpico (Hyde Park Corner, Battaramulla, Galle, Kadawatha, Kalutara, Kandy, Kiribathgoda, Nawinna, Negambo, Wattala), Laksala (Thummulla ), No Limit, Lakkam Sales Center Moratuwa , Cotton Collection, Odel , Kandygs and Cool Planet (Isipathana Mawatha).
+
+                </p>*@
+                        <h3 style="text-align:left">MOTHER SRI LANKA LIVELIHOOD DEVELOPMENT PROJECT</h3>
+                        <p>
+                            Our Livelihood Development Project was launched in 2016 with the main aim of protecting
+                            livelihoods of micro entrepreneurs who are engaged in the production of authentic Sri Lankan
+                            products which are being pushed out of the shelves due to severe competition from imported
+                            products. The final outcome of the project is to alleviate poverty of vulnerable segments of
+                            society, women’s empowerment and ensuring the continuity of the production of authentic Sri
+                            Lankan products for our future generations. The project is a non-profit self-financed project
+                            which has to cover all its expenses of administration, man power and marketing through the
+                            income earned from sales.
+                        </p>
+                        <p>
+                            Even though, most livelihood development programs do well in training the entrepreneur in
+                            production, one of the common weaknesses identified in most such programs is the lack of
+                            support in accessing the value chain and the lack of knowledge of the entrepreneur to understand
+                            market trends, packaging and marketing and the lack of infrastructure to access local and
+                            international markets. Mother Sri Lanka’s livelihood development project is designed to give
+                            access to markets guidance in design, packaging and marketing of their products to earn fair
+                            market prices.
+                        </p>
+                        <p>
+                            Mother Sri Lanka also believes that economic empowerment of women is one of the most
+                            successful approaches to gender equality. Hence, most of the micro entrepreneurs supported by
+                            us are female, while there is also a high number of very talented males who are making a
+                            significant contribution to the project. Currently, approximately 1,000 families directly and over
+                            5,000 families indirectly benefit from this MSL initiative.
+                        </p>
+                        <p>
+                            The collection of products which are sold under the sub brand “Love Sri Lanka” with the tagline
+                            “100 smiles for your 100 rupees” is one of the most popular brands of authentic Sri Lankan
+                            products designed targeting Sri Lankans and tourists. The product range include Clay, Brass,
+                            Leather, Handloom, Batik, Cane, Lace, Stationary, Eco Friendly and Organic products, food and
+                            beverages, herbs and medicines and personal care products. The products are 100% Made in Sri
+                            Lanka and are designed by a panel of designers to suit the current consumer trends and needs and
+                            includes some world class products that one can be proud to own. This unique product range is
+                            sold at the exclusive Mother ஸஸஸ ஸஸஸஸ showroom at 614, Sri Jayawardenepura Mawatha, Kotte
+                            and over 25 other retailers and on-line.
+                        </p>
+                        <h3 style="text-align:left">Our Micro Entrepreneur Base</h3>
+                        <h3 style="text-align:left">Industries Covered</h3>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Processed Food</th>
+                                <th>Jute</th>
+                                <th>Cork / Rubber</th>
+                            </tr>
+                            <tr>
+                                <td>Ayurvedic Products</td>
+                                <td>Leather</td>
+                                <td>Dairy</td>
+                            </tr>
+                            <tr>
+                                <td>Bags</td>
+                                <td>Linen</td>
+                                <td>Dolamite</td>
+                            </tr>
+                            <tr>
+                                <td>Batik</td>
+                                <td>Metal</td>
+                                <td>Gray cloth</td>
+                            </tr>
+                            <tr>
+                                <td>Beeralu</td>
+                                <td>Beeralu</td>
+                                <td>Handloom</td>
+                            </tr>
+                            <tr>
+                                <td>Brass</td>
+                                <td>Paper</td>
+                                <td>Sweets</td>
+                            </tr>
+                            <tr>
+                                <td>Caps</td>
+                                <td>Pottery</td>
+                                <td>Tea</td>
+                            </tr>
+                            <tr>
+                                <td>Cane</td>
+                                <td>Recycled Products</td>
+                                <td>Terra Cotta</td>
+                            </tr>
+                            <tr>
+                                <td>Canvas Art</td>
+                                <td>Rush and Reed</td>
+                                <td>Beverages</td>
+                            </tr>
+                            <tr>
+                                <td>Ceramic</td>
+                                <td>Sea Shell</td>
+                                <td>Wood</td>
+                            </tr>
+                            <tr>
+                                <td>Clothing</td>
+                                <td>Semi-Precious Gems</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Coconut Shell products</td>
+                                <td>Spices</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Copper</td>
+                                <td>Spiritual offerings</td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-bordered mt-5">
+                            <tr>
+                                <th>Supplliers by District</th>
+                            </tr>
+                            <tr>
+                                <td>Colombo</td>
+                            </tr>
+                            <tr>
+                                <td>Galle</td>
+                            </tr>
+                            <tr>
+                                <td>Gampaha</td>
+                            </tr>
+                            <tr>
+                                <td>Kaluthara</td>
+                            </tr>
+                            <tr>
+                                <td>Kandy</td>
+                            </tr>
+                            <tr>
+                                <td>Kurunegala</td>
+                            </tr>
+                            <tr>
+                                <td>Matale</td>
+                            </tr>
+                            <tr>
+                                <td>Matara</td>
+                            </tr>
+                            <tr>
+                                <td>Nuwara Eliya</td>
+                            </tr>
+                            <tr>
+                                <td>Ratnapura</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="col-12 col-md-6">
+                    <img class="clickImg" src="images/Supplier/alex.jpg" style=" max-width: 100%; max-height: 100%;" data-toggle="modal" data-target="#myModal" @onclick='() => ChangeImage("images/Supplier/alex.jpg")' />
+                </div>
+                <div class="col-12 col-md-6">
+                    <img class="clickImg" src="images/Supplier/nilani.jpg" style=" max-width: 100%; max-height: 100%;" data-toggle="modal" data-target="#myModal" @onclick='() => ChangeImage("images/Supplier/nilani.jpg")' />
+                </div>
+                <div class="col-12 col-md-6">
+                    <img class="clickImg" src="images/Supplier/viranga.jpg" style=" max-width: 100%; max-height: 100%;" data-toggle="modal" data-target="#myModal" @onclick='() => ChangeImage("images/Supplier/viranga.jpg")' />
+                </div>
+            </div>
+        </div>
+
+        <RecentPosts />
+    </div>
+</div>
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close modalCloseBtn" data-dismiss="modal">&times;</button>
+            <img src="@displayImg" width="100%" />
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private string displayImg { get; set; } = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+    private void ChangeImage(string img)
+    {
+        displayImg = img;
+        StateHasChanged();
+    }
+
+}

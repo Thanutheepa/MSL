@@ -1,0 +1,30 @@
+﻿@inject IJSRuntime JSRuntime
+@inject ILocalStorageService localStore
+
+<div class="owl-carousel productSlider owl-theme">
+    @foreach (var product in products)
+    {
+        <div class="item p-2">
+            <ProductItem Product="product"></ProductItem>
+        </div>
+    }
+</div>
+
+@code {
+
+    private int selectedOutletId;
+
+    [Parameter]
+    public IEnumerable<Product> products { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            selectedOutletId = await localStore.GetItemAsync<int>("outlet");
+            await JSRuntime.InvokeAsync<object>("CardImageHeader");
+            StateHasChanged();
+        }
+    }
+
+}

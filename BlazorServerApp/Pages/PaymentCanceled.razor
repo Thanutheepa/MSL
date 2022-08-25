@@ -1,0 +1,48 @@
+﻿@page "/paymentCancel"
+
+@inject NavigationManager NavManager
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject IApiService apiService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+@inject ISendEmails sendEmails
+@inject IProfileService ProfileService
+@using System.Text
+
+<div class="container topMargin mb-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Payment Canceled</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-0 col-md-1 col-lg-2"></div>
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="summeryBox mt-4 text-center">
+                <h1 class="text-danger"><i class="far fa-times-circle"></i></h1>
+                <h1>Payment Cancelled!</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

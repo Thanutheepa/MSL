@@ -1,0 +1,33 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "ApiLinks": {
+    "test": "http://api.mothersl.melstasoft.com:80",
+    "live": "http://api.mothersl.melstasoft.com:80",
+    "type": "test"
+  },
+  "paymentDetails": {
+    "apiPassword": "f0889624bc06ba2bb94ffbc607b34c43",
+    "apiUsername": "merchant.TESTBELLVANTGLKR",
+    "merchant": "TESTBELLVANTGLKR",
+    "merchantName": "Mother Sri Lanka",
+    "returnUrl": "https://localhost:44354/paymentSuccess",
+    "returnUrlMobile": "https://localhost:44354/paymentSuccessMobile",
+    "cancelReturnUrl": "https://localhost:44354/paymentCancel"
+  },
+  "paymentDetailsLive": {
+    "apiPassword": "0a65596412967c11f4d0729fd70cb21d",
+    "apiUsername": "merchant.BELLVANTGLKR",
+    "merchant": "BELLVANTGLKR",
+    "merchantName": "Mother Sri Lanka",
+    "returnUrl": "https://lankasathosa.lk/paymentSuccess",
+    "returnUrlMobile": "https://lankasathosa.lk/paymentSuccessMobile",
+    "cancelReturnUrl": "https://lankasathosa.lk/paymentCancel"
+  },
+  "AllowedHosts": "*"
+}

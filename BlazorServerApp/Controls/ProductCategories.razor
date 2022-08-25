@@ -1,0 +1,52 @@
+﻿@inject IProductService ProductService
+@inject ILocalStorageService localStore
+@inject ICategoryService CategoryService
+@inject IJSRuntime JSRuntime
+
+<div class="container latestProducts">
+    <div class="row">
+        <div class="col-12 text-center pt-lg-5 pb-5">
+            <h1 class="headingNew text-center">Product <span class="redheading" style="color: #8B1E29;">Categories</span></h1>
+            <p>
+                All proceeds from the sale of these products support our island wide programs with
+                children and promote livelihood development.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="owl-carousel productSlider3 owl-theme">
+            @if (allCategories != null)
+            {
+                @foreach (var category in allCategories)
+                {
+                    <div class="item p-2">
+                        <a href="">
+                            <div class="catBox">
+                                <img src="@category.ImageUrl" class="catImgSlider" />
+                                @*<img src="images/OP1C7890.jpg" class="catImgSlider" />*@
+                            </div>
+                        </a>
+                    </div>
+                 }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private IEnumerable<Category> allCategories { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            allCategories = (await CategoryService.GetAllCategories()).ToList();
+            await JSRuntime.InvokeAsync<object>("CategorySlider");
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,76 @@
+﻿@page "/WhatWeDo"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">What We Do</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">What We <span class="redheading" style="color: #8B1E29;">Do</span></h1>
+                        <p>
+                            We carry out programs targeting pre-school children, school children and the youth. We also conduct community programs for the most vulnerable segments in society such as impoverished women, aiming at their empowerment. We also raise awareness among the most influential segments of society aiming at their knowledge enhancement.   The projects are implemented by paid and voluntary members of the movement based in Colombo and in other districts.
+                        </p>
+                        <h3 style="text-align:left">Our Network</h3>
+                        <p>
+                            Our organization consists of an island wide network covering all 9 provinces and 25 districts of the country through a network of over 1000 youth clubs and school clubs.  In addition, the movement has over 1000 pre-school and school teachers who are currently actively involved in implementing child development and child protection work in all 25 districts of the country.
+                        </p>
+                        <p>
+                            We also have a network of leading Sri Lankan personalities from the fields of business, sports, entertainment and academia as Mother Sri Lanka ambassadors, inducted into the membership of the movement.
+                        </p>
+                        <h3 style="text-align:left">Main Programs</h3>
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                            <li><b>Responsible Citizenship Development:</b> Project RUN – Schools program, with 2600 schools </li>
+                            <li><b>Entrepreneurship Development, Women’s Empowerment and Protecting Local Arts & Crafts under the brand Love Sri Lanka</b> – Supporting over 140 micro entrepreneurs and 5000 organic farmers Other Projects </li>
+                            <li><b>Responsible Citizenship Development:</b> Pre-School Project – 600 schools </li>
+                            <li><b>Reconciliation Projects:</b> Inter-Faith Music Festivals, Friendship Bridge camps </li>
+                            <li><b>Future Forum:</b> Workshop Series on current issues affecting the Citizens</li>
+                            <li><b>Love Sri Lanka Festival:</b> A celebration of the Pride of Sri Lanka</li>
+                        </ul>
+
+                        <h3 style="text-align:left">PROJECT RUN - DEVELOPING RESPONSIBLE CITIZENS</h3>
+                        <img src="images/RUN.jpg" width="300" />
+                        <p>
+                            Project RUN is named after the acronyms of the three components, Responsible citizenship, Unity, and National pride.
+                        </p>
+                        <p>
+                            It is a unique concept where children are encouraged to come up with their own project, find the team, and appoint leaders as well as find the finances for the project under the guidance of Mother Sri Lanka
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

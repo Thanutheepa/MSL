@@ -1,0 +1,39 @@
+﻿@inject IProductService ProductService
+@inject ILocalStorageService localStore
+@inject IJSRuntime JSRuntime
+
+<div class="container latestProducts">
+    <div class="row">
+        <div class="col-12 text-center pt-md-5 pb-5">
+            <h1 class="headingNew text-center">Shop <span class="redheading" style="color: #8B1E29;">With Us</span></h1>
+            <h3 class="headingNew text-center"> We are a 100% charity organization. <span class="redheading" style="color: #8B1E29;"></span></h3>
+
+            <p>
+                All our products are especially designed by local artists to depict Sri Lankan culture, art and symbols. Most of the items are
+                100% made in Sri Lanka using local raw materials and individually crafted and handmade by self- employed local craftsmen and women.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        @if (newProducts != null)
+        {
+            <ProductSlider products="newProducts"></ProductSlider>
+        }
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12 text-center pt-4">
+            <a href="/allproducts/-1" class="btn readMore">Shop Now <i class="fas fa-shopping-cart"></i></a>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<Product> newProducts { get; set; }
+}

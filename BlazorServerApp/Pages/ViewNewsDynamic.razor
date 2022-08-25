@@ -1,0 +1,76 @@
+﻿@page "/viewPostDynamic/{id:int}"
+
+@inject IJSRuntime JSRuntime
+@inject IApiService apiService
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">News</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @if (post != null)
+                        {
+                            <div class="row mt-5">
+                                <img class="d-block w-100 clickImg" src="@post.MainImage" data-toggle="modal" data-target="#myModal" @onclick='() => ChangeImage(post.MainImage)' />
+                            </div>
+                            <h3 style="text-align:left">@post.Title</h3>
+                            <p>Posted on @post.CreatedDate, Edited @post.EditedDate by Mother Srilanka</p><br />
+                            <hr />
+                            <div class="mb-3"> @((MarkupString)@System.Web.HttpUtility.HtmlDecode(post.Description))</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close modalCloseBtn" data-dismiss="modal">&times;</button>
+            <img id="modalImage" src="" width="100%" />
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+    private string item = "";
+
+    private BlogPosts post { get; set; }
+
+    private string displayImg { get; set; } = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            await JSRuntime.InvokeAsync<object>("ClickImage");
+            post = (await apiService.GetPostById(id));
+            StateHasChanged();
+        }
+    }
+
+    private void ChangeImage(string img)
+    {
+        displayImg = img;
+        StateHasChanged();
+    }
+}

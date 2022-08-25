@@ -1,0 +1,39 @@
+﻿@inject IApiService apiService
+
+<div class="col-md-3 col-lg-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="terms-conditions p-0 mt-5">
+                <div style="background-color: #c6c6c6;">
+                    <h4 style="background-color:#d8d8d8; padding:5px 10px 5px 10px;">Recent Posts</h4>
+                </div>
+                @if (newestPosts != null)
+                {
+                    @foreach (var post in newestPosts)
+                    {
+                        <ul style="font-family: Montserrat, sans-serif; font-size: 12px;">
+                            <li><a href="viewPostDynamic/@post.PostId" target="_top" style="text-decoration: none; color: black">@post.Title</a></li>
+                        </ul>
+                        <hr />
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<BlogPosts> newestPosts { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            newestPosts = new List<BlogPosts>();
+            newestPosts = await apiService.GetNewestPosts(6);
+            StateHasChanged();
+        }
+    }
+
+}

@@ -1,0 +1,246 @@
+﻿@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject AppState appState
+@implements IDisposable
+@inject IJSRuntime JSRuntime
+@inject IFavProduct favProduct
+@inject NavigationManager NavManager
+
+<div class="productBoxNew row ml-0 @BoxType">
+    <div class="col-5 centerCol">
+        <NavLink class="productLink" href="@($"product/{Product.productId}")">
+            @if (Product.ImageUrl != null)
+            {
+                <img src="@Product.ImageUrl" />
+            }
+            else
+            {
+                <img src="images/noimg.png" />
+            }
+            @if (Product.CurrentStock <= 0 && appState.selectedOutletId > 0)
+            {
+                <div class="noStock centerCol">
+                    <font>Out of Stock</font>
+                </div>
+            }
+        </NavLink>
+    </div>
+    <div class="col-7 centerColLeft text-left">
+        <div class="productDetails @BoxType">
+            <NavLink class="productLink" href="@($"product/{Product.productId}")">
+                <p class="title">@Product.name</p>
+            </NavLink>
+            @if (appState.currRate != null)
+            {
+                @if (Product.RegularPrice > Product.SellingPrice)
+                {
+                    <p class="price mb-0"><span class="strik strikeText">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(@Product.RegularPrice / appState.currRate.BuyingRate, 2))).ToString("N")</span> @appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(@Product.SellingPrice / appState.currRate.BuyingRate, 2))).ToString("N")</p>
+                }
+                else
+                {
+                    <p class="price mb-0">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(@Product.SellingPrice / appState.currRate.BuyingRate, 2))).ToString("N")</p>
+                }
+
+                @if (maxReached)
+                {
+                    <p class="text-danger m-0 p-0">Maximum is @Product.MaxQtyPurchase</p>
+                }
+
+                @if (Product.CurrentStock <= 0 && appState.selectedOutletId > 0)
+                {
+                    <button class="btn btn-success addToCartBtn disabled" disabled>Add to cart</button>
+                }
+                else
+                {
+                    @if (cartService.IsAdded(Product))
+                    {
+                        //<button class="btn btn-success addToCartBtn" @onclick="AddToCart"><i class="far fa-check-circle"></i> Add to cart</button>
+                        <div class="countBtnCon">
+                            <button class="minusBtn" @onclick="MinusProduct">-</button>
+                            <font>@productQty</font>
+                            <button class="plusBtn" @onclick="PlusProduct">+</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success addToCartBtn" @onclick="AddToCart">Add to cart</button>
+                    }
+                }
+            }
+            </div>
+    </div>
+</div>
+
+
+    @code {
+
+        private int productQty = 1;
+        private bool maxReached = false;
+        private bool addedToCart = false;
+        private List<CartItem> cartProducts;
+        private Product favproducts;
+        private bool addedToFav = false;
+        private List<Product> listofFavProducts;
+
+        [Parameter]
+        public Product Product { get; set; }
+
+        [Parameter]
+        public EventCallback<string> OnFavRemove { get; set; }
+
+        [Parameter]
+        public string BoxType { get; set; }
+
+        [CascadingParameter]
+        public MainLayout Layout { get; set; }
+
+
+        protected override void OnInitialized()
+        {
+            appState.OnChange += StateHasChanged;
+        }
+
+        public void Dispose()
+        {
+            appState.OnChange -= StateHasChanged;
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            productQty = cartService.GetProductCountInCart(Product);
+            if (productQty == Product.MaxQtyPurchase)
+                maxReached = true;
+            else
+                maxReached = false;
+
+        }
+        //protected override async Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //  if (firstRender)
+        // {
+        //   selectedOutletId = await localStore.GetItemAsync<int>("outlet");
+        // StateHasChanged();
+        //}
+        //}
+
+        private async void MinusProduct()
+        {
+            if (appState.selectedOutletId > 0)
+            {
+                if (productQty > 1)
+                {
+                    productQty--;
+                    AddToCart();
+                }
+                else if (productQty == 1)
+                {
+                    RemoveFromCart(Product);
+                    addedToCart = false;
+                }
+                maxReached = false;
+            }
+            else
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+            }
+        }
+
+        private async void PlusProduct()
+        {
+            if (appState.selectedOutletId > 0)
+            {
+                if (productQty < Product.MaxQtyPurchase && productQty < Product.CurrentStock)
+                {
+                    productQty++;
+                    AddToCart();
+                }
+                else if (productQty == Product.MaxQtyPurchase)
+                {
+                    maxReached = true;
+                }
+            }
+            else
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+            }
+        }
+
+        private async void AddToCart()
+        {
+            if (appState.selectedOutletId > 0)
+            {
+                if (productQty == 0)
+                    productQty = 1;
+
+                var cartItem = new CartItem(Product, productQty);
+                cartProducts = cartService.AddToCart(cartItem);
+                appState.SetCartItemCount(cartService.GetTotalCount());
+                cartService.SetCartPopup(true);
+                StateHasChanged();
+                addedToCart = true;
+                SaveCart();
+            }
+            else
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+            }
+        }
+
+        private async void SaveCart()
+        {
+            if (appState.user != null)
+            {
+                await localStore.SetItemAsync("cart-" + appState.user.CustomerId, cartProducts);
+            }
+            else
+            {
+                await localStore.SetItemAsync("cart-0", cartProducts);
+            }
+        }
+
+        private void RemoveFromCart(Product product)
+        {
+            cartProducts = cartService.RemoveFromCartItem(product);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+            SaveCart();
+        }
+
+        private async void AddToFavourite()
+        {
+            if (appState.selectedOutletId > 0)
+            {
+                favProduct.AddToFav(Product);
+                appState.SetFavProductCount(favProduct.GetTotalCount());
+                listofFavProducts = favProduct.GetFavProducts();
+                StateHasChanged();
+                addedToFav = true;
+                SaveFav();
+            }
+            else
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+            }
+        }
+
+        private void RemoveFromFavourite()
+        {
+            listofFavProducts = favProduct.RemoveFromFav(Product);
+            appState.SetFavProductCount(favProduct.GetTotalCount());
+            SaveFav();
+            OnFavRemove.InvokeAsync("");
+            StateHasChanged();
+        }
+
+        private async void SaveFav()
+        {
+            if (appState.user != null)
+            {
+                await localStore.SetItemAsync("fav-" + appState.user.CustomerId, listofFavProducts);
+            }
+            else
+            {
+                await localStore.SetItemAsync("fav-0", listofFavProducts);
+            }
+        }
+    }

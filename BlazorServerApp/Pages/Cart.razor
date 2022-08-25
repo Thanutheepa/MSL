@@ -1,0 +1,218 @@
+﻿@page "/cart"
+
+@inject ILocalStorageService localStore
+@inject ICartService cartService
+@inject AppState appState
+@inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime
+@inject IApiService apiService
+@inject IProfileService ProfileService
+
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cart</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <h1 class="mainTitles">CART</h1>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="heading">
+                <div class="row">
+                    <div class="col-4 col-md-2 rightBorder">
+                        <p class="title mt-1 mb-1">Item</p>
+                    </div>
+                    <div class="col-4 col-md-4 text-center centerCol rightBorder">
+                        <p class="title mt-1 mb-1">Item Name</p>
+                    </div>
+                    <div class="col-4 col-md-2 text-center centerCol rightBorder rightBorderMobile">
+                        <p class="price m-0 mb-1">Unit Price</p>
+                    </div>
+                    <div class="col-0 col-md-3 text-center centerCol">
+                        <p class="price m-0 mb-1 d-none d-md-block">Quantity</p>
+                    </div>
+                    <div class="col-0 col-md-1 text-center centerCol">
+
+                    </div>
+                </div>
+            </div>
+            @if (cartProducts != null)
+            {
+                @foreach (var cartProduct in cartProducts)
+                {
+                    <CartItems CartItem="cartProduct" ShowDelete="true" OnRemove="RemoveFromCart" OnAdd="AddToCart"></CartItems>
+                }
+            }
+        </div>
+        <div class="col-md-4">
+            <div class="summeryBox">
+                <h2>Order Summary</h2>
+                <hr />
+                @if (appState.currRate != null)
+                {
+                    @if (cartProducts != null)
+                    {
+                        <h5>Total Items: <font class="text-right float-right">@cartService.GetTotalCount()</font></h5>
+                        @*<h5>Delivery Fee: <font class="text-right float-right">$@deliveryFee</font></h5>*@
+                        <h5>Item Total: <font class="text-right float-right">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(@cartService.GetTotal() / appState.currRate.BuyingRate, 2))).ToString("N")</font></h5>
+                        <hr />
+                        <h2><b>Total: <font class="text-right float-right">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(@fullTotal / appState.currRate.BuyingRate, 2))).ToString("N")</font></b></h2>
+
+                        <button class="btn checkoutBtn w-100" @onclick="GoToCheckout">PROCEED TO CHECKOUT</button>
+                        <p class="text-center mt-2"><NavLink href="@($"/allproducts/-1")" class="redText link">Continue Shopping</NavLink></p>
+                    }
+                    else
+                    {
+                        <p>Total Items: <font class="text-right float-right">0</font></p>
+                        <h3>Total: <font class="text-right float-right">@appState.currRate.CurrencySymbol 0</font></h3>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<CartItem> cartProducts = new List<CartItem>();
+    private List<Product> products;
+    private User user;
+    private double deliveryFee;
+    private double total;
+    private double fullTotal;
+    private RegisterUser userRegister = new RegisterUser();
+
+
+    protected override void OnInitialized()
+    {
+        appState.OnChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        appState.OnChange -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            user = await localStore.GetItemAsync<User>("user");
+            SetCart();
+            StateHasChanged();
+        }
+    }
+
+    private async void AddToCart(CartItem cartItem)
+    {
+        if (appState.selectedOutletId > 0)
+        {
+            cartProducts = cartService.AddToCart(cartItem);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+            SaveCart();
+            StateHasChanged();
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+        }
+
+    }
+    private void RemoveFromCart(CartItem cartItem)
+    {
+        cartProducts = cartService.RemoveFromCartItem(cartItem.Product);
+        appState.SetCartItemCount(cartService.GetTotalCount());
+        SaveCart();
+    }
+
+    private async void GoToCheckout()
+    {
+        if (cartProducts.Count() > 0)
+        {
+            @*if (cartService.GetTotal() >= 2000)
+            {*@
+                NavManager.NavigateTo("/checkout");
+@*            }
+            else
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Minimum order amount is Rs.2000!");
+            }*@
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Cart is empty!");
+        }
+    }
+
+    private async void SetCart()
+    {
+        if (user != null)
+        {
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + user.CustomerId);
+        }
+        else
+        {
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+        }
+
+        if (cartProducts != null)
+        {
+            cartService.SetCart(cartProducts);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+        }
+        else
+        {
+            cartService.EmptyCart();
+            appState.SetCartItemCount(0);
+        }
+        cartProducts = cartService.GetCartProducts();
+        await SetDeliveryFee(1);
+        StateHasChanged();
+    }
+
+    private async Task SetDeliveryFee(int type)
+    {
+        total = cartService.GetTotal();
+        if (type == 1)
+        {
+            deliveryFee = 0; //await apiService.GetDeliveryFee("1");
+            fullTotal = total + deliveryFee;
+        }
+        else
+        {
+            deliveryFee = 0;
+            fullTotal = total;
+        }
+        StateHasChanged();
+    }
+
+    public async void SaveCart()
+    {
+        total = cartService.GetTotal();
+        fullTotal = total + deliveryFee;
+        if (appState.user != null)
+        {
+            await localStore.SetItemAsync("cart-" + appState.user.CustomerId, cartProducts);
+        }
+        else
+        {
+            await localStore.SetItemAsync("cart-0", cartProducts);
+        }
+    }
+
+
+}
+

@@ -1,0 +1,185 @@
+﻿@inject ICartService cartService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+@inject ILocalStorageService localStore
+
+<div class="cartItemBox">
+    <div class="row">
+        <div class="col-4 col-md-2">
+            <img src="@CartItem.Product.ImageUrl" />
+        </div>
+        <div class="col-4 col-md-4 text-center centerCol">
+            <p class="title mt-1 mb-1">@CartItem.Product.name</p>
+        </div>
+        <div class="col-4 col-md-2 text-center centerCol">
+            @if (appState.currRate != null)
+            {
+                <p class="price m-0 mb-1">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(CartItem.Product.SellingPrice / appState.currRate.BuyingRate, 2))).ToString("N")</p>
+            }
+        </div>
+        @if (ShowDelete)
+        {
+            @if (maxReached)
+            {
+                <div class="col-10 col-md-3 text-center">
+
+                    <p class="text-danger mb-0 m-md-0 p-0 maximumText">Maximum is @CartItem.Product.MaxQtyPurchase</p>
+
+                    <div class="countBtnCon">
+                        <button class="minusBtn" @onclick="MinusProduct">-</button>
+                        <font>@CartItem.Qty</font>
+                        <button class="plusBtn" @onclick="PlusProduct">+</button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-10 col-md-3 text-center centerCol">
+                    <div class="countBtnCon">
+                        <button class="minusBtn" @onclick="MinusProduct">-</button>
+                        <font>@CartItem.Qty</font>
+                        <button class="plusBtn" @onclick="PlusProduct">+</button>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-10 col-md-3 text-center centerCol">
+                <p class="price m-0 mb-1">Qty: @CartItem.Qty</p>
+            </div>
+        }
+        <div class="col-2 col-md-1 text-center centerCol">
+            @if (ShowDelete)
+            {
+                <button class="btn removeFromCartBtn" @onclick="RemoveFromCart"><i class="fas fa-times"></i></button>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private int productQty = 1;
+    private bool maxReached = false;
+    private List<CartItem> cartProducts;
+
+    [Parameter]
+    public bool ShowDelete { get; set; }
+
+    [Parameter]
+    public CartItem CartItem { get; set; }
+
+    [Parameter]
+    public EventCallback<CartItem> OnRemove { get; set; }
+
+    [Parameter]
+    public EventCallback<CartItem> OnAdd { get; set; }
+
+    protected override void OnInitialized()
+    {
+        appState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        appState.OnChange -= StateHasChanged;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        productQty = cartService.GetProductCountInCart(CartItem.Product);
+        if (productQty == CartItem.Product.MaxQtyPurchase)
+            maxReached = true;
+        else
+            maxReached = false;
+
+    }
+
+    private void RemoveFromCart()
+    {
+        OnRemove.InvokeAsync(CartItem);
+    }
+
+    private void AddToCart()
+    {
+        OnAdd.InvokeAsync(CartItem);
+    }
+
+    private async void MinusProduct()
+    {
+        if (appState.selectedOutletId > 0)
+        {
+            if (productQty > 1)
+            {
+                productQty--;
+                CartItem.Qty = productQty;
+                AddToCart();
+            }
+            else if (productQty == 1)
+            {
+                CartItem.Qty = 0;
+                RemoveFromCart();
+            }
+            maxReached = false;
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+        }
+    }
+
+    private async void PlusProduct()
+    {
+        if (appState.selectedOutletId > 0)
+        {
+            if (productQty < CartItem.Product.MaxQtyPurchase && productQty < CartItem.Product.CurrentStock)
+            {
+                productQty++;
+                CartItem.Qty = productQty;
+                AddToCart();
+            }
+            else if (productQty == CartItem.Product.MaxQtyPurchase)
+            {
+                maxReached = true;
+            }
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+        }
+    }
+
+@*    private async void AddToCart()
+    {
+        if (appState.selectedOutletId > 0)
+        {
+            if (productQty == 0)
+                productQty = 1;
+
+            var cartItem = new CartItem(CartItem.Product, productQty);
+            cartProducts = cartService.AddToCart(cartItem);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+            StateHasChanged();
+            SaveCart();
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+        }
+    }*@
+
+    private void RemoveFromCart(Product product)
+    {
+        cartProducts = cartService.RemoveFromCartItem(product);
+        appState.SetCartItemCount(cartService.GetTotalCount());
+        SaveCart();
+    }
+
+    private async void SaveCart()
+    {
+        await localStore.SetItemAsync("cart", cartProducts);
+    }
+
+}

@@ -1,0 +1,501 @@
+﻿@page "/Donate"
+
+@inject ICartService cartService
+@inject ILocalStorageService localStore
+@inject AppState appState
+@inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime
+@inject IApiService apiService
+@inject IProfileService ProfileService
+@inject IPaymentService paymentService
+@inject IProfileService ProfileService
+@inject IProductService ProductService
+@inject Security security
+@inject IConfiguration Configuration
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Donate</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-lg-10">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">Donate <span class="redheading" style="color: #8B1E29;"></span></h1>
+                        <p>
+                            Dear Customer,<br /><br />
+
+                            Please note that our payment gateway can only process Sri Lanka Rupee (SLR) transactions. So if you are operating in another currency please check today’s exchange rate  <a target="_blank" href="https://www.cbsl.gov.lk/rates-and-indicators/exchange-rates" style="color:black;">( Live link to get US $ conversion against SLR )</a> and  enter the equivalent Rupee value for your donation
+                            <br /><br />
+                            Thank You.
+                        </p>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            @if (orderStatus)
+            {
+                <div class="loginBox loginBoxDeli mb-4 py-4">
+
+                        <div class="alert alert-success" role="alert">
+                            Order Successful!
+                        </div>
+                
+                </div>
+            }
+
+            <div class="loginBox pt-0">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                        <h5><b>Donation Details</b></h5>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label for="donateAmount">Donate For<span class="text-danger">*</span></label>
+                            <RadzenDropDown AllowClear="true" TValue="Product" disabled=@validated FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                            Placeholder="Select Type *" Data=@productList TextProperty="name" ValueProperty="Product" Change=@DonationSelect @bind-Value="selectedProduct" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label for="donateAmount">Donation Amount<span class="text-danger">*</span></label>
+                            <input type="text" @bind-value="fullTotal" disabled=@validated class="form-control checkoutForm" id="donateAmount" placeholder="Enter amount">
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <h5><b>Customer Details</b></h5>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        @if (appState.user == null)
+                        { 
+                            <a href="/login/Donate"><button class="btn checkoutLoginBtns">Login</button></a>
+                            <a href="/register"><button class="btn checkoutLoginBtns">Register</button></a>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="userName">Name<span class="text-danger">*</span></label>
+                            <input type="text" @bind-value="name" disabled=@validated class="form-control checkoutForm" id="userName" placeholder="Enter name">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nic">Email<span class="text-danger">*</span></label>
+                            <input type="email" @bind-value="userEmail" disabled=@validated class="form-control checkoutForm" id="userEmail" placeholder="Enter email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nic">Phone<span class="text-danger">*</span></label>
+                            <input type="text" @bind-value="phone" disabled=@validated class="form-control checkoutForm" id="nic" placeholder="Enter phone">
+                        </div>
+                    </div>
+                </div>
+                @if (deliveryType == 1)
+                {
+                    @if (ShippingAddress != null)
+                    {
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <p class="mb-2">Select an Address</p>
+                            </div>
+
+                            @foreach (var address in ShippingAddress)
+                            {
+                                <div class="col-12 col-md-3 px-1">
+                                    @if (!validated)
+                                    {
+                                        <div class="addressBox @(selectedAddress == address ? "active" : "")" @onclick="() => SetAddress(address)">
+                                            <p class="mb-0"><i class="fas fa-home"></i> @address.FullAddress</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="addressBox @(selectedAddress == address ? "active" : "")">
+                                            <p class="mb-0"><i class="fas fa-home"></i> @address.FullAddress</p>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (appState.user != null)
+                            {
+                                <div class="col-12 col-md-3 px-1">
+                                    <NavLink href="/MyShippingAddress/set" class="linkHover">
+                                        <div class="addressBox">
+                                            <p class="mb-0"><i class="fas fa-plus"></i> Add a New Address</p>
+                                        </div>
+                                    </NavLink>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-12 col-md-3 px-1">
+                                    <NavLink href="/login/NewAddress" class="linkHover">
+                                        <div class="addressBox">
+                                            <p class="mb-0"><i class="fas fa-plus"></i> Add a New Address (Login)</p>
+                                        </div>
+                                    </NavLink>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label for="userAddress">Address<span class="text-danger">*</span></label>
+                        <textarea class="form-control checkoutForm" disabled=@validated id="userAddress" placeholder="Address" @bind="address"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="userCity">City<span class="text-danger">*</span></label>
+                                <input type="text" @bind-value="city" disabled=@validated class="form-control checkoutForm" id="userName" placeholder="Enter city">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="userPostalCode">Country<span class="text-danger">*</span></label>
+                                <RadzenDropDown AllowClear="true" TValue="string" disabled=@validated FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                                Placeholder="Select Country *" Data=@countryList TextProperty="CountryName" ValueProperty="CountryCode" Change=@OnCountryChange @bind-Value="country" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="userCity">State / Province<span class="text-danger"></span></label>
+                                <RadzenDropDown AllowClear="true" TValue="string" disabled=@validated FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                                Placeholder="Select State / Province *" Data=@stateList TextProperty="StateName" ValueProperty="StateCode" @bind-Value="province" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="userPostalCode">ZIP Code<span class="text-danger">*</span></label>
+                                <input type="text" @bind-value="postalCode" disabled=@validated class="form-control checkoutForm" id="userPostalCode" placeholder="Enter postal code">
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-4 mt-4 mt-md-0">
+            <div class="summeryBox">
+                <h2>Donation</h2>
+                    <hr />
+                    <h2><b>Total: <font class="text-right float-right">Rs.@String.Format("{0:0.00}", @Math.Round(@fullTotal, 2))</font></b></h2>
+                <hr />
+                <h5><b>Payment Method</b></h5>
+                @*<RadzenRadioButtonList @bind-Value=@paymentType TValue="int" Orientation="Orientation.Vertical">
+                        <Items>
+                            <RadzenRadioButtonListItem Text="Cash On Delivery" Value="1" />
+                            <RadzenRadioButtonListItem Text="Card Payment" Value="2" />
+                        </Items>
+                    </RadzenRadioButtonList>*@
+                @*<div class="form-check mt-3 pl-0 mb-2">
+                    <label class="form-check-label">
+                        <img src="images/Icons/CashPayments.png" class="smallIcons mr-4" /> <input type="radio" class="form-check-input marginTopRadio" name="pType" checked="@(paymentType==1)" @onclick="() => PaymentSelect(1)"> Cash On Delivery
+                    </label>
+                </div>*@
+                <div class="form-check pl-0 mb-3">
+                    <label class="form-check-label">
+                        <img src="images/Icons/CardPayments.png" class="smallIcons mr-4" /> <input type="radio" class="form-check-input marginTopRadio" name="pType" checked="@(paymentType==2)" @onclick="() => PaymentSelect(2)"> Card Payment
+                    </label>
+                </div>
+                @* <p class="termsText">
+                       Incase some of the products are out of stock, the respective Sathosa outlet will contact you to get acknowledge such situation and alternative items will be added to your order as per your preference. In case you are not willing to proceed with such alternative arrangements, your order will get cancelled and refund will be processed to your card within 3-5 working days from the cancellation date.
+                       *IPG Aggregator is Bellvantage Pvt Ltd (sme.lk)
+                    </p>*@
+                <div class="form-check">
+                    <label class="form-check-label termsText">
+                        <input type="checkbox" class="form-check-input" @bind="@agreed"><span class="text-danger">I have read and agree to the website</span> <NavLink href="/termsConditions" class="text-dark">terms and conditions</NavLink><span class="text-danger">*</span>
+                    </label>
+                </div>
+                @if (!checkedOut)
+                {
+                    <button class="btn checkoutBtn w-100 mt-4" @onclick="HandleCheckout">PROCEED TO PAYMENT</button>
+
+                    @*<p class="text-center mt-2"><NavLink href="@($"/searchPage/null/-1")" class="redText link">Continue Shopping</NavLink></p>*@
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <img src="images/Loading.gif" width="50" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<CartItem> cartProducts = new List<CartItem>();
+    private List<Product> products;
+    private List<ListOrderDetail> listOrderDetail;
+    private List<Address> ShippingAddress = new List<Address>();
+    private string billingAdd { get; set; } = "";
+    private Address BillingAddress { get; set; }
+    private Address selectedAddress { get; set; }
+    private int selectedOutletId;
+    private string name = "";
+    private string phone = "";
+    private string userEmail = "";
+    private string address = "";
+    private string note = "";
+    private string city = "";
+    private string province = "";
+    private string postalCode = "";
+    private string country = "";
+    private bool orderStatus = false;
+    private int paymentType = 2;
+    private int deliveryType = 1;
+    private int deliveryOption = 2;
+    private string coupon = "";
+    private double total;
+    private double fullTotal = 500;
+    private double discount = 0;
+    private int discountStatus;
+    private double deliveryFee;
+    private double totalWeight = 0;
+    private User user;
+    private RegisterUser userRegister = new RegisterUser();
+    private string response = "";
+    private bool agreed { get; set; } = false;
+    private bool checkedOut { get; set; } = false;
+    private bool validated { get; set; } = false;
+    private string paymentLink { get; set; }
+    private double abhimanaDiscount = 0;
+
+    private List<Country> countryList { get; set; }
+    private List<Product> productList { get; set; }
+    private Product selectedProduct { get; set; }
+    private List<State> stateList { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            countryList = new List<Country>();
+            productList = new List<Product>();
+            countryList = (await apiService.GetCountries()).ToList();
+            productList = (await ProductService.GetProductsByCategoryId(10)).OrderBy(a => a.productId).ToList();
+            selectedOutletId = await localStore.GetItemAsync<int>("outlet");
+            user = await localStore.GetItemAsync<User>("user");
+            //SetCart();
+            if (user != null)
+            {
+                var registeruser = Task.Run(async () => await ProfileService.GetCustomer(user.CustomerId));
+                userRegister = registeruser.Result;
+
+                if (userRegister != null)
+                {
+                    name = userRegister.CustomerFirstName + " " + userRegister.CustomerLastName;
+                    phone = userRegister.CustomerMobileNo;
+                    userEmail = userRegister.CustomerEmailAddress;
+                    GetUserAddress(user.CustomerId);
+                }
+
+                cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + user.CustomerId);
+            }
+            else
+            {
+                cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+            }
+
+            if (cartProducts != null)
+                cartService.SetCart(cartProducts);
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleCheckout()
+    {
+        listOrderDetail = cartService.GetCheckoutItems();
+        if (selectedProduct != null)
+        {
+            @*if (total >= 2000)
+                {*@
+
+            var selectedCountry = "";
+            var selectedProvince = "";
+            if(country != "" && country != String.Empty && country != null)
+            {
+                selectedCountry = countryList.Where(a => a.CountryCode == country).FirstOrDefault().CountryName;                
+            }
+            if(province != "" && province != String.Empty && province != null)
+            {
+                selectedProvince = stateList.Where(a => a.StateCode == province).FirstOrDefault().StateName;               
+            }
+
+            string fullAddress = address + ", " + city + ", " + selectedCountry + ", " + selectedProvince + ", " + postalCode;
+            if (billingAdd == null || billingAdd == "")
+            {
+                billingAdd = address + ", " + city + " ," + selectedCountry + ", " + selectedProvince + ", " + postalCode;
+            }
+            if (deliveryType == 1 && (name == String.Empty || name == "" || name == null || phone == String.Empty || phone == "" || phone == null || userEmail == String.Empty || userEmail == "" || userEmail == null || address == String.Empty || address == "" || address == null || city == String.Empty || city == "" || city == null || postalCode == String.Empty || postalCode == null || country == String.Empty || country == null || province == String.Empty || province == null))
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the data");
+            }
+            else if (deliveryType == 2 && (name == String.Empty || name == "" || name == null || phone == String.Empty || phone == "" || phone == null || userEmail == String.Empty || userEmail == "" || userEmail == null))
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please fill all the data");
+            }
+            else if (!phone.All(Char.IsDigit))
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Invalid phone number (Should contain only digits)");
+            }
+            else if (!agreed)
+            {
+                await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please read and accept the terms and conditions to proceed with your order.");
+            }
+            else
+            {
+                checkedOut = true;
+                ListOrderDetail orderItem = new ListOrderDetail(selectedProduct.productId, selectedProduct.name, 1.ToString(), fullTotal.ToString());
+                CheckoutCart checkoutCart = cartService.GetCheckoutDonate(orderItem, name, phone, fullAddress, billingAdd, paymentType.ToString(), fullTotal, selectedOutletId, deliveryFee, coupon, discount, deliveryType, deliveryOption);
+                await localStore.SetItemAsync("checkout", checkoutCart);
+                await localStore.SetItemAsync("userEmail", userEmail);
+                await localStore.SetItemAsync("orderType", "donate");
+                if (user != null)
+                    response = await apiService.Checkout(checkoutCart, user.CustomerId.ToString());
+                else
+                    response = await apiService.Checkout(checkoutCart, "0");
+
+                var orderId = response.Split(' ')[6];
+                orderId = orderId.Remove(orderId.Length - 1);
+                await localStore.SetItemAsync("orderId", orderId);
+
+                name = "";
+                address = "";
+                city = "";
+                phone = "";
+                userEmail = "";
+                postalCode = "";
+                orderStatus = true;
+
+                if (paymentType == 2)
+                {
+                    PaymentSession PaymentResponse = await paymentService.CreateSession(orderId, checkoutCart.TotalAmount, fullAddress);
+                    await localStore.SetItemAsync("paymentIndicator", PaymentResponse.successIndicator);
+
+                    await JSRuntime.InvokeAsync<object>("PaymentGateway", PaymentResponse.SessionId.ToString());
+                    await JSRuntime.InvokeAsync<object>("Checkout.showPaymentPage");
+                    checkedOut = false;
+                }
+                else
+                {
+                    NavManager.NavigateTo("/paymentSuccess");
+                    checkedOut = false;
+                }
+            }
+            @*}
+                else
+                {
+                    await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Minimum order amount is Rs.2000!");
+                }*@
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please Select a Donation Type!");
+        }
+    }
+    private async void SetCart()
+    {
+        if (user != null)
+        {
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-" + user.CustomerId);
+        }
+        else
+        {
+            cartProducts = await localStore.GetItemAsync<List<CartItem>>("cart-0");
+        }
+
+        if (cartProducts != null)
+        {
+            cartService.SetCart(cartProducts);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+        }
+        else
+        {
+            cartService.EmptyCart();
+            appState.SetCartItemCount(0);
+        }
+        total = cartService.GetTotal();
+        fullTotal = total;
+        totalWeight = cartService.GetTotalWeight();
+        StateHasChanged();
+    }
+    private async void GetUserAddress(int customerId)
+    {
+        var customershipping = Task.Run(async () => await ProfileService.ShippingAddress(customerId));
+        var customerBilling = Task.Run(async () => await ProfileService.BillingAddress(customerId));
+        ShippingAddress = customershipping.Result;
+        BillingAddress = customerBilling.Result;
+        if (ShippingAddress.Count() > 0)
+        {
+            SetAddress(ShippingAddress[0]);
+        }
+        if (BillingAddress != null)
+        {
+            billingAdd = BillingAddress.FullAddress + ", " + BillingAddress.AdCity + ", " + " ," + BillingAddress.Country + "," + BillingAddress.PostalCode;
+        }
+    }
+
+    private void SetAddress(Address val)
+    {
+        selectedAddress = val;
+        address = val.FullAddress;
+        postalCode = val.PostalCode.ToString();
+        city = val.AdCity;
+        province = val.Province;
+        country = val.Country;
+        stateList = new List<State>();
+        stateList = countryList.Where(a => a.CountryCode == country).FirstOrDefault<Country>().ListState;
+        province = val.Province;
+        StateHasChanged();
+    }
+    private void OnCountryChange()
+    {
+        stateList = new List<State>();
+        province = "";
+        if (country != String.Empty && country != "" && country != null)
+        {
+            stateList = countryList.Where(a => a.CountryCode == country).FirstOrDefault<Country>().ListState;
+        }
+    }
+    private void PaymentSelect(int val)
+    {
+        paymentType = val;
+    }
+    public async void ClearCart()
+    {
+        if (user != null)
+        {
+            await localStore.RemoveItemAsync("cart-" + user.CustomerId);
+        }
+        else
+        {
+            await localStore.RemoveItemAsync("cart-0");
+        }
+    }
+    public async void DonationSelect()
+    {
+        @*await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", selectedProduct.productId+" "+selectedProduct.name);*@
+    }
+
+}

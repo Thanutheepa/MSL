@@ -1,0 +1,56 @@
+﻿@page "/Sustainability"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Sustainability</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <img class="d-block w-100" src="images/sustainability.jpg" alt="First slide" />
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <h1 class="mainTitles">SUSTAINABILITY</h1>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="home-welcome-div stassen-page">
+            <div class="welcome-center">
+                <div class="welcome-border">
+                    <p>As a Group, we are deeply committed to the development and promotion of sustainable practices. Building a culture of responsibility is central to our vision, wherein we protect the environment and help build stronger communities. Business units across our Group have pioneered programs specific to their sectors, directed towards environmental sustainability and community welfare. Furthermore, our businesses have set industry standards over the years in areas such as sustainable farming, quality control, renewable energy, green infrastructure, and carbon footprint management.</p>
+                    <p>Find out more about our sustainability initiatives: <a href="http://www.stassengroup.com/sustainability" class="more-arrow" target="_blank">→</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

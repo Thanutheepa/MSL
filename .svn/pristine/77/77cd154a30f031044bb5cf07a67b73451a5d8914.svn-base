@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "UiqXr/787lIKh0QiW5Wwd0BVsbjPhzarx0n6BQwg4Hx4gDq+XEe/7+YYANjz3x7jFjyuCFTAurKq1808ZqlqaA==",
+  "success": true,
+  "projectFilePath": "O:\\Bellvantage\\MSL\\ShoppingCart.CoreBusiness\\ShoppingCart.CoreBusiness.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Oshan\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

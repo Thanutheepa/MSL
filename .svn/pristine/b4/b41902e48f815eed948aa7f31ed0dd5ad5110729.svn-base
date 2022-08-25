@@ -1,0 +1,455 @@
+﻿@page "/otp_register"
+
+@using System.Text.RegularExpressions;
+@inject NotificationService NotificationService
+@inject NavigationManager NavManager
+@inject ILogin login
+@inject IRegisterService RegisterService
+@inject IRegister register
+@inject IJSRuntime JSRuntime
+
+<div class="container">
+    <div class="row mt-5 mt-md-4 my-2">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 centerCol">
+
+            @if (ChangePhone == false)
+            {
+            <div class="loginBox ">
+                <h2 class="mainTitles otp" style="margin-bottom:40px">Verify your Phone Number</h2>
+
+                @if (success != "false")
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @success
+                    </div>
+                }
+
+                <div class="row" style="justify-content:center">
+                    <div class="form-group col-md-6">
+                        <label>Enter your OTP code Here!!</label>
+                    </div>
+                </div>
+                <div class="row" style="justify-content:center">
+                    <div class="form-group col-md-6">
+                        <input type="text" @bind-value="otpcode" class="form-control" id="otp" placeholder="OTP Code *">
+                    </div>
+                </div>
+
+                @if (noofTimeResend <= 5)
+                {
+                    <div class="row" style="justify-content:center">
+                        <div class="form-group col-md-6">
+                            <p style="text-align:center; color:red">Send OTP again in @TimeLeft sec</p>
+                            <p style="text-align: center; color: red">@displaytext</p>
+                        </div>
+                    </div>
+                }
+
+                @if (noofTimeResend == 5)
+                {
+                    <div class="row" style="justify-content:center">
+                        <div class="form-group col-md-6">
+                            <p style="text-align: center; color: red">@attemptCountError</p>
+                        </div>
+                    </div>
+                }
+
+                @if (submitOTP == true)
+                {
+                    <div class="row" style="justify-content:center">
+                        <div class="form-group col-md-6 centerCol">
+                            <button type="submit" @onclick="HandleOTP" class="btn checkoutBtn w-100">Submit</button>
+                        </div>
+                    </div>
+                }
+
+                else
+                {
+                    <div class="row" style="justify-content:center">
+                        <div class="form-group col-md-6 centerCol">
+                            <button type="submit" @onclick="HandleOTP" class="btn checkoutBtn w-100" disabled>Submit</button>
+                        </div>
+                    </div>
+                }
+
+                @if (noofTimeResend < 5 && displaytext != "")
+                {
+                    <div class="row" style="justify-content:center">
+                        <div class="form-group col-md-6">
+                            <label>  Didn't you receive a Code?</label><br />
+                            <button type="submit" @onclick="HandleResendOTP" class="btn checkoutBtn w-100">Resend</button>
+                        </div>
+                    </div>
+                }
+
+                @if (noofTimeResend < 5 && displaytext == "")
+                {
+                    <div class="row" style="justify-content:center">
+                        <div class="form-group col-md-6">
+                            <label>  Didn't you receive a Code?</label><br /><br />
+                            <button type="submit" @onclick="HandleResendOTP" class="btn checkoutBtn w-100"  disabled>Resend</button>
+                        </div>
+                    </div>
+                }
+
+                @if (noofTimeResend == 5)
+                {
+                    <div class="row" style="justify-content:center">
+                        <div class="form-group col-md-6">
+                            <label>  Didn't you receive a Code?</label><br />
+                            <button type="submit" @onclick="HandleResendOTP" class="btn checkoutBtn w-100" disabled>Resend</button>
+                        </div>
+                    </div>
+                }
+
+
+                <div class="row" style="justify-content:center">
+                    <div class="form-group col-md-6">
+                        <button type="submit" @onclick="ChangeMobile" class="btn checkoutBtn w-100">Change Mobile number</button>
+                    </div>
+                </div>
+            </div>
+            }
+
+            else
+            {
+                <div class="loginBox ">
+                    <h2 class="mainTitles" style="margin-bottom:40px">Change Phone Number</h2>
+
+                    @if (changemobileError != "")
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @changemobileError
+                        </div>
+                    }
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4"><label for="mobile">Mobile Number</label></div>
+                            <div class="col-8"><input type="text" @bind-value="MobileNumber" class="form-control" id="mobile" placeholder="Mobile Number *" required></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4"></div>
+                            <div class="col-8"><button type="submit" @onclick="HandleChangeMobile" class="btn checkoutBtn w-100">Change Phone Number</button></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4"></div>
+                            <div class="col-8"><button type="submit" @onclick="HandleCancel" class="btn checkoutBtn w-100">Cancel</button></div>
+                        </div> 
+                    </div>
+
+                    </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private int id;
+    private User user = new User();
+    private List<User> saveUser = new List<User> { };
+    private string otpcode;
+    private bool result;
+    private string success = "false";
+    private string loginsave;
+    private int otp;
+    private bool submitOTP = true;
+    private bool ChangePhone = false;
+    private string MobileNumber = "";
+    private string changemobileError = "";
+    private int updateResult;
+    private int noofTimesMobileChanged = 0;
+    private int noofTimeResend = 1;
+    private string attemptCountError = "";
+    private RegisterUser registerUser = new RegisterUser();
+
+    TimeSpan TimeLeft = new TimeSpan(0, 0, 60);
+    string displaytext = "";
+
+    protected override async void OnInitialized()
+    {
+        base.OnInitialized();
+        Timer();
+
+    }
+
+    protected void timerRender()
+    {
+        Timer();
+    }
+
+    async Task Timer()
+    {
+        while (TimeLeft > new TimeSpan())
+        {
+            await Task.Delay(1000);
+            TimeLeft = TimeLeft.Subtract(new TimeSpan(0, 0, 1));
+            StateHasChanged();
+        }
+        await AfterTime();
+        StateHasChanged();
+    }
+
+    Task AfterTime()
+    {
+        displaytext = "OTP code is expired.";
+        submitOTP = false;
+        return Task.CompletedTask;
+    }
+
+
+
+    protected void HandleOTP()
+
+    {
+
+        success = "false";
+
+        if (otpcode == null || otpcode == string.Empty)
+        {
+            success = "Please enter the OTP code";
+        }
+
+
+        else
+        {
+
+
+
+            if (OTPValidate() == false)
+            {
+                success = "OTP code Should contain 6 digits";
+                otpcode = "";
+            }
+
+            else if (success == "false")
+            {
+
+                user = login.GetUsers();
+
+
+                id = user.CustomerId;
+
+
+                otp = Convert.ToInt32(otpcode);
+
+                if(noofTimesMobileChanged == 0)
+                {
+                    var verifiedCostomer = Task.Run(async () => await RegisterService.VerifedOtp(id, otp));
+                    result = verifiedCostomer.Result;
+
+
+                    if (result == true)
+                    {
+                        saveUser.Add(user);
+
+                        var savelogin = Task.Run(async () => await RegisterService.SaveLogin(saveUser));
+                        loginsave = savelogin.Result;
+
+                        if (loginsave.ToLower() == "successfully inserted")
+                        {
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfuly", Detail = "Verified", Duration = 1000 });
+                            NavManager.NavigateTo("/login");
+                        }
+                        else
+                        {
+                            success = loginsave;
+                        }
+                    }
+
+                    else
+                    {
+                        otpcode = "";
+                        success = "Invalid Verifcation Code";
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Invalid", Detail = "Verification Code", Duration = 1000 });
+                    }
+                }
+                else
+                {
+                    var verifiedcustomer = Task.Run(async () => await RegisterService.VerifyOTPforUpdateCustomer(id, otp));
+                    string resultcustomer = verifiedcustomer.Result;
+
+
+                    if (resultcustomer == "true")
+                    {
+                        saveUser.Add(user);
+
+                        var savelogin = Task.Run(async () => await RegisterService.SaveLogin(saveUser));
+                        loginsave = savelogin.Result;
+
+                        if (loginsave.ToLower() == "successfully inserted")
+                        {
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfuly", Detail = "Verified", Duration = 1000 });
+                            NavManager.NavigateTo("/login");
+                        }
+                        else
+                        {
+                            success = loginsave;
+                        }
+                    }
+
+                    else
+                    {
+                        otpcode = "";
+                        success = "Invalid Verifcation Code";
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Invalid", Detail = "Verification Code", Duration = 1000 });
+                    }
+                }
+            }
+
+        }
+    }
+
+    protected void HandleResendOTP()
+    {
+        user = login.GetUsers();
+        id = user.CustomerId;
+
+
+        var verifiedCostomer = Task.Run(async () => await RegisterService.ResendOtp(id));
+        result = verifiedCostomer.Result;
+
+        if (result == true)
+        {
+            submitOTP = true;
+            noofTimeResend = noofTimeResend + 1;
+
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfully", Detail = "Resend the OTP code", Duration = 1000 });
+        }
+
+        else
+        {
+           // submitOTP = false;
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Something Wrong. ", Detail = "Plese Resend the OTP code", Duration = 1000 });
+        }
+
+        if (noofTimeResend == 5)
+        {
+            attemptCountError = "Maximum no of attempt is over.";
+            TimeLeft = new TimeSpan(0, 0, 60);
+            displaytext = "";
+            timerRender();
+        }
+        else
+        {
+            
+            TimeLeft = new TimeSpan(0, 0, 60);
+            displaytext = "";
+            timerRender();
+        }
+
+    }
+
+
+    private async void HandleChangeMobile()
+    {
+        user = login.GetUsers();
+        id = user.CustomerId;
+
+        changemobileError = "";
+        if (MobileNumber == string.Empty || MobileNumber == null)
+        {
+            changemobileError = "Please enter mobile number";
+        }
+
+        else
+        {
+            if (PhoneValidate() == false)
+            {
+                changemobileError = "Invalid mobile number";
+                MobileNumber = "";
+            }
+
+            else
+            {
+                registerUser = register.GetUser();
+
+                if (registerUser.CustomerMobileNo == MobileNumber)
+                {
+                    changemobileError = "This mobile number is same as previous. Please Enter another mobile number.";
+                    MobileNumber = "";
+                }
+
+                else
+                {
+                    registerUser.CustomerId = id;
+                    registerUser.CustomerMobileNo = MobileNumber;
+
+                    var updateregisterCostomer = Task.Run(async () => await RegisterService.UpdateCustomer(registerUser));
+                    updateResult = updateregisterCostomer.Result;
+
+                    if (updateResult == 1)
+                    {
+                        noofTimesMobileChanged = noofTimesMobileChanged + 1;
+                        await JSRuntime.InvokeAsync<object>("ErrorAlert", "success", "", "mobile number is updated successfully!");
+                        ChangePhone = false;
+                        noofTimeResend = 1;
+                        TimeLeft = new TimeSpan(0, 0, 120);
+                        displaytext = "";
+                        submitOTP = true;
+                        success = "false";
+                        timerRender();
+                        StateHasChanged();
+                    }
+
+                    else
+                    {
+                        await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Something Wrong! Please Try again");
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void HandleCancel()
+    {
+        ChangePhone = false;
+    }
+
+    private void ChangeMobile()
+    {
+        ChangePhone = true;
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+    private bool OTPValidate()
+    {
+        Regex otpreg = new Regex("^[1-9]{1}[0-9]{2}[0-9]{3}$");
+        if (otpreg.IsMatch(otpcode))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool PhoneValidate()
+    {
+        Regex phone = new Regex("[0-9]{10}");
+        if (phone.IsMatch(MobileNumber))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+}
+

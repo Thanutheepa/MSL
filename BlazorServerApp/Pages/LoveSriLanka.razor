@@ -1,0 +1,96 @@
+﻿@page "/LoveSriLanka"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Love Sri Lanka Festival</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">Love Sri Lanka <span class="redheading" style="color: #8B1E29;">Festival</span></h1>
+                        <img src="images/heart.png" width="100%" />
+                        @*<h3 style="text-align:left">BUILDING LIVELIHOODS </h3>
+                            <ul style="font-family: Montserrat, sans-serif; font-size: 14px;">
+                                <li>Entrepreneurship Development </li>
+                                <li>Protecting Farmers </li>
+                                <li>Protecting Local Artistes & Craftsmen </li>
+                                <li>Protecting Authentic Sri Lankan products</li>
+                            </ul>
+                            <p>
+                                Our products are made exclusively for MSL by very talented artisans who are struggling to find a market for their products.
+                            </p>
+                            <p>
+                                MSL’s objective is to help these small and medium entrepreneurs by guiding them in designing, packaging and marketing of their products.
+                            </p>
+                            <p>
+                                By purchasing these products you will be helping small and medium entrepreneurs who make a livelihood
+                            </p>
+                            <p>
+                                All proceeds from the sale of these products support our island wide programs with children and promote livelihood development.
+                            </p>
+                            <p>
+                                Full range of items available at our flagship showroom No. 614, Sri Jayawardenapura Mawatha, Kotte and on our online shop.
+                                Selected range of items available at Arpico (Hyde Park Corner, Battaramulla, Galle, Kadawatha, Kalutara, Kandy, Kiribathgoda, Nawinna, Negambo, Wattala), Laksala (Thummulla ), No Limit, Lakkam Sales Center Moratuwa , Cotton Collection, Odel , Kandygs and Cool Planet (Isipathana Mawatha).
+
+                            </p>*@
+                        <p>
+                            In Sri Lanka, we celebrate so many festivals on religious and ethnic lines, but we wanted an occasion that
+                            all Sri Lankans can come together and celebrate as one nation regardless of ethnic and religious divisions.
+                            Hence, we at Mother Sri Lanka (MSL) thought what better day than the Independence Day of our beloved
+                            Mother Land to celebrate the “pride of being Sri Lankan” as one nation.
+                        </p>
+                        <p>
+                            Launched in 2018, to celebrate the 70th Independence of our country, the “Love Sri Lanka Street Festival”
+                            is conceptualized for the enjoyment of all Sri Lankans as well as foreigners and will showcase everything
+                            Sri Lankan. It will be a celebration of Sri Lankan culture, art, craft, street drama, local fashion and
+                            accessories, music and entertainment displayed and demonstrated during the festival. This unique event,
+                            is by Sri Lankans, for Sri Lankans for the first time in the history, for the true purpose of rekindling the
+                            nostalgia and emotions of being a ‘Sri Lankan’. Further for the foreign nationals, it will be an
+                            opportunity to enjoy of ‘All of Sri Lanka’ in one place.
+                        </p>
+                        <p>
+                            This festival will be a celebration of Sri Lankan food & beverages, local art & craft, Sri Lankan culture
+                            and music. The festival will also have local street food and beverages, local fashion and accessories, gift
+                            items, games and entertainment. It is envisaged to make this an opportunity for small and medium local
+                            street food manufacturers and small time entertainers who will be allowed to perform and sell their
+                            products. Many Sri Lankan brands that have won the hearts of Sri Lankans will be a part of this event. It
+                            is a unique event that is conducted for the true purpose of rekindling the pride of being a ‘Sri Lankan’.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

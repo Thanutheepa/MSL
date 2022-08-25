@@ -1,0 +1,364 @@
+﻿@page "/register"
+
+@using System.Text.RegularExpressions;
+@inject NotificationService NotificationService
+@inject NavigationManager NavManager
+@inject IRegister register
+@inject IRegisterService RegisterService
+@inject ILogin login
+@inject IApiService apiService
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row mt-5 mt-md-4 my-2">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 centerCol">
+            <div class="loginBox">
+                <h2 class="mainTitles" style="margin-bottom:25px">Sign Up</h2>
+
+                @if (!datastatus)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <p>@emailerror </p>
+                        <p>@passworderror</p>
+                        <p>@phonenoerror</p>
+                        <p>@emailexisterror</p>
+                        <p>@passwordCharacterError</p>
+                        <p>@nameCompareError</p>
+                        <p>@fieldRequiredError</p>
+                    </div>
+                }
+
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="fname">First Name</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="firstName" class="form-control" id="fname" placeholder="First Name *"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="lname">Last Name</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="lastName" class="form-control" id="lname" placeholder="Last Name *"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="email">Email Address</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="email" class="form-control" id="email" placeholder="Email Address *"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"> <label for="exampleInputPassword1">Password</label></div>
+                        <div class="col-md-8">
+                            <div id="passwordBox">
+                                <input type="@passwordTypeforpassword" @bind-value="password" class="form-control" id="exampleInputPassword1" placeholder="Password *" minlength="8">
+                                <button class="btn" @onclick="HandlePasswordIcon"><i class="topIcons @iClassforPassword"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="exampleInputconfirmPassword1">Confirm Password</label></div>
+                        <div class="col-md-8">
+                            <div id="passwordBox">
+                                <input type="@passwordTypeforconfirmPW" @bind-value="confirmPassword" class="form-control" id="exampleInputconfirmPassword1" placeholder="Confirm Password *" minlength="8">
+                                <button class="btn" @onclick="HandleConfirmPasswordIcon"><i class="topIcons @iClassforconfirmPW"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="mobile">Mobile Number</label></div>
+                        <div class="col-md-8"><input type="text" @bind-value="mobile" class="form-control" id="mobile" placeholder="Mobile Number *" required></div>
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                        <div class="row">
+                            <div class="col-4"><label for="country">Country</label></div>
+                            <div class="col-8">
+                                <select class="form-control" @bind="@country">
+                                    @foreach (var country in countires)
+                                    {
+                                        <option value=@country>@country</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"><label for="country">Country</label></div>
+                        <div class="col-md-8">
+                            @*<input class="form-control" list="browsers" name="browser" id="browser" placeholder="Country *" @bind-value="country">
+                                <datalist id="browsers">
+                                    @foreach (var country in countires)
+                                    {
+                                        <option value=@country>@country</option>
+                                    }
+                                </datalist>*@
+                            <RadzenDropDown AllowClear="true" TValue="string" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" Style="width:100%"
+                                            Placeholder="Select Country *" Data=@countryList TextProperty="CountryName" ValueProperty="CountryCode" @bind-Value="country" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8"><button type="submit" @onclick="HandleLogin" class="btn checkoutBtn w-100">Sign Up</button></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8">
+                        <div class="form-group" style="padding-top:20px ; font-size:14px">
+                            <label for="SignUp">Already have an account?</label>
+                            <a href="/login/null" style="color: #FFB554; margin-left: 10px">Login</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private string firstName = "";
+    private string lastName = "";
+    private string email = "";
+    private string mobile = "";
+    private int mobilevalidated = 0;
+    private string date = "2021-10-07T12:46:41";
+    private int status = 0;
+    private int otp = 0;
+    private string country = "";
+    private int noofOrder = 0;
+    private string password = "";
+    private string confirmPassword = "";
+    private int Id = 0;
+    private bool datastatus = true;
+    private int Loginid = 0;
+    private bool registerStatus = true;
+    private string emailerror = "";
+    private string passworderror = "";
+    private string phonenoerror = "";
+    private string emailexisterror = "";
+    private string passwordCharacterError = "";
+    private string emailNotFound = "";
+    private string passwordNotFound = "";
+    private string nameCompareError = "";
+    private string phoneNotFound = "";
+    private string fieldRequiredError = "";
+
+    private string iClassforPassword = "fas fa-eye-slash";
+    private string passwordTypeforpassword = "password";
+    private string iClassforconfirmPW = "fas fa-eye-slash";
+    private string passwordTypeforconfirmPW = "password";
+
+    List<string> countires = new List<string>() { "SriLanka", "Australia", "United Kingdom", "New Zealand" };
+    private string selectcountry = "select country";
+
+    private List<Country> countryList { get; set; }
+
+    private RegisterUser registerUser = new RegisterUser();
+
+    private RegisterUser result;
+
+    //
+    private User user = new User();
+    private List<User> saveUser = new List<User> { };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            countryList = new List<Country>();
+            countryList = (await apiService.GetCountries()).ToList();
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+    private void HandleLogin()
+    {
+        registerStatus = true;
+        datastatus = true;
+        emailerror = "";
+        passworderror = "";
+        phonenoerror = "";
+        emailexisterror = "";
+        passwordCharacterError = "";
+        nameCompareError = "";
+        fieldRequiredError = "";
+
+        if (firstName == string.Empty || firstName == null || lastName == string.Empty || lastName == null || email == string.Empty || email == null || password == string.Empty || password == null || confirmPassword == string.Empty || confirmPassword == null || mobile == string.Empty || mobile == null || country == string.Empty || country == null)
+        {
+            fieldRequiredError = "All the fields are required. Please fill all the fields.";
+            registerStatus = false;
+            datastatus = false;
+        }
+
+        else
+        {
+            if (string.Compare(firstName.ToLower(), lastName.ToLower()) == 0)
+            {
+                registerStatus = false;
+                nameCompareError = "First name and last name should be different";
+                firstName = "";
+                lastName = "";
+            }
+
+
+            if (EmailValidate() == false)
+            {
+                registerStatus = false;
+                emailerror = "Incorrect email address";
+                email = "";
+            }
+
+            if (string.Compare(password, confirmPassword) != 0)
+            {
+                registerStatus = false;
+                passworderror = "password and confirm password are not matching";
+            }
+
+
+            if (password.Length < 8 || confirmPassword.Length < 8)
+            {
+                registerStatus = false;
+                passwordCharacterError = "password should contain more than 8 characters";
+                password = "";
+                confirmPassword = "";
+            }
+
+
+            if (passworderror != string.Empty)
+            {
+                password = "";
+                confirmPassword = "";
+            }
+
+            if (PhoneValidate() == false)
+            {
+                registerStatus = false;
+                phonenoerror = "Incorrect phone number";
+                mobile = "";
+            }
+
+            if (!registerStatus)
+            {
+                datastatus = false;
+            }
+
+            else
+            {
+                registerUser = register.UserRegistration(Id, firstName, lastName, email, mobile, date, country);
+
+
+                var registerCostomer = Task.Run(async () => await RegisterService.RegisterCustomer(registerUser));
+                result = registerCostomer.Result;
+
+                if (result == null)
+                {
+                    datastatus = false;
+                    emailexisterror = "this email is already exist";
+                }
+
+                else
+                {
+                    Id = result.CustomerId;
+
+                    login.SaveUser(Loginid, Id, email, password);
+
+                    //new
+                    user = login.GetUsers();
+                    saveUser.Add(user);
+
+                    var savelogin = Task.Run(async () => await RegisterService.SaveLogin(saveUser));
+                    string loginsave = savelogin.Result;
+
+                    if (loginsave.ToLower() == "successfully inserted")
+                    {
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfuly", Detail = "Verified", Duration = 1000 });
+                        NavManager.NavigateTo("/login/null");
+                    }
+
+                    //  NavManager.NavigateTo("/otp_register");
+                }
+
+
+            }
+
+        }
+
+
+    }
+
+    private bool EmailValidate()
+    {
+
+        if (Regex.IsMatch(email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    private bool PhoneValidate()
+    {
+        Regex phone = new Regex("[0-9]{10}");
+        if (phone.IsMatch(mobile))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void HandlePasswordIcon()
+    {
+        if (iClassforPassword == "fas fa-eye-slash")
+        {
+            iClassforPassword = "fas fa-eye";
+            passwordTypeforpassword = "text";
+        }
+        else
+        {
+            iClassforPassword = "fas fa-eye-slash";
+            passwordTypeforpassword = "password";
+        }
+    }
+    private void HandleConfirmPasswordIcon()
+    {
+        if (iClassforconfirmPW == "fas fa-eye-slash")
+        {
+            iClassforconfirmPW = "fas fa-eye";
+            passwordTypeforconfirmPW = "text";
+        }
+        else
+        {
+            iClassforconfirmPW = "fas fa-eye-slash";
+            passwordTypeforconfirmPW = "password";
+        }
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+}

@@ -1,0 +1,458 @@
+﻿@page "/LatestPosts/{Page}"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Latest Posts</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-lg-9">
+            <div class="blog-list blogs-grid" style="">
+                <div class="blog-wrapper">
+                    <div class="page-title">
+                        <h1>@title</h1>
+                    </div>
+                    <div class="posts-list">
+                        <div class="row blogs-row">
+                            @foreach (var item in latestPosts)
+                            {
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="wrap-item" style="">
+                                        <div class="post-block" style="">
+                                            <div class="blog-image">
+                                                <a href="@item.newseventlink" style="color: #494" title="@item.title">
+                                                    <img src="@item.imagelink" style="width:414px;height:250px" alt="@item.title">
+                                                </a>
+                                            </div>
+                                            <div class="blog-meta-block">
+                                                <h3 class="blog-title"><a href="@item.newseventlink" style="color: #494" title="@item.title">@item.title</a></h3>
+                                                <div class="ves-description">
+                                                    <p class="blog-readmore">
+                                                        <a href="@item.newseventlink" style="color: #494" title="@item.title">
+                                                            Read more
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                                <div class="blog-meta">
+                                                    <span class="blog-category">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                        <a style="font-size:11px" title="News">NEWS</a>
+                                                    </span>
+                                                    <span class="created-date" style="color: #ffffff;font-size:11px">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span class="month">@item.month</span>
+                                                        <span class="day">@item.day</span>
+                                                        <span class="year">, @item.year</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Page == "Page-1")
+            {
+                <div class="row justify-content-end">
+                    <div class="pagination">
+                        <p class="amount">1 to 8 of 18 Item(s) </p>
+                        <button class="buttonactive" @onclick="@(args => btnPagination_Click(1))">1</button>
+                        <button @onclick="@(args => btnPagination_Click(2))">2</button>
+                        <button @onclick="@(args => btnPagination_Click(3))">3</button>
+                        <button @onclick="@(args => btnPagination_Click(2))">&raquo;</button> @*//go to 2*@
+                    </div>
+                </div>
+            }
+
+            @if (Page == "Page-2")
+            {
+                <div class="row justify-content-end">
+                    <div class="pagination">
+                        <p class="amount">8 to 16 of 18 Item(s) </p>
+                        @*<a href="/LatestPosts/Page-1" >1</a>
+                            <a class="active" style="color:white">2</a>
+                            <a href="/LatestPosts/Page-3">3</a>
+                            <a href="/LatestPosts/Page-3">&raquo;</a>*@
+                        <button @onclick="@(args => btnPagination_Click(1))">1</button>
+                        <button class="buttonactive" @onclick="@(args => btnPagination_Click(2))">2</button>
+                        <button @onclick="@(args => btnPagination_Click(3))">3</button>
+                        <button @onclick="@(args => btnPagination_Click(3))">&raquo;</button> @*//go to 3*@
+                    </div>
+                </div>
+            }
+            @if (Page == "Page-3")
+            {
+                <div class="row justify-content-end">
+                    <div class="pagination">
+                        @*<p class="amount">16 to 18 of 18 Item(s) </p>
+                            <a href="/LatestPosts/Page-2">&laquo;</a>
+                            <a href="/LatestPosts/Page-1" >1</a>
+                            <a href="/LatestPosts/Page-2">2</a>
+                            <a class="active" style="color:white">3</a>*@
+                        <button @onclick="@(args => btnPagination_Click(2))">&laquo;</button> @*//go to 2*@
+                        <button @onclick="@(args => btnPagination_Click(1))">1</button>
+                        <button @onclick="@(args => btnPagination_Click(2))">2</button>
+                        <button class="buttonactive" @onclick="@(args => btnPagination_Click(3))">3</button>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <div class="rightSideBar">
+                <div id="ves_blog_search_block" class="block column_block">
+                    <div class="block-title"><strong><span>Blog search</span></strong></div>
+                    <div id="ves_block_searchbox">
+                        <div class="block-content clearfix">
+                            <input class="form-control-sm" type="text" @bind-value="txtsearch" placeholder="Search">
+                            <button type="submit" @onclick="btnSearch_Click" class="btn-sm checkoutBtn w-75 mt-2" style="border: 1px solid #01b43b">Search</button>
+                        </div>
+                    </div>
+                </div><div class="ves-blog-archives block">
+                    <div class="block-title">
+                        <strong>
+                            <span>Blog Archives</span>
+                        </strong>
+                    </div>
+                    <div class="block-content">
+                        <ul id="blog-archives1853380219" style="list-style-type:none">
+                            <li class="level1 parent blog-archive">
+                                <a @onclick="@(args => SearchByYear("2016"))" title="2016" style="color:black"><span class="myClickableThingy">2016</span></a>
+                                <span class="head"><a class="open_collapse"><i class="topIcons fas fa-plus-circle"></i></a></span>
+                                <ul class="list-level2 collapse" style="list-style-type:none">
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2016","AUG"))" title="August"><span class="myClickableThingy">August (1)</span></a></li>
+                                </ul>
+
+                            </li>
+                            <li class="level1 parent blog-archive">
+                                <a @onclick="@(args => SearchByYear("2017"))" title="2017" style="color:black"><span>2017</span></a>
+                                <span class="head"><a class="open_collapse"><i class="topIcons fas fa-plus-circle"></i></a></span>
+                                <ul class="list-level2 collapse" style="list-style-type:none">
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2017","JAN"))" title="January"><span class="myClickableThingy">January (2)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2017","FEB"))" title="February"><span class="myClickableThingy">February (1)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2017","MAR"))" title="March"><span class="myClickableThingy">March (1)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2017","AUG"))" title="August"><span class="myClickableThingy">August (2)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2017","SEP"))" title="September"><span class="myClickableThingy">September (1)</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="level1 parent blog-archive">
+                                <a @onclick="@(args => SearchByYear("2018"))" title="2018" style="color:black"><span>2018</span></a>
+                                <span class="head"><a class="open_collapse"><i class="topIcons fas fa-plus-circle"></i></a></span>
+                                <ul class="list-level2 collapse" style="list-style-type:none">
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2018","AUG"))" title="August"><span class="myClickableThingy">August (2)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2018","OCT"))" title="October"><span class="myClickableThingy">October (1)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2018","JUN"))" title="June"><span class="myClickableThingy">June (1)</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="level1 parent blog-archive">
+                                <a @onclick="@(args => SearchByYear("2019"))" title="2019" style="color:black"><span>2019</span></a>
+                                <span class="head"><a class="open_collapse"><i class="topIcons fas fa-plus-circle"></i></a></span>
+                                <ul class="list-level2 collapse" style="list-style-type:none">
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2019","JAN"))" title="January"><span class="myClickableThingy">January (2)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2019","JUN"))" title="June"><span class="myClickableThingy">June (1)</span></a></li>
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2019","APR"))" title="April"><span class="myClickableThingy">April (2)</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="level1 parent blog-archive">
+                                <a @onclick="@(args => SearchByYear("2020"))" title="2020" style="color:black"><span class="myClickableThingy">2020</span></a>
+                                <span class="head"><a class="open_collapse"><i class="topIcons fas fa-plus-circle"></i></a></span>
+                                <ul class="list-level2 collapse" style="list-style-type:none">
+                                    <li class="level2"><a @onclick="@(args => SearchByYearAndMonth("2020","JAN"))" title="January"><span class="myClickableThingy">January (1)</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div><div class="block block-list block-viewed">
+                    <div class="block-title">
+                        <strong><span>Recently Viewed Products</span></strong>
+                    </div>
+                    <div class="block-content">
+                        <ol style="list-style-type:none">
+                            <li class="item last odd" style="margin:0;padding:0">
+                                <div class="row">
+                                    <div class="col-md-4 col-12" style="margin:0;padding:0">
+                                        <a href="https://www.stassentea.com/stassen-chai-spice-tea.html">
+                                            <span class="product-image" style="margin:0;padding:0"><img src="images/21.jpg" alt=""></span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-8 col-12">
+                                        <div class="product-block" style="color:black">
+                                            <div class="product-info">
+                                                <p class="product-name">
+                                                    <a href="https://www.stassentea.com/stassen-chai-spice-tea.html" style="color:black">
+                                                        25 ETB Stassen Chai Spice Tea
+                                                    </a>
+                                                </p>
+                                                <div class="price-box">
+                                                    <span class="regular-price" id="product-price-92-viewed">
+                                                        <span class="price" style="margin-left:5px">$6.85</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public string Page { get; set; }
+    private int search = 0;
+    private string title = "Latest Posts";
+
+    private string txtsearch = "";
+    private List<LatestPost> latestPostsList1 = new List<LatestPost>();
+    private List<LatestPost> latestPostsList2 = new List<LatestPost>();
+    private List<LatestPost> latestPostsList3 = new List<LatestPost>();
+    private List<LatestPost> latestPosts = new List<LatestPost>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            await JSRuntime.InvokeAsync<object>("LatestPost");
+            StateHasChanged();
+        }
+    }
+
+
+    protected override async void OnInitialized()
+    {
+
+        await JSRuntime.InvokeAsync<object>("LatestPost");
+
+
+        FetchLatestPost();
+
+        if (Page == "Page-1")
+        {
+            latestPosts = latestPostsList1;
+        }
+        if (Page == "Page-2")
+        {
+            latestPosts = latestPostsList2;
+        }
+        if (Page == "Page-3")
+        {
+            latestPosts = latestPostsList3;
+        }
+        StateHasChanged();
+    }
+
+    protected void btnSearch_Click()
+    {
+        List<LatestPost> searchList = new List<LatestPost>();
+
+        if (txtsearch == "")
+        {
+            if (Page == "Page-1")
+            {
+                latestPosts = latestPostsList1;
+            }
+            if (Page == "Page-2")
+            {
+                latestPosts = latestPostsList2;
+            }
+            if (Page == "Page-3")
+            {
+                latestPosts = latestPostsList3;
+            }
+        }
+
+
+        @for (int i = 0; i < latestPostsList1.Count; i++)
+        {
+            if (latestPostsList1.ElementAt(i).title.Contains(txtsearch))
+            {
+                searchList.Add(latestPostsList1.ElementAt(i));
+            }
+        }
+        @for (int i = 0; i < latestPostsList2.Count; i++)
+        {
+            if (latestPostsList2.ElementAt(i).title.Contains(txtsearch))
+            {
+                searchList.Add(latestPostsList2.ElementAt(i));
+            }
+        }
+        @for (int i = 0; i < latestPostsList3.Count; i++)
+        {
+            if (latestPostsList3.ElementAt(i).title.Contains(txtsearch))
+            {
+                searchList.Add(latestPostsList3.ElementAt(i));
+            }
+        }
+
+        if (searchList.Count != 0)
+        {
+            latestPosts = searchList;
+        }
+        else
+        {
+            latestPosts = new List<LatestPost>();
+        }
+
+        StateHasChanged();
+    }
+
+    protected void btnPagination_Click(int page)
+    {
+        if (page == 1)
+        {
+            Page = "Page-1";
+            latestPosts = latestPostsList1;
+        }
+        if (page == 2)
+        {
+            Page = "Page-2";
+            latestPosts = latestPostsList2;
+        }
+        if (page == 3)
+        {
+            Page = "Page-3";
+            latestPosts = latestPostsList3;
+        }
+        StateHasChanged();
+    }
+
+    protected void FetchLatestPost()
+    {
+        latestPostsList1 = new List<LatestPost>
+{
+            new LatestPost{ newseventlink="newsEvent/stassen_participates_at_gulfood_2020",imagelink="images/Gulfood-2020.jpg",title="Stassen Participates at GULFOOD 2020",month="JAN",day="16",year="2020" },
+            new LatestPost{ newseventlink="newsEvent/stassen_participates_at_ife_2019",imagelink="images/IFE--2019-For-News-Center.jpg",title="Stassen Participates at IFE 2019",month="APR",day="03", year="2019" },
+            new LatestPost{ newseventlink="newsEvent/stassen_participates_at_foodex_japan_2019",imagelink="images/Fodex-Japan-2019-For-News-Center.jpg",title="Stassen Participates at FOODEX JAPAN 2019",month="APR",day="03", year="2019" },
+            new LatestPost{ newseventlink="newsEvent/stassen-participates-at-gulfood-2019",imagelink="images/Gulfood-2019-For-News-Center.jpg",title="Stassen Participates at GULFOOD 2019",month="JUN",day="02", year="2019" },
+            new LatestPost{ newseventlink="newsEvent/stassen-participates-at-prodexpo-2019",imagelink="images/Prodexpro-2019-For-News-Center.jpg",title="Stassen Participates at PRODEXPO 2019",month="JAN",day="31", year="2019" },
+            new LatestPost{ newseventlink="newsEvent/stassen-participates-at-biofach-2019",imagelink="images/Biofach-2019-For-News-Center.jpg",title="Stassen Participates at BIOFACH 2019",month="JAN",day="31", year="2019" },
+            new LatestPost{ newseventlink="newsEvent/stassen-participates-at-fhc-2018",imagelink="images/FHC-China_2018-For-News-Center.jpg",title="Stassen Participates at FHC 2018" ,month="JUN",day="11", year="2018"},
+            new LatestPost{ newseventlink="newsEvent/stassen-participates-at-sial-paris-2018",imagelink="images/Sial-Paris_2018-For-News-Center.jpg",title="Stassen Participates at Sial Paris 2018",month="OCT",day="10", year="2018" }
+        };
+        latestPostsList2 = new List<LatestPost>
+{
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_WorldFood_Istanbul_2018",imagelink="images/WorldFood-Istanbul-2018.jpg",title="Stassen Participates at WorldFood Istanbul 2018" ,month="AUG",day="20", year="2018" },
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_WorldFood_Moscow_2018",imagelink="images/WorldFood-Moscow-2018.jpg",title="Stassen Participates at WorldFood Moscow 2018" ,month="AUG",day="20", year="2018"},
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_Anuga_2017",imagelink="images/Anuga-2017.jpg",title="Stassen Participates at Anuga 2017" ,month="SEP",day="25", year="2017"},
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_WorldFood_Moscow_2017",imagelink="images/WorldFood-Moscow-2017.jpg",title="Stassen Participates at WorldFood Moscow 2017" ,month="AUG",day="24", year="2017"},
+            new LatestPost{ newseventlink="newsEvent/40th_Anniversary_of_Stassen_Group",imagelink="images/40th-Anniversary-of-Stassen-Group.jpg",title="40th Anniversary of Stassen Group" ,month="AUG",day="30", year="2017"},
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_WorldFood_Warsaw_2017",imagelink="images/worldfood-warsaw-2017.jpg",title="Stassen Participates at WorldFood Warsaw 2017" ,month="MAR",day="16", year="2017"},
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_Foodex_2017",imagelink="images/Foodex-2017.jpg",title="Stassen Participates at Foodex 2017" ,month="FEB",day="16", year="2017"},
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_Prodexpo_2017",imagelink="images/Prodexpo 2017.jpg",title="Stassen Participates at Prodexpo 2017" ,month="JAN",day="21", year="2017"}
+        };
+        latestPostsList3 = new List<LatestPost>
+{
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_Gulfood_2017",imagelink="images/Gulfood-2017.jpg",title="Stassen Participates at Gulfood 2017" ,month="JAN",day="31", year="2017"},
+            new LatestPost{ newseventlink="newsEvent/Stassen_Participates_at_SIAL_2016",imagelink="images/Sial-2016.jpg",title="Stassen Participates at SIAL 2016" ,month="AUG",day="31", year="2016"}
+        };
+    }
+
+    protected void SearchByYear(string year)
+    {
+        List<LatestPost> searchList = new List<LatestPost>();
+
+        @for (int i = 0; i < latestPostsList1.Count; i++)
+        {
+            if (latestPostsList1.ElementAt(i).year == year)
+            {
+                searchList.Add(latestPostsList1.ElementAt(i));
+            }
+        }
+        @for (int i = 0; i < latestPostsList2.Count; i++)
+        {
+            if (latestPostsList2.ElementAt(i).year == year)
+            {
+                searchList.Add(latestPostsList2.ElementAt(i));
+            }
+        }
+        @for (int i = 0; i < latestPostsList3.Count; i++)
+        {
+            if (latestPostsList3.ElementAt(i).year == year)
+            {
+                searchList.Add(latestPostsList3.ElementAt(i));
+            }
+        }
+        if (searchList.Count != 0)
+        {
+            latestPosts = searchList;
+        }
+        StateHasChanged();
+    }
+
+    protected void SearchByYearAndMonth(string year, string month)
+    {
+        List<LatestPost> searchList = new List<LatestPost>();
+
+        @for (int i = 0; i < latestPostsList1.Count; i++)
+        {
+            if (latestPostsList1.ElementAt(i).year == year && latestPostsList1.ElementAt(i).month == month)
+            {
+                searchList.Add(latestPostsList1.ElementAt(i));
+            }
+        }
+        @for (int i = 0; i < latestPostsList2.Count; i++)
+        {
+            if (latestPostsList2.ElementAt(i).year == year && latestPostsList2.ElementAt(i).month == month)
+            {
+                searchList.Add(latestPostsList2.ElementAt(i));
+            }
+        }
+        @for (int i = 0; i < latestPostsList3.Count; i++)
+        {
+            if (latestPostsList3.ElementAt(i).year == year && latestPostsList3.ElementAt(i).month == month)
+            {
+                searchList.Add(latestPostsList3.ElementAt(i));
+            }
+        }
+        if (searchList.Count != 0)
+        {
+            latestPosts = searchList;
+        }
+        StateHasChanged();
+    }
+
+    class LatestPost
+    {
+        public string newseventlink { get; set; }
+        public string imagelink { get; set; }
+        public string title { get; set; }
+        public string month { get; set; }
+        public string day { get; set; }
+        public string year { get; set; }
+    }
+
+
+}

@@ -1,0 +1,114 @@
+﻿@page "/gallery/{item}/{title}"
+@using Microsoft.AspNetCore.Hosting;
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="terms-conditions" style="text-align:left">
+                        <h1>@title</h1>
+                    </div>
+                    @if (imgfiles == null)
+                    {
+                        <p><em>Loading...</em></p>
+                    }
+                    else
+                    {
+                        @foreach (var file in imgfiles)
+                        {
+
+                            <div class="col-md-3 col-12" style=" float: left; width: 33.33%; padding: 5px;">
+                                <img src="@file.DisplayURL" class="blogImg" data-toggle="modal" data-target="#myModal" @onclick='() => ChangeImage(file.DisplayURL)' />
+                            </div>
+
+
+                        }
+
+                    }
+                </div>
+            </div>
+
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close modalCloseBtn" data-dismiss="modal">&times;</button>
+            <img src="@displayImg" width="100%" />
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string item { get; set; }
+
+    [Parameter]
+    public string title { get; set; }
+
+    private string displayImg { get; set; } = "";
+
+    List<ImageSpec> imgfiles;
+    protected override void OnInitialized()
+    {
+        imgfiles = GetAllImages();
+    }
+
+    private List<ImageSpec> GetAllImages()
+    {
+        List<ImageSpec> result = new List<ImageSpec>();
+        string imgPath = @"\images\Gallery\";
+        DirectoryInfo d = new DirectoryInfo(@"wwwroot\images\Gallery\" + item);
+        var files = d.GetFiles("*.*");
+        if (files != null)
+        {
+            foreach (var f in files)
+            {
+                if(f.Name.Contains("300x300"))
+                {
+                    continue;
+                }
+                else
+                {
+                    var spec = new ImageSpec
+                    {
+                        Name = Path.GetFileNameWithoutExtension(f.Name),
+                        DisplayURL = $"{imgPath}\\{item}\\{f.Name}"
+                    };
+                    result.Add(spec);
+                }
+
+            }
+        }
+        return result;
+    }
+
+    private void ChangeImage(string img)
+    {
+        displayImg = img;
+        StateHasChanged();
+    }
+
+
+    public class ImageSpec
+    {
+        public string Name { get; set; }
+        public string DisplayURL { get; set; }
+    }
+
+}

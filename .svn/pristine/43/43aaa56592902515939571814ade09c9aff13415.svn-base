@@ -1,0 +1,37 @@
+﻿@page "/paymentMobileTest/{orderId}"
+
+@inject IApiService ApiService
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IPaymentService paymentService
+@inject IJSRuntime JSRuntime
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 centerCol pt-5">
+            <img src="images/Loading.gif" width="200"/>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<CheckoutCart> checkoutCart { get; set; }
+
+    [Parameter]
+    public string orderId { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            @*PaymentSession PaymentResponse = await paymentService.CreateSessionMobileTest(orderId, "2500");
+            await localStore.SetItemAsync("paymentIndicator", PaymentResponse.successIndicator);
+            await localStore.SetItemAsync("orderId", orderId);
+
+            await JSRuntime.InvokeAsync<object>("PaymentGateway", PaymentResponse.SessionId.ToString());
+            await JSRuntime.InvokeAsync<object>("Checkout.showPaymentPage");*@
+        }
+    }
+
+}

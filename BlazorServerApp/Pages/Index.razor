@@ -1,0 +1,915 @@
+﻿@page "/"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject IApiService apiService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container-fluid mainCon">
+         
+   
+    @if (sliders != null)
+    {
+       
+        <div class="row">
+            <div class="col-md-12 p-0">
+     
+
+                <div class="owl-carousel mainSlider owl-theme">
+                    
+                    @*<div class="row mb-4">
+                    <div class="col-12">
+                        <div class="sizeChangeBox">
+                            <div class="col p-4">
+                                <div class="dropdown w-100 text-left">
+                                    <button class="btn primary-btn dropdown-toggle text-left" type="button" data-toggle="dropdown">
+                                        Seller
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="proCat dropdown-menu">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col p-4">
+                                <div class="dropdown w-100 text-left">
+                                    <button class="btn primary-btn dropdown-toggle text-left" type="button" data-toggle="dropdown">
+                                        Search by Seller
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="proCat dropdown-menu">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col p-4">
+                                <div id="searchBox" class="mt-2 mt-md-0">
+                                    <input type="text" placeholder="Search products.." id="searchBox" class="form-control mr-2" value="" />
+                                    <button class="btn"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@       
+                    @*@foreach (var slide in sliders)
+                    {
+                        <div class="item">
+                            <img class="d-block w-100" src="@slide.ImageUrl" />
+                        </div>
+                    }*@
+                    @*Need to ask from aiye*@
+                    <div class="item">
+                            <img class="d-block w-100" src="images/Slider01.png" alt="First slide" />
+                            <img class="d-block w-100" src="images/Slider02.png" alt="Second slide" />
+                            @*<div class="sliderText centerCol">
+                                <div>
+                                    <p class="mainText">
+                                        LOVE SRI LANKA PROJECT
+                                    </p>
+                                    <p class="subText">
+                                        100 smiles for your 100 ruppees
+                                    </p>-->
+                                    <p class="subText2">
+                                        Loving your own country is to love peace
+                                    </p>
+                                </div>
+                            </div>*@
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-12 centerCol pt-5">@*Hidden height part 150*@
+                    <img src="images/Loading.gif" style="width:150px !important; height:100px !important;" />
+                </div>
+            </div>
+        </div>
+    }
+   
+</div>
+
+<div class="row mb-4">
+                    <div class="col-12">
+                        <div class="sizeChangeBox">
+                            <div class="col p-4">
+                                <div class="dropdown w-100 text-left">
+                                    <button class="btn primary-btn dropdown-toggle text-left" type="button" data-toggle="dropdown">
+                                        Seller
+                                        <span class="caret">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </span>
+                                    </button>
+                                    <ul class="proCat dropdown-menu" >
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col p-4">
+                                <div class="dropdown w-100 text-left">
+                                    <button class="btn primary-btn dropdown-toggle text-left" type="button" data-toggle="dropdown">
+                                        Search by Seller
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="proCat dropdown-menu">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col p-4">
+                                <div id="searchBox" class="mt-2 mt-md-0">
+                                    <input type="text" placeholder="Search products.." id="searchBox" class="form-control mr-2" value="" />
+                                    <button class="btn"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ @*Hidden*@
+    @*<div class="containerA">*@ 
+       @*<div class="content1">*@
+            @*<div class="container1">
+                <div class="row mt-5 mt-md-4 my-2">
+                    <div class="col-md-4 d-inline-flex centerCol mb-2 mb-md-0">
+                        <label class="mr-2"><b>Seller: </b></label>
+                             <div class="rz-dropdown rz-clear" onmousedown="Radzen.activeElement = null" style="width:100%" tabindex="0" id="sellerSelect">
+                                <div class="rz-helper-hidden-accessible">
+                                    <input style="width:100%" aria-haspopup="listbox" readonly type="text" tabindex="-1" value="0" aria-label="0" />
+                                </div>
+
+                                <label class="rz-dropdown-label rz-inputtext  rz-placeholder">
+                                         Select the Seller...
+                                </label>
+
+                                <div class="rz-dropdown-trigger  rz-corner-right">
+                                 <span class="rz-dropdown-trigger-icon  rzi rzi-chevron-down"></span>
+                                </div>
+
+                                <div id="popupPf3olSe5jk" class="rz-dropdown-panel    " style="display:none; box-sizing: border-box">
+                                    <div class="rz-dropdown-filter-container">
+                                         <input id="searchPf3olSe5jk" tabindex="0" class="rz-dropdown-filter rz-inputtext   " autocomplete="off" type="text">
+                                                            <span class="rz-dropdown-filter-icon rzi rzi-search"></span>
+                                    </div>
+                                    <div class="rz-dropdown-items-wrapper" style="max-height: 200px;overflow-x: hidden">
+                                            <ul class="rz-dropdown-items rz-dropdown-list    " role="listbox">
+                                            <li role="option" class="rz-dropdown-item " aria-label="&gt;Abanpola" __internal_preventDefault_onclick>
+                                            <span>
+                                                    Indula Rathnayaka       </span>
+                                            </li>
+                                            <li role="option" class="rz-dropdown-item " aria-label="&gt;Achchuveli" __internal_preventDefault_onclick>
+                                            <span>
+                                                     V.B Nanayakkara       </span></li>>
+                                            <li role="option" class="rz-dropdown-item " aria-label="&gt;nawagamuwa" __internal_preventDefault_onclick>
+                                            <span>
+                                                     A.S.M Fernando        </span>
+                                            </li>
+                                            </ul>
+                                    </div>
+                                    </div>
+                                         <i class="rz-dropdown-clear-icon rzi rzi-times" __internal_stopPropagation_onclick></i>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                    @*</div>*@
+                @*</div>*@@*Hidden*@
+ <br/>
+ <br/>
+<div class="container">
+    <div class="row mt-5">
+       @* @if (banners != null)
+        {
+            @foreach (var banner in banners)
+            {
+                <div class="col-md-3">
+                    <a href="/allproducts/-1"><img src="@banner.ImageUrl" class="smallBanners" /></a>
+                </div>
+            }
+        }*@
+        <br/>
+        
+        <div class="col-md-3">
+            <a href="/allproducts/-1"><img src="images/Banners/P1.png" class="smallBanners" /></a>
+        </div>
+        <div class="col-md-3">
+            <a href="/allproducts/-1"><img src="images/Banners/P2.png" class="smallBanners" /></a>
+        </div>
+        <div class="col-md-3">
+            <a href="/allproducts/-1"><img src="images/Banners/P3.png" class="smallBanners" /></a>
+        </div>
+        <div class="col-md-3">
+            <a href="/allproducts/-1"><img src="images/Banners/P4.png" class="smallBanners" /></a>
+        </div>
+        <br/>
+        <br/>
+    </div>
+</div>
+
+
+@if (newProducts != null)
+{
+    <LatestProducts newProducts="newProducts"></LatestProducts>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12 centerCol pt-5">
+                <img src="images/Loading.gif" width="150" />
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+}
+@*Hidden*@
+@*<div class="container-fluid aboutCon pt-2 centerCol">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 centerCol">
+                <div>
+                    <h1 class="headingNew text-center">'Building, Livelihoods, protecting authentic Sri Lankan Products'</h1>
+                    <h1 class="headingNew redHeading text-center">A 100% charity organization</h1>
+                    <h2 class="headingNew redHeading text-center"></h2>
+                    <p class="text-justify">
+                        Our products are made exclusively for MSL by very talented artisans who are struggling to find a market for their products.  MSL’s objective is to help these small and medium entrepreneurs by guiding them in designing, packaging and marketing of their products. A 100% charity organization
+                    </p>
+                    <p class="text-justify">
+                        By purchasing these products you will be helping small and medium entrepreneurs who make a livelihood.All proceeds from the sale of these products support our island wide programs with children and promote livelihood development.
+                    </p>
+                    <a href="/Livelihood"><button class="btn readMore">Read More <i class="fas fa-long-arrow-alt-right"></i></button></a>
+                </div>
+            </div>
+            <div class="col-md-7 centerCol text-center">
+                <img src="images/heart.png" width="90%" />
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="container latestProducts">
+    <div class="row">
+        <div class="col-12 text-center pt-lg-5 pb-5">@*#8B1E29;*@
+            <h1 class="headingNew text-center">Product <span class="redheading" style="color: #FFB554;"> Categories</span></h1>
+            @*Hidden*@
+            @*<p>
+                All proceeds from the sale of these products support our island wide programs with
+                children and promote livelihood development.
+            </p>*@
+        </div>
+    </div>
+</div>
+
+@*<div class="container">
+        <div class="row">
+            <div class="col-md-4 categoryLink mb-4 mb-md-0">
+                <a href="/allproducts/1">
+                    <img src="images/Categories/Cat2.png" class="verticalImage" />
+                    <div class="catTextCon">
+                        <p>Accessories</p>
+                        <button class="btn">View More</button>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6 categoryLink mb-4 mb-md-0">
+                        <a href="/allproducts/2">
+                            <img src="images/Categories/Cloths.png" class="smallImages" />
+                            <div class="catTextCon">
+                                <p>Clothing</p>
+                                <button class="btn">View More</button>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6 categoryLink">
+                        <a href="/allproducts/3">
+                            <img src="images/Categories/Covid Protection Equipment.png" class="smallImages" />
+                            <div class="catTextCon">
+                                <p>Covid Protection <br />Equipment</p>
+                                <button class="btn">View More</button>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12 categoryLink">
+                        <a href="/allproducts/4">
+                            <img src="images/Categories/Food.png" class="horizontalImage" />
+                            <div class="catTextCon">
+                                <p>Food</p>
+                                <button class="btn">View More</button>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-4 categoryLink mb-4 mb-md-0">
+                <a href="/allproducts/5" class="">
+                    <img src="images/Categories/Homeware.png" class="smallImages" />
+                    <div class="catTextCon">
+                        <p>Homeware</p>
+                        <button class="btn">View More</button>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 categoryLink mb-4 mb-md-0">
+                <a href="/allproducts/6" class="">
+                    <img src="images/Categories/Accessories.png" class="smallImages" />
+                    <div class="catTextCon">
+                        <p>Jewelry</p>
+                        <button class="btn">View More</button>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 categoryLink mb-4 mb-md-0">
+                <a href="/allproducts/7" class="">
+                    <img src="images/Categories/Patriot Collection.png" class="smallImages" />
+                    <div class="catTextCon">
+                        <p>Patriot Collection</p>
+                        <button class="btn">View More</button>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-8 categoryLink mb-4">
+                <a href="/allproducts/8" class="">
+                    <img src="images/Categories/Soft Toys.png" class="smallImages" />
+                    <div class="catTextCon">
+                        <p>Soft Toys</p>
+                        <button class="btn">View More</button>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 categoryLink mb-4">
+                <a href="/allproducts/9" class="">
+                    <img src="images/Categories/Stationery.png" class="smallImages" />
+                    <div class="catTextCon">
+                        <p>Stationery</p>
+                        <button class="btn">View More</button>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>*@
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-3 mb-4">
+            <div class="row">
+                <div class="col-12 mb-4 categoryLink">
+                    <a href="/allproducts/1">
+                        <img src="images/Categories/Product1(Electronics).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Electronics</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 categoryLink">
+                    <a href="/allproducts/5" class="">
+                        <img src="images/Categories/Product2(Home Appliances).png" class="verticalImage" />
+                        <div class="catTextCon">
+                            <p>Home Appliances</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-4">
+            <div class="row">
+                <div class="col-12 mb-4 categoryLink">
+                    <a href="/allproducts/2">
+                        <img src="images/Categories/Product3(Health & Beauty Care).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Health & Beauty Care</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 mb-4 categoryLink">
+                    <a href="/allproducts/6" class="">
+                        <img src="images/Categories/Product4(Baby Care).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Baby Care</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 categoryLink">
+                    <a href="/allproducts/8" class="">
+                        <img src="images/Categories/Product5(Groceries & Pet Products).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Groceries & Pet Products</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-4">
+            <div class="row">
+                <div class="col-12 mb-4 categoryLink">
+                    <a href="/allproducts/3">
+                        <img src="images/Categories/Product6(Lifestyle).png" class="verticalImage" />
+                        <div class="catTextCon">
+                            <p>Lifestyle</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 categoryLink">
+                    <a href="/allproducts/9" class="">
+                        <img src="images/Categories/Product7(Fashion).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Fashion</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="row">
+                <div class="col-12 mb-4 categoryLink">
+                    <a href="/allproducts/4">
+                        <img src="images/Categories/Product8(Accessories).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Accessories</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 mb-4 categoryLink">
+                    <a href="/allproducts/7" class="">
+                        <img src="images/Categories/Product9(Sports & Outdoor Products).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Sports & Outdoor Products</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 categoryLink">
+                    <a href="/allproducts/11" class="">
+                        <img src="images/Categories/Product10(Automotive).png" class="smallImages" />
+                        <div class="catTextCon">
+                            <p>Automotive</p>
+                            <button class="btn">View More</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*@if (newProducts != null)
+    {
+        <ProductCategories></ProductCategories>
+    }
+    else
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-12 centerCol pt-5">
+                    <img src="images/Loading.gif" width="150" />
+                </div>
+            </div>
+        </div>
+    }
+*@
+
+@if (mostBuying != null)
+{
+    <BestSellers mostBuying="mostBuying"></BestSellers>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12 centerCol pt-5">
+                <img src="images/Loading.gif" width="150" />
+            </div>
+        </div>
+    </div>
+}
+@*Hidden*@
+@*<div class="container-fluid aboutCon pt-0 centerCol">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 centerCol text-center">
+                <img src="images/about5.png" width="90%" />
+            </div>
+            <div class="col-md-5 centerCol">
+                <div>
+                    <h1 class="headingNew text-center">Welcome To</h1>
+                    <h1 class="headingNew redHeading text-center">Mother Sri Lanka</h1>
+                    <p class="text-justify">
+                        Mother Sri Lanka is the story of how the people of one resilient island nation in the Indian Ocean did not allow thirty long years of terrorism drown their hopes and dreams for their motherland. It is the story of a small group of patriotic citizens who wanted to tell their family of twenty million to hold their heads high in pride, believing in themselves. The story of how a country can overcome bloodshed and rise from the ashes of war, learning from the mistakes of the past, uniting under one flag, as one nation, as one people who believe in their country.
+                    </p>
+                    <a href="/aboutus"><button class="btn readMore">Read More <i class="fas fa-long-arrow-alt-right"></i></button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid donationCon p-0">
+    <div class="donationBackColor">
+        <div class="row h-100">
+            <div class="col-12 col-md-10 h-100 text-center centerColRightDonation pl-md-5">
+                <div class="donationText">
+                    <h1 class="text-centert">Donations</h1>
+                    <p class="">
+                        Help Launch<br />
+                        our life-saving ship for children who need.
+                    </p>
+                    <a href="/Donate" class="btn readMore2">Donate Now <i class="fas fa-long-arrow-alt-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid ourProjectCon centerCol">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 text-center centerCol pr-md-5">
+
+            </div>
+            <div class="col-lg-9 text-center pl-md-5">
+                <div class="my-5">
+                    <h1 class="headingNew text-center mb-5">Our Top <span class="redheading" style="color: #8B1E29;">Projects</span></h1>
+                    <div class="row w-100 d-none d-md-flex">
+                        <div class="col-md-4">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Responsible Citizenship
+                                    Development: Project RUN
+                                </h6>
+                                <p class="mt-3">
+                                    Schools program, with 2600 schools
+                                </p>
+                                <a href="/OurWorkWithChildren#projectRun" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Entrepreneurship
+                                    Development, Women’s
+                                    Empowerment and
+                                    Protecting  Local Arts &
+                                    Crafts under the brand
+                                    Love Sri Lanka
+                                </h6>
+                                <p class="mt-3">
+                                    Supporting over 140 micro entrepreneurs
+                                    and 5000 organic farmers Other Projects
+                                </p>
+                                <a href="/OurWorkwiththeCommunity#livelihood" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Responsible Citizenship
+                                    Development: Pre-School
+                                    Project
+                                </h6>
+                                <p class="mt-3">
+                                    600 Schools
+                                </p>
+                                <a href="/OurWorkWithChildren#preSchool" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w-100 d-none d-md-flex">
+                        <div class="col-md-4">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Reconciliation Projects:
+                                    Inter
+                                </h6>
+                                <p class="mt-3">
+                                    Faith Music Festivals, Friendship
+                                    Bridge camps
+                                </p>
+                                <a href="/OurWorkWithYouth#interfaith" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Future Forum
+                                </h6>
+                                <p class="mt-3">
+                                    Workshop Series on current issues
+                                    affecting the Citizens
+                                </p>
+                                <a href="/OurWorkwiththeCommunity" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Love Sri Lanka Festival
+                                </h6>
+                                <p class="mt-3">
+                                    A celebration of the Pride of Sri Lanka
+                                </p>
+                                <a href="/LoveSriLanka" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*For Mobile*@
+                    <div class="owl-carousel productSlider4 owl-theme d-md-none">
+                        <div class="item p-2">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Responsible Citizenship
+                                    Development: Project RUN
+                                </h6>
+                                <p class="mt-3">
+                                    Schools program, with 2600 schools
+                                </p>
+                                <a href="/Projects" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                            <div class="redProjectBox">
+                                <h6>
+                                    Reconciliation Projects:
+                                    Inter
+                                </h6>
+                                <p class="mt-3">
+                                    Faith Music Festivals, Friendship
+                                    Bridge camps
+                                </p>
+                                <a href="/OurWorkWithChildren#projectRun" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                        <div class="item p-2">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Entrepreneurship
+                                    Development, Women’s
+                                    Empowerment and
+                                    Protecting  Local Arts &
+                                    Crafts under the brand
+                                    Love Sri Lanka
+                                </h6>
+                                <p class="mt-3">
+                                    Supporting over 140 micro entrepreneurs
+                                    and 5000 organic farmers Other Projects
+                                </p>
+                                <a href="/OurWorkWithChildren#projectRun" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                            <div class="redProjectBox">
+                                <h6>
+                                    Future Forum
+                                </h6>
+                                <p class="mt-3">
+                                    Workshop Series on current issues
+                                    affecting the Citizens
+                                </p>
+                                <a href="/OurWorkWithChildren#projectRun" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                        <div class="item p-2">
+                            <div class="redProjectBox">
+                                <h6>
+                                    Responsible Citizenship
+                                    Development: Pre-School
+                                    Project
+                                </h6>
+                                <p class="mt-3">
+                                    600 Schools
+                                </p>
+                                <a href="/OurWorkWithChildren#projectRun" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                            <div class="redProjectBox">
+                                <h6>
+                                    Love Sri Lanka Festival
+                                </h6>
+                                <p class="mt-3">
+                                    A celebration of the Pride of Sri Lanka
+                                </p>
+                                <a href="/OurWorkWithChildren#projectRun" target="_top"><button class="btn readMoreRedBtn">Read More</button></a>
+                            </div>
+                        </div>
+                    </div>
+          @*Hidden*@      @*</div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+
+@*<div class="container-fluid aboutCon centerCol">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 centerCol text-center">
+                    <img src="images/about6.png" width="90%" />
+                </div>
+                <div class="col-md-5 centerCol">
+                    <div>
+                        <h1 class="headingNew text-center">Letter from the</h1>
+                        <h1 class="headingNew redHeading text-center">Chairperson</h1>
+                        <p class="text-justify">
+                            When I was well into the rat race of the private sector, I had the realization to do something beyond myself and my family, for the benefit of my motherland. With this in mind, I joined the Public Sector in January 2008, at a time when the country was in the grip of war and crises. On the one hand, within the country we were facing the gruesome realities of terrorism, and on the other, a global financial crisis, a food crisis and an oil crisis, added to the gloom and doom. There was an acute lack of positive thinking and whoever had the means, were looking for ways to leave the country and ‘abandon ship’ so to speak.
+                        </p>
+                        <a href="/ChairpersonMessage"><button class="btn readMore">Read More <i class="fas fa-long-arrow-alt-right"></i></button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> need to putend cmt
+
+@*Hidden*@
+@*<div class="container-fluid greyCon ourworkCon centerCol">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="headingNew float-left">Recent <span class="redheading" style="color: #8B1E29;">News</span></h1>
+                <a class="float-right" href="/eventsDynamic"><button class="btn readMore">View All</button></a>
+            </div>
+            <div class="col-md-6 mb-5">
+                @if (newestPosts != null && newestPosts.Count() > 0)
+                {
+                    <div class="row mt-4">
+                        <div class="col-5">
+                            <img src="@newestPosts[0].MainImage" class="blogImg" />
+                        </div>
+                        <div class="col-7 blogDetailsBox">
+                            <h5 mb-4>
+                                @newestPosts[0].Title
+                            </h5>
+                            <div class="blogParaCon">
+                                <p class="blogPara">
+                                    @newestPosts[0].SubDescription
+                                </p>
+                            </div>
+                            <a href="/viewPostDynamic/@newestPosts[0].PostId"><button class="btn readMore">Read More <i class="fas fa-long-arrow-alt-right"></i></button></a>
+                        </div>
+                    </div>
+                }
+
+                <hr class="blogLine" />
+
+                @if (newestPosts != null && newestPosts.Count() > 1)
+                {
+                    <div class="row mt-4">
+                        <div class="col-5">
+                            <img src="@newestPosts[1].MainImage" class="blogImg" />
+                        </div>
+                        <div class="col-7 blogDetailsBox">
+                            <h5 mb-4>
+                                @newestPosts[1].Title
+                            </h5>
+                            <div class="blogParaCon">
+                                <p class="blogPara">
+                                    @newestPosts[1].SubDescription
+                                </p>
+                            </div>
+                            <a href="/viewPostDynamic/@newestPosts[1].PostId"><button class="btn readMore">Read More <i class="fas fa-long-arrow-alt-right"></i></button></a>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-6 mb-5">
+                @if (newestPosts != null && newestPosts.Count() > 2)
+                {
+                    <div class="row mt-4">
+                        <div class="col-5">
+                            <img src="@newestPosts[2].MainImage" class="blogImg" />
+                        </div>
+                        <div class="col-7 blogDetailsBox">
+                            <h5 mb-4>
+                                @newestPosts[2].Title
+                            </h5>
+                            <div class="blogParaCon">
+                                <p class="blogPara">
+                                    @newestPosts[2].SubDescription
+                                </p>
+                            </div>
+                            <a href="/viewPostDynamic/@newestPosts[2].PostId"><button class="btn readMore">Read More <i class="fas fa-long-arrow-alt-right"></i></button></a>
+                        </div>
+                    </div>
+                }
+
+                <hr class="blogLine" />
+
+                @if (newestPosts != null && newestPosts.Count() > 3)
+                {
+                    <div class="row mt-4">
+                        <div class="col-5">
+                            <img src="@newestPosts[3].MainImage" class="blogImg" />
+                        </div>
+                        <div class="col-7 blogDetailsBox">
+                            <h5 mb-4>
+                                @newestPosts[3].Title
+                            </h5>
+                            <div class="blogParaCon">
+                                <p class="blogPara">
+                                    @newestPosts[3].SubDescription
+                                </p>
+                            </div>
+                            <a href="/viewPostDynamic/@newestPosts[3].PostId"><button class="btn readMore">Read More <i class="fas fa-long-arrow-alt-right"></i></button></a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@if (sliders == null)
+{
+    <div class="loadingScreen">
+        <div class="row h-100">
+            <div class="col-12 h-100 centerCol">
+                <img src="images/Loading.gif" width="150" />
+            </div>
+        </div>
+    </div>
+}
+
+   
+@code {
+
+    private IEnumerable<Product> newProducts { get; set; }
+    private IEnumerable<Product> allProducts { get; set; }
+    private IEnumerable<Product> mostBuying { get; set; }
+    private List<Banner> banners { get; set; }
+    private List<Slide> sliders { get; set; }
+    private int selectedOutletId = 1;
+    private int displayCount = 12;
+    private User user;
+    private List<BlogPosts> newestPosts { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            sliders = await apiService.GetSliders();
+            banners = await apiService.GetBanner();
+            //selectedOutletId = appState.selectedOutletId;
+            await JSRuntime.InvokeAsync<object>("CardImageHeader");
+            await JSRuntime.InvokeAsync<object>("ProjectSlider");
+            await JSRuntime.InvokeAsync<object>("NavBar");
+            await GetProducts();
+
+            newestPosts = new List<BlogPosts>();
+            newestPosts = await apiService.GetNewestPosts(4);
+            StateHasChanged();
+        }
+    }
+
+    private async void HandleOutletSelect(string selectedOutletId)
+    {
+        this.selectedOutletId = Convert.ToInt32(selectedOutletId);
+        //appState.SetOutlet(Convert.ToInt32(selectedOutletId));
+        await GetProducts();
+    }
+
+    private async Task GetProducts()
+    {
+        newProducts = (await ProductService.GetNewProductsByOutletId(selectedOutletId)).ToList();
+        allProducts = (await ProductService.GetProductsByOutletId(selectedOutletId)).ToList();
+        mostBuying = (await ProductService.GetMostBuyingProducts(selectedOutletId)).ToList();
+
+        if (allProducts.Count() < 12)
+        {
+            displayCount = allProducts.Count();
+        }
+        else
+        {
+            displayCount = 12;
+        }
+        StateHasChanged();
+    }
+
+    private void ViewAll()
+    {
+        NavManager.NavigateTo("/searchPage/null/-1");
+    }
+}

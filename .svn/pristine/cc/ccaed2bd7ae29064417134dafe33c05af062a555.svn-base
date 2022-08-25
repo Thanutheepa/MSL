@@ -1,0 +1,544 @@
+﻿@page "/gallery"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="terms-conditions" style="text-align:left">
+                        <h1>Gallery</h1>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/71stIndependenceDayCelebrations/71st Independence Day Celebrations -Love Sri Lanka Festival 2019" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/71stIndependenceDayCelebrations/IMG_7758-min.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        71st Independence Day Celebrations -Love Sri Lanka Festival 2019
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/YouthLeadershipHarmonyAmbassadorCamp/Youth Leadership and Harmony Ambassador Camp  2018" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/YouthLeadershipHarmonyAmbassadorCamp/DSC01097-min-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Youth Leadership & Harmony Ambassador Camp – 2018
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRunAwardAndOpeningCeremony/Project RUN 2017 2018 Award Ceremony and Opening Ceremony" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRunAwardAndOpeningCeremony/42956065_1944859262247160_8903762152897118208_o-min-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN 2017/18 – Award Ceremony and Opening Ceremony Ceremony Of the Youth Leadership & Harmony Ambassador Camp -2018
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/FieldVisitShanmugaVidyalaya/Field Visit to Shanmuga Maha Vidyalaya" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/FieldVisitShanmugaVidyalaya/20180621_145226-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Field Visit to Shanmuga Maha Vidyalaya
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNEasternProvinceFinals/Project RUN 2017 2018 Eastern Province Finals" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNEasternProvinceFinals/DSC_0133-min-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN 2017/18- Eastern Province Finals
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNSouthernProvinceFinals/Project RUN 2017 2018 Southern Province Finals" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNSouthernProvinceFinals/20180614_112939-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN 2017/18 – Southern Province Finals
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNCentralProvinceFinals/Project RUN 2017 2018 Central Province Finals" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNCentralProvinceFinals/DSC_7870-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN 2017/18 – Central Province Finals
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNNorthWesternProvince/Project RUN Provincial Finals 2017 2018 North Western Province" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNNorthWesternProvince/IMG_7699-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN Provincial Finals 2017/18 – North Western Province
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNUvaSabaragamuwaProvince/Project RUN provincial finals 2017 2018 Uva and Sabaragamuwa Province" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNUvaSabaragamuwaProvince/IMAG0506-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN provincial finals 2017/18 – Uva & Sabaragamuwa Province
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/70IndependenceAllIsland/70th Independence Day Celebrations All Island Souvenir Competition" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/70IndependenceAllIsland/11-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        70th Independence Day Celebrations- All Island Souvenir Competition
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/70IndependenceSongs/70th Independence Day Celebrations All Island School Songs and Drama competition" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/70IndependenceSongs/27458888_2068965033120201_2577092623990598123_n-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        70th Independence Day Celebrations- All Island School Songs and Drama competition
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/70thIndependenceCelebrations/70th Independence Day Celebrations Love Sri Lanka Festival" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/70thIndependenceCelebrations/IMG_0278-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        70th Independence Day Celebrations- Love Sri Lanka Festival
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/HigherEducationpath/Future Forum on How to Select a Higher Education path" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/HigherEducationpath/Webp.net-compress-image-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Future Forum on How to Select a Higher Education path
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/HealthWellness/Future Forum on Health and Wellness" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/HealthWellness/2017-10-06-PHOTO-00000419-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Future Forum on Health and Wellness
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/MotherSLProjectRUN2017/Mother Sri Lanka Project RUN 2017 kicks off with building bridges between Biyagama and Uvakele" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/MotherSLProjectRUN2017/0113-Copy-min-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Mother Sri Lanka: Project RUN 2017 kicks off with building bridges between Biyagama and Uvakele
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/LivelihoodDevelopment/Livelihood Development Training for Women’s in Uyana Community at Gampaha" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/LivelihoodDevelopment/3-min-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Livelihood Development Training for Women’s in Uyana Community at Gampaha
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/MotherSLLivelihoodDevelopmentProject/Mother Sri Lanka launches a Livelihood Development Project in Partnership with Zonta Club II" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/MotherSLLivelihoodDevelopmentProject/Lunawa-Pic-7-min-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Mother Sri Lanka launches a Livelihood Development Project in Partnership with Zonta Club II
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/MotherSLUniversityChild/Mother Sri Lanka Future Forum How to Select a University For My Child" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/MotherSLUniversityChild/DSC_1909-min-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Mother Sri Lanka Future Forum How to Select a University For My Child
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/MotherSLAwardsCeremony2016/Mother Srilanka Awards Ceremony 2016" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/MotherSLAwardsCeremony2016/IMG_5742-300x299.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Mother Srilanka Awards Ceremony 2016
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/65NationalIndependenceDay/65 National Independence Day" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/65NationalIndependenceDay/untitled-truecolor-201-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        65 national independence day
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNEasternProvince/Project RUN Eastern Province" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNEasternProvince/imag0796-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN – Eastern Province
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNSabaragamuwaProvince/Project RUN Sabaragamuwa Province" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNSabaragamuwaProvince/2013-01-10-10-40-43-2-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project RUN – Sabaragamuwa Province
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/ProjectRUNUvaProvince/Project run uva province" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/ProjectRUNUvaProvince/dscf1157-2-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Project run uva province
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/MotherSLProjectRUNSchoolsClubs/Mother sri lanka Project RUN Schools clubs program begins" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/MotherSLProjectRUNSchoolsClubs/img_0052-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Mother sri lanka Project RUN Schools clubs program begins
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6 ">
+                            <a href="/gallery/RUNforLanka/RUN for Lanka" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/RUNforLanka/img_3304-2-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        RUN for Lanka
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/MotherSLCommercialBank/Mother Sri Lanka Trust together with the Commercial Bank" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/MotherSLCommercialBank/img_4510-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Mother Sri Lanka Trust together with the Commercial Bank
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/PirivenaEducationProgramme/Pirivena Education Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/PirivenaEducationProgramme/2012-06-14-14-17-15-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Pirivena Education Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/InterfaithMusicFestivalAsia/First Interfaith Music Festival in Asia" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/InterfaithMusicFestivalAsia/dsc_3404-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        First Interfaith Music Festival in Asia
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/MotherSLInauguration/Mother Sri Lanka Ambassador Inauguration" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/MotherSLInauguration/img_0718-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Mother Sri Lanka Ambassador Inauguration
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/NorthWesternSchoolProgramme/North Western Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/NorthWesternSchoolProgramme/dsc00074-2-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        North Western Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/WesternProvinceSchoolProgramme/Western Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/WesternProvinceSchoolProgramme/dsc04676-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Western Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/SouthernProvinceSchoolProgramme/Southern Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/SouthernProvinceSchoolProgramme/f3530012-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Southern Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6 ">
+                            <a href="/gallery/SabaragamuwaProvinceSchoolProgramme/Sabaragamuwa Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/SabaragamuwaProvinceSchoolProgramme/dsc05567-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Sabaragamuwa Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/NothernSchoolProgramme/Nothern Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/NothernSchoolProgramme/dsc_0319-3-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Nothern Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/EasternProvinceSchoolProgramme/Eastern Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/EasternProvinceSchoolProgramme/dsc05218-2-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Eastern Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/CentralProvinceSchoolProgramme/Central Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/CentralProvinceSchoolProgramme/mg_2958-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Central Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/UvaProvinceSchoolProgramme/Uva Province School Programme" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/UvaProvinceSchoolProgramme/dsc05797-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Uva Province School Programme
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <a href="/gallery/DenuwaraMithuro/Denuwara Mithuro" style="color: #8B1E29;text-decoration:none">
+                                <div class="row p-3 img-hover-zoom">
+                                    <img src="images/Gallery/DenuwaraMithuro/img_9947-1-300x300.jpg" class="blogImg" />
+                                </div>
+                                <div class="row blogDetailsBox p-3">
+                                    <p>
+                                        Denuwara Mithuro
+                                    </p>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

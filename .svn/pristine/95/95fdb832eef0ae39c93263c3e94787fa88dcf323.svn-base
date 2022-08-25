@@ -1,0 +1,31 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@using BlazorServerApp
+@using BlazorServerApp.Shared
+@using Blazored.LocalStorage;
+@using BlazorServerApp.Data
+
+@using ShoppingCart.UseCases.SearchProductScreen
+@using ShoppingCart.UseCases.ViewProductScreen
+@using ShoppingCart.UseCases.CartScreen
+@using ShoppingCart.UseCases.LoginScreen
+@using ShoppingCart.CoreBusiness.Models
+
+@using BlazorServerApp.Controls
+
+@using Radzen
+@using Radzen.Blazor
+@using ShoppingCart.UseCases.RegisterScreen
+@using ShoppingCart.UseCases.FavProductScreen
+
+@using System.IO
+@using System.Configuration
+
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
+@using System.Web

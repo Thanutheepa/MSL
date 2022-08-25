@@ -1,0 +1,87 @@
+﻿@page "/supportUs"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Support Us</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        <h1 class="headingNew">Support <span class="redheading" style="color: #8B1E29;">Us</span></h1>
+                        <p>
+                            We are striving tirelessly towards achieving our goals with the funding we receive from those who have been with us on our journey.
+                            With all transparency, with genuine intent and with only the well-being of our own people at heart, we wish to continue this path and
+                            welcome like-minded partners to join us.  Our country needs a helping hand no doubt, just until we get on our own feet.  We have the
+                            talent, the capability and the will to conquer but we cannot go it alone.  Only a collective thought and effort will see us through.
+                        </p>
+                        <p>
+                            MSL most often operates on a volunteer basis therefore our overheads are kept to a minimum. It is indeed heartening to know that most
+                            business organizations are willing to lavish their wealth and resources on us as they recognize that this endeavor is not simply rhetoric,
+                            but that we are genuinely result-oriented.
+                        </p>
+                        <p>
+                            We are combining our resources, knowledge, expertise and time, to take MSL to greater heights.  We consider the beautiful lives we would be
+                            saving and are proud that we are part of something that is bigger than ourselves!
+                        </p>
+
+                        <h3 style="text-align:left">Donations</h3>
+
+                        <p>
+                            Mother Lanka Foundation is a non-profit social enterprise registered as a company limited by guarantee, run by a team of professionals following
+                            the highest standards of ethics, transparency and good governance.
+                        </p>
+                        <p>
+                            MSL is financed by generous donors in the private sector, donor sector, and philanthropists, as well as through fund raising programs and sale of
+                            Sri Lankan souvenirs under the Patriot Collection.
+                        </p>
+                        <p>
+                            We run our movement with minimum overhead costs and in the most cost effective manner in order to ensure that every cent that you donate to us is
+                            spent with utmost care.  You also have the option of selecting a particular cause that you want to support among our causes such as Child Development,
+                            Responsible Citizenship Development, Community Development or Livelihood Development.
+                        </p>
+                        <p>
+                            If you partner us, you will know exactly where your money goes.
+                        </p>
+                        <p>
+                            If you want further details about our work before you donate please feel free to contact us on +94 (11) 2878711 / manager@mothersrilanka.lk
+                        </p>
+
+                        <div class="row">
+                            <div class="col-md-3 col-12"><a href="/Donate"><button type="button" class="btn checkoutBtn w-100">Donate Now</button></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

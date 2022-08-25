@@ -1,0 +1,453 @@
+﻿@page "/product/{productId:int}"
+
+@inject IViewProduct viewProduct
+@inject ILocalStorageService localStore
+@inject IProductService productService
+@inject ICartService cartService
+@inject NavigationManager NavManager
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin">
+    <div class="row mt-5 mt-md-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    @if (product != null)
+                    {
+                        <li class="breadcrumb-item active" aria-current="page">@product.name</li>
+                    }
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    @if (product != null)
+    {
+        <div class="row mt-3">
+            <div class="loginBox">
+            <div class="row">
+            <div class="col-md-5">
+                @if (product.ImageUrl != null)
+                {
+                    <img src="@displayImg" class="productDetailsImage" data-toggle="modal" data-target="#myModal" />
+                }
+                else
+                {
+                    <img src="images/noimg.png" class="productDetailsImage" />
+                }
+
+                @if (itemImages != null)
+                {
+                    <div class="row mt-2 mb-4">
+                        <div class="col-4 col-lg-3">
+                            <button class="imgBtn" @onclick="() => changeImg(product.ImageUrl)"><img src="@product.ImageUrl" /></button>
+                        </div>
+                        @foreach (var img in itemImages.imagePath)
+                        {
+                            <div class="col-4 col-lg-3">
+                                <button class="imgBtn" @onclick="() => changeImg(product.ImageUrl)"><img src="@img" /></button>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-7 centerCol">
+                <div>
+                <h2 class="productTitle mb-3">@product.name</h2>
+                @if (appState.currRate != null)
+                {
+                    @if (product.RegularPrice > product.SellingPrice)
+                    {
+                        <h4><span class="strik strikeText">@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(product.RegularPrice / appState.currRate.BuyingRate, 2))).ToString("N")</span> @appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(product.SellingPrice / appState.currRate.BuyingRate, 2))).ToString("N")</h4>
+                    }
+                    else
+                    {
+                        @if (product.SellingPrice != 0 || product.Weight != 0)
+                        {
+                            <h4>@appState.currRate.CurrencySymbol@Convert.ToDouble(String.Format("{0:0.00}", @Math.Round(product.SellingPrice / appState.currRate.BuyingRate, 2))).ToString("N")</h4>
+                        }
+                    }
+                }
+                <p class="mt-3">@product.Description</p>
+                @if (product.CurrentStock > 0)
+                {
+                    @*<p>In Stock: @product.CurrentStock</p>*@
+                }
+                <p>SKU: @product.ItemCode</p>
+                @if (product.CurrentStock == 0 && selectedOutletId > 0)
+                {
+                    <p>Out of Stock</p>
+                }
+
+                @if (maxReached)
+                {
+                    <p class="text-danger m-0 p-0">Maximum is @product.MaxQtyPurchase</p>
+                }
+
+                @if (product.CurrentStock == 0 && appState.selectedOutletId > 0)
+                {
+                    <button class="btn btn-success addToCartBtn disabled" disabled>Add to cart</button>
+                }
+                else
+                {
+                    @if (cartService.IsAdded(product))
+                    {
+                        //<button class="btn btn-success addToCartBtn" @onclick="AddToCart"><i class="far fa-check-circle"></i> Add to cart</button>
+                        <div class="countBtnCon2">
+                            <div class="countBtnCon">
+                                <button class="minusBtn" @onclick="MinusProduct">-</button>
+                                <font>@productQty</font>
+                                <button class="plusBtn" @onclick="PlusProduct">+</button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        @if (product.SellingPrice == 0 && product.Weight == 0)
+                        {
+                            <button class="btn btn-success addToCartBtn" @onclick="ShowMsg">Add to cart</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success addToCartBtn" @onclick="AddToCart">Add to cart</button>
+                        }
+                    }
+                }
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        @if (itemReviews != null)
+        {
+            <div class="col-12 mb-4">
+                <hr class="redLine" />
+                <h2>Reviews (@itemReviews.Count())</h2>
+            </div>
+            <div class="col-12 scrollLimit">
+                @foreach (var review in itemReviews)
+                {
+                    <div class="reviewBox mb-2">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="">
+                                    @review.CustomerName
+                                    @if (review.StartCount >= 1 && review.StartCount <= 5)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                    @if (review.StartCount >= 2 && review.StartCount <= 5)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                    @if (review.StartCount >= 3 && review.StartCount <= 5)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                    @if (review.StartCount >= 4 && review.StartCount <= 5)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                    @if (review.StartCount >= 5 && review.StartCount <= 5)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                </p>
+                                <p>@review.Review</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                }
+                    <hr class="mt-5" />
+                </div>
+        }
+        else
+        {
+            <div class="col-12 mb-4">
+                <hr class="redLine" />
+                <h2>Reviews (0)</h2>
+            </div>
+        }
+       @* <div class="col-12">
+            <h4>Reviews</h4>
+            @if (reviewsCount == 0)
+            {
+                <p>There are no reviews yet.</p>
+                @if (product != null)
+                {
+                    <p class="bg-light p-2">Be the first to review "@product.name"</p>
+                }
+            }
+            <p><i>Your email address will not be published. Required fields are marked <span class="text-danger">*</span></i></p>
+            <p>YOUR RATING</p>
+            <p class="ratingStars">
+                <i class="@star1 fa-star star star1" @onclick="() => RatingCountChange(1)"></i>
+                <i class="@star2 fa-star star star2" @onclick="() => RatingCountChange(2)"></i>
+                <i class="@star3 fa-star star star3" @onclick="() => RatingCountChange(3)"></i>
+                <i class="@star4 fa-star star star4" @onclick="() => RatingCountChange(4)"></i>
+                <i class="@star5 fa-star star star5" @onclick="() => RatingCountChange(5)"></i>
+            </p>
+
+            
+        </div>*@
+     @*   <div class="col-12">
+            <div class="form-group">
+                <label for="reviewText">YOUR REVIEW<span class="text-danger">*</span></label>
+                <textarea class="form-control checkoutForm" id="reviewText" placeholder="Your Review" @bind="reviewText"></textarea>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label for="userName">NAME<span class="text-danger">*</span></label>
+                <input type="text" @bind-value="userName" class ="form-control checkoutForm" id="userName" placeholder="Name">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label for="userEmail">EMAIL<span class="text-danger">*</span></label>
+                <input type="email" @bind-value="userName" class ="form-control checkoutForm" id="userEmail" placeholder="Email">
+            </div>
+        </div>
+        <div class="col-12">
+            <button class="btn checkoutBtn w-100 mt-4" @onclick="SubmitReview">SUBMIT</button>
+        </div>*@
+    </div>
+</div>
+
+<LatestProducts newProducts="newProducts"></LatestProducts>
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close modalCloseBtn" data-dismiss="modal">&times;</button>
+            <img src="@displayImg" width="100%" />
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private IEnumerable<Product> newProducts { get; set; }
+    private List<ItemReviews> itemReviews { get; set; }
+    private int selectedOutletId;
+    private Product product;
+    private List<CartItem> cartProducts;
+    private ItemImages itemImages { get; set; }
+    private bool addToCartStatus = false;
+    private User user;
+    private int productQty = 1;
+    private bool maxReached = false;
+    private int reviewsCount = 0;
+    private int ratingStarCount = 0;
+    private string displayImg {get;set;} = "";
+    private string star1 = "far";
+    private string star2 = "far";
+    private string star3 = "far";
+    private string star4 = "far";
+    private string star5 = "far";
+    private string reviewText = "";
+    private string userName = "";
+
+    [Parameter]
+    public int ProductId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        appState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        appState.OnChange -= StateHasChanged;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        base.OnParametersSet();
+        //product = (await productService.GetProductById(ProductId)).ToList().ElementAt(0);
+
+        selectedOutletId = appState.selectedOutletId;
+        newProducts = (await productService.GetNewProductsByOutletId(selectedOutletId)).ToList();
+        itemReviews = (await productService.GetItemReviews(ProductId)).ToList();
+        itemImages = (await productService.GetItemImages(ProductId));
+        if (selectedOutletId > 0)
+        {
+            product = (await productService.GetProductByIdAndOutletId(selectedOutletId, ProductId));
+        }
+        else
+        {
+            product = (await productService.GetProductById(ProductId)).ToList().ElementAt(0);
+        }
+        displayImg = product.ImageUrl;
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            user = await localStore.GetItemAsync<User>("user");
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            await JSRuntime.InvokeAsync<object>("Star");
+            StateHasChanged();
+        }
+    }
+
+    private void changeImg(string image)
+    {
+        displayImg = image;
+    }
+
+    private async void AddToCart()
+    {
+        if (appState.selectedOutletId > 0)
+        {
+            if (productQty == 0)
+                productQty = 1;
+
+            var cartItem = new CartItem(product, productQty);
+            cartProducts = cartService.AddToCart(cartItem);
+            appState.SetCartItemCount(cartService.GetTotalCount());
+            StateHasChanged();
+            addToCartStatus = true;
+            SaveCart();
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+        }
+    }
+
+    private async void MinusProduct()
+    {
+        if (appState.selectedOutletId > 0)
+        {
+            if (productQty > 1)
+            {
+                productQty--;
+                AddToCart();
+            }
+            else if (productQty == 1)
+            {
+                RemoveFromCart(product);
+                addToCartStatus = false;
+            }
+            maxReached = false;
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+        }
+    }
+
+    private async void PlusProduct()
+    {
+        if (appState.selectedOutletId > 0)
+        {
+            if (productQty < product.MaxQtyPurchase)
+            {
+                productQty++;
+                AddToCart();
+            }
+            else if (productQty == product.MaxQtyPurchase)
+            {
+                maxReached = true;
+            }
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "Please select an outlet");
+        }
+    }
+
+    private async void SaveCart()
+    {
+        if (user != null)
+        {
+            await localStore.SetItemAsync("cart-"+user.CustomerId, cartProducts);
+        }
+        else
+        {
+            await localStore.SetItemAsync("cart-0", cartProducts);
+        }
+    }
+
+    private void RemoveFromCart(Product product)
+    {
+        cartProducts = cartService.RemoveFromCartItem(product);
+        appState.SetCartItemCount(cartService.GetTotalCount());
+        SaveCart();
+    }
+
+    private void RatingCountChange(int i)
+    {
+        star1 = "far";  star2 = "far"; star3 = "far"; star4 = "far"; star5 = "far";
+        ratingStarCount = i;
+        if (i == 1)
+        {
+            star1 = "fas";
+        }
+        else if(i == 2)
+        {
+            star1 = "fas";
+            star2 = "fas";
+        }
+        else if(i == 3)
+        {
+            star1 = "fas";
+            star2 = "fas";
+            star3 = "fas";
+        }
+        else if(i == 4)
+        {
+            star1 = "fas";
+            star2 = "fas";
+            star3 = "fas";
+            star4 = "fas";
+        }
+        else if(i == 5)
+        {
+            star1 = "fas";
+            star2 = "fas";
+            star3 = "fas";
+            star4 = "fas";
+            star5 = "fas";
+        }
+    }
+
+    private async void ShowMsg()
+    {
+        await JSRuntime.InvokeAsync<object>("ErrorAlert", "error", "", "This Item Can't be Ordered Online!");
+    }
+
+    private void SubmitReview()
+    {
+    }
+
+}

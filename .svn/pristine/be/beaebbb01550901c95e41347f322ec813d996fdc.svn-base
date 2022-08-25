@@ -1,0 +1,126 @@
+﻿@page "/OurWorkWithChildren"
+
+@inject ISearchProduct searchProduct
+@inject ILocalStorageService localStore
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject AppState appState
+@inject IJSRuntime JSRuntime
+
+<div class="container topMargin mb-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Our Work with Children</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-md-12 centerCol">
+                    <div class="terms-conditions">
+                        @*<h1> </h1>*@
+                        <h1 class="headingNew">Our Work With <span class="redheading" style="color: #8B1E29;">Children</span></h1>
+                        <h3 style="text-align:left">Schools Program: ‘අපෙන් රටට‍ – රට නැගුමට’ – ‘My contribution to my country’</h3>
+                        <p>
+                            MSL was one of the first movements to start reconciliation work in the North and East soon after the end of the
+                            30-year long war in May 18, 2009.  We braved the journey to war-torn areas in order to implement the schools
+                            program in the East in August 2009 and in the North in December 2009.  The response was overwhelming. 2600
+                            schools consisting of public, private and international schools representing all 9 provinces participated under
+                            the theme “Apen Ratata, Rata Nagumata” (Our contribution to Nation Building).
+                        </p>
+
+                        <img class="img-fluid d-block" src="images/ourWorkWithChildren/1-2-768x170-1.jpg" />
+
+                        <img id="projectRun" class="img-fluid d-block" src="images/ourWorkWithChildren/2-2-768x170-4.jpg" />
+
+
+                        <h3 style="text-align:left">Mother Sri Lanka Project RUN</h3>
+
+                        <img class="img-fluid d-block pb-2" src="images/ourWorkWithChildren/1.jpg" />
+
+
+                        <p>
+                            Project Run, an acronym of three powerful components, Responsible Citizenship, Unity and National Pride is a
+                            unique concept where children were motivated and encouraged to design projects that helped uplift lives and
+                            enrich communities across the island.
+                        </p>
+                        <p>
+                            The holistic objective of this project is developing a ‘Responsible Citizen’ while instilling positive
+                            thinking and the values of ethnic harmony, leadership and teamwork.  The project also focuses on enhancing
+                            entrepreneurship, leadership qualities and project management skills of the youth which will eventually
+                            develop students who are strategic thinkers, analysts, motivators and group achievers who can contribute
+                            towards Nation building at a young age. Launched in late 2012, with the blessings of the Ministry of
+                            Education, MSL Project RUN has become the practical aspect of the Citizen Education subject which will
+                            eventually help build responsible citizens.
+                        </p>
+                        <p>
+                            The project has had an excellent progress with 1400 projects being implemented so far since the introduction
+                            of this program in 2013.
+                        </p>
+
+                        @*<img class="img-fluid d-block pb-1" src="images/ourWorkWithChildren/new.jpg" />
+
+                            <img class="img-fluid d-block pb-1" src="images/ourWorkWithChildren/2-4.jpg" />
+
+                            <img class="img-fluid d-block pb-1" src="images/ourWorkWithChildren/2-7.jpg" />*@
+
+                        <div class="img-Container">
+                            <img class="img-fluid" src="images/ourWorkWithChildren/new.jpg" />
+                            <div class="bottomleftimg container-fluid">Project RUN – Provincial Finals at various places in 2013</div>
+                        </div>
+                        <div class="img-Container">
+                            <img class="img-fluid" src="images/ourWorkWithChildren/2-4.jpg" />
+                            <div class="bottomleftimg container-fluid">Project RUN award ceremony – 11.02.2014</div>
+                        </div>
+                        <div class="img-Container">
+                            <img class="img-fluid" src="images/ourWorkWithChildren/2-7.jpg" />
+                            <div id="preSchool" class="bottomleftimg container-fluid">Award Ceremony Project RUN – 28.05.2016</div>
+                        </div>
+
+                        <h3 style="text-align:left">Protection of Children</h3>
+                        <h3 style="text-align:left">Mother Sri Lanka Pre-schools Program</h3>
+
+                        @*<img class="img-fluid d-block pb-1" src="images/ourWorkWithChildren/pre_school-768x432.jpg" />*@
+
+                        <p>
+                            The MSL Pre-school programme was launched in 2010, under the theme ‘Deshabhimani Kekulu”.  The MSL pre-school
+                            program was introduced to all pre-schools registered under the Ministry of Child Development with the main
+                            objectives being, to keep the country clean, appreciate the environment with the flora and fauna of our
+                            country and to understand and appreciate other ethnic and religious groups in the country living in peace
+                            and harmony.
+                        </p>
+
+                        <img class="img-fluid pb-3" src="images/ourWorkWithChildren/preschool2.png" />
+
+                        <p style="background-color: rgba(0,0,0,.4); color:white">
+                            The participating schools and teachers are recognized and rewarded at Award Ceremonies held periodically.
+                            The first such ceremony was held on May 28th, 2016 with the distinguished patronage of Dr A T Ariyaratna,
+                            who has been one of the most respected professionals in the field of organized pre-school teaching in the
+                            country.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RecentPosts />
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            StateHasChanged();
+        }
+    }
+
+}

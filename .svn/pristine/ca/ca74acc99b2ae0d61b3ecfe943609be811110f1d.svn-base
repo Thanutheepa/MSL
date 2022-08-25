@@ -1,0 +1,389 @@
+﻿@page "/allproducts/{categoryId}"
+
+@inject NavigationManager NavManager
+@inject IProductService ProductService
+@inject ICategoryService CategoryService
+@inject AppState appState
+@inject ILocalStorageService localStore
+@inject IJSRuntime JSRuntime
+
+
+
+
+@*<div class="container">
+
+        <SearchBar OnSearch="HandleSearch" searchValue="@search" isNewPage="false" OnOutletSelect="HandleOutletSelect"></SearchBar>
+
+        <br />
+    </div>*@
+<div class="container-fluid topMargin px-lg-5">
+    @if (search != "null")
+    {
+        @*<h4 class="mb-4">Search Results : @search</h4>*@
+    }
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><NavLink href="/" class="bread"><i class="fas fa-home"></i> Home</NavLink></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shop Items</li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-lg-2">
+            @if (allCategories != null)
+            {
+                <div class="categoryBtn2 d-block d-md-none" id="catViewBtn">View Categories <i class="fas fa-chevron-down catDownArrow"></i></div>
+                <section class="d-none d-md-block" id="categoryContainer">
+                    @if (categoryId != "-1")
+                    {
+                        <div class="categoryBtn" @onclick="() => HandleCategoryChange(-1)">All Categories</div>
+                    }
+                    else
+                    {
+                        <div class="categoryBtn active">All Categories</div>
+                    }
+
+                    @foreach (var cateogry in allCategories)
+                    {
+                        @if (categoryId != "-1" && categoryId == cateogry.CategoryId.ToString())
+                        {
+                            <div class="categoryBtn active">@cateogry.Name</div>
+                        }
+                        else
+                        {
+                            <div class="categoryBtn" id="catSelect-@cateogry.CategoryId" @onclick="() => HandleCategoryChange(cateogry.CategoryId)">@cateogry.Name</div>
+                        }
+                    }
+                </section>
+            }
+        </div>
+        <div class="col-md-9 col-lg-10">
+            @if (selectedCategory != null)
+            {
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="sizeChangeBox">
+                            <div class="row p-4">
+                                <div class="col-12 mb-2">
+                                    <h2>@selectedCategory.Name</h2>
+                                </div>
+                                <div class="col-md-4 centerCol">
+                                    <img src="@selectedCategory.ImageUrl" class="categoryImg" />
+                                </div>
+                                <div class="col-md-8 centerCol mt-4 mt-md-0">
+                                    <div>
+                                        @if (lines != null)
+                                        {
+                                            @foreach (string line in lines)
+                                            {
+                                                <p>@line</p>
+                                            }
+                                        }
+                                    </div>
+                                    @*<p>@selectedCategory.Description</p>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="sizeChangeBox">
+                        <button class="btn gridBtn d-none d-lg-inline @activeSmall" @onclick="() => changeGrid(3)"><img src="images/3X3.png" class="gridIcons" /></button>
+                        <button class="btn gridBtn d-none d-lg-inline @activeLarge" @onclick="() => changeGrid(4)"><img src="images/4X4.png" class="gridIcons" /></button>
+                        <button class="btn gridBtn d-none d-lg-inline @activeLarge" @onclick="() => changeGrid(6)"><img src="images/6X6.png" class="gridIcons" /></button>
+                        <div class="form-check pl-4">
+                            <input type="checkbox" class="form-check-input" id="showStock" @onchange="eventArgs => { CheckboxClicked(eventArgs.Value); }">
+                            <label class="form-check-label moblieCheck" for="showStock">Show only products in stock</label>
+                        </div>
+                        @*      <div class="form-check pl-5">
+                                <input type="checkbox" class="form-check-input" id="showSathosa" checked="@isSathosa" @onchange="eventArgs => { CheckboxClickedSathosa(eventArgs.Value); }">
+                                <label class="form-check-label moblieCheck" for="showSathosa">Show only sathosa products</label>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @if (searchedProducts != null)
+                {
+                    @for (int i = 0; i < displayCount; i++)
+                    {
+                        if (showStock)
+                        {
+                            if (searchedProducts.ElementAt(i).CurrentStock > 0)
+                            {
+                                <div class="col-6 col-md-6 @gridSize">
+                                    <ProductItem Product="searchedProducts.ElementAt(i)" BoxType="@boxSize"></ProductItem>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-6 col-md-6 @gridSize">
+                                <ProductItem Product="searchedProducts.ElementAt(i)" BoxType="@boxSize"></ProductItem>
+                            </div>
+                        }
+                    }
+                    <div class="col-12 text-center">
+                        <p class="itemCount"> @displayCount of @searchedProducts.Count()</p>
+                        <button class="btn viewAllBtn mb-4" @onclick="ViewMore">View More</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 centerCol pt-5">
+                        <img src="images/Loading.gif" width="150" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+
+    private IEnumerable<Product> allProducts { get; set; }
+    private IEnumerable<Product> searchedProducts { get; set; }
+    private IEnumerable<Category> allCategories { get; set; }
+    private int selectedOutletId;
+    private User user;
+    private int displayCount = 12;
+    private int viewCount = 12;
+    private string gridSize = "col-lg-4";
+    private string boxSize = "";
+    private bool showStock = false;
+    private string activeSmall = "";
+    private string activeLarge = "";
+    private bool isSathosa = false;
+    private Category selectedCategory { get; set; }
+    private string[] lines { get; set; }
+
+    public string search { get; set; } = "";
+
+    [Parameter]
+    public string categoryId { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<object>("NavBarFixed");
+            selectedOutletId = appState.selectedOutletId;
+            //selectedOutletId = appState.selectedOutletId;
+            if (categoryId == "-2")
+            {
+                isSathosa = true;
+                categoryId = "-1";
+            }
+            allCategories = (await CategoryService.GetAllCategories()).Where(a => a.CategoryId != 10).ToList();
+            allProducts = (await ProductService.GetProductsByCatIdAndOutletId(selectedOutletId, Convert.ToInt32(categoryId), isSathosa)).ToList();
+            if (Convert.ToInt32(categoryId) > 0)
+            {
+                selectedCategory = allCategories.Where(a => a.CategoryId == Convert.ToInt32(categoryId)).FirstOrDefault<Category>();
+                //lines = selectedCategory.Description.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            }
+            await JSRuntime.InvokeAsync<object>("CategoryBtnClickMobile");
+
+            SetMeta();
+            Search();
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        base.OnParametersSet();
+        if (search == "null")
+        {
+            search = "";
+        }
+
+        if (categoryId == "-2")
+        {
+            isSathosa = true;
+            categoryId = "-1";
+        }
+
+        allCategories = (await CategoryService.GetAllCategories()).Where(a => a.CategoryId != 10).ToList();
+        allProducts = (await ProductService.GetProductsByCatIdAndOutletId(selectedOutletId, Convert.ToInt32(categoryId), isSathosa)).ToList();
+        if (Convert.ToInt32(categoryId) > 0)
+        {
+            HandleCategoryChange(Convert.ToInt32(categoryId));
+        }
+        Search();
+        StateHasChanged();
+    }
+
+    private void Search()
+    {
+        if (search == null || search == "null" || search == "")
+        {
+            searchedProducts = allProducts.Where(product => product.IsOnline == 1);
+        }
+        else
+        {
+            searchedProducts = allProducts.Where(product => product.name.ToLower().Contains(search.ToLower()) && product.IsOnline == 1);
+        }
+
+        if (searchedProducts.Count() < viewCount)
+        {
+            displayCount = searchedProducts.Count();
+        }
+        else
+        {
+            displayCount = viewCount;
+        }
+    }
+
+    private void HandleSearch(string searchValue)
+    {
+        search = searchValue;
+        Search();
+    }
+
+    private void ViewMore()
+    {
+        if ((displayCount + viewCount) < searchedProducts.Count())
+        {
+            displayCount += viewCount;
+        }
+        else
+        {
+            displayCount = searchedProducts.Count();
+        }
+    }
+
+    private async void HandleCategoryChange(int categoryId)
+    {
+        this.categoryId = categoryId.ToString();
+        selectedCategory = allCategories.Where(a => a.CategoryId == Convert.ToInt32(categoryId)).FirstOrDefault<Category>();
+        if (categoryId != -1)
+        {
+            //lines = selectedCategory.Description.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+        await GetProducts();
+    @*    if (categoryId == -1)
+            NavManager.NavigateTo("/allproducts/-1");
+        else*@
+            NavManager.NavigateTo("/allproducts/"+categoryId);
+@*        else if (categoryId == 2)
+            NavManager.NavigateTo("/greentea/2");
+        else if (categoryId == 3)
+            NavManager.NavigateTo("/organictea/3");
+        else if (categoryId == 4)
+            NavManager.NavigateTo("/herbalinfusions/4");
+        else if (categoryId == 5)
+            NavManager.NavigateTo("/luxurygiftpacks/5");*@
+
+        SetMeta();
+    }
+
+    private async void HandleOutletSelect(string selectedOutletId)
+    {
+        this.selectedOutletId = Convert.ToInt32(selectedOutletId);
+        //appState.SetOutlet(Convert.ToInt32(selectedOutletId));
+        await GetProducts();
+    }
+
+    private async Task GetProducts()
+    {
+        allProducts = (await ProductService.GetProductsByCatIdAndOutletId(selectedOutletId, Convert.ToInt32(categoryId), isSathosa)).ToList();
+        Search();
+        StateHasChanged();
+    }
+
+    private void changeGrid(int number)
+    {
+        if (number == 3)
+        {
+            gridSize = "col-lg-4";
+            boxSize = "";
+            if (searchedProducts.Count() < 12)
+            {
+                displayCount = searchedProducts.Count();
+            }
+            else
+            {
+                displayCount = 12;
+            }
+            viewCount = 12;
+            activeSmall = "active";
+            activeLarge = "";
+        }
+        else if (number == 4)
+        {
+            gridSize = "col-lg-3";
+            boxSize = "smallBox";
+            if (searchedProducts.Count() < 16)
+            {
+                displayCount = searchedProducts.Count();
+            }
+            else
+            {
+                displayCount = 16;
+            }
+            viewCount = 16;
+            activeSmall = "";
+            activeLarge = "active";
+        }
+        else if (number == 6)
+        {
+            gridSize = "col-lg-2";
+            boxSize = "smallBox smallBox6";
+            if (searchedProducts.Count() < 36)
+            {
+                displayCount = searchedProducts.Count();
+            }
+            else
+            {
+                displayCount = 36;
+            }
+            viewCount = 36;
+            activeSmall = "";
+            activeLarge = "active";
+        }
+        //StateHasChanged();
+    }
+
+    private void CheckboxClicked(object checkedValue)
+    {
+        if ((bool)checkedValue)
+        {
+            showStock = true;
+        }
+        else
+        {
+            showStock = false;
+        }
+    }
+
+    private async void CheckboxClickedSathosa(object checkedValue)
+    {
+        isSathosa = (bool)checkedValue;
+        allProducts = (await ProductService.GetProductsByCatIdAndOutletId(selectedOutletId, Convert.ToInt32(categoryId), isSathosa)).ToList();
+        Search();
+        StateHasChanged();
+    }
+
+    private async void SetMeta()
+    {
+       @* if (categoryId == "-1")
+            await JSRuntime.InvokeVoidAsync("setTitle", "Stassen Tea - All Products", "Our Stassen branded tea is available in Ceylon black tea, green tea, flavoured tea, herbal infusions, organic tea and ready to drink iced tea variants. Luxury gift packs and purpose built caddies are marketed for a variety of tea.");
+        else if (categoryId == "1")
+            await JSRuntime.InvokeVoidAsync("setTitle", "Stassen Tea - Black Tea", "Stassen black tea makes up the majority of tea sold in the world market and is popular for its rich colour and taste. The distinctly refreshing aroma and soothing taste of Stassen Pure Ceylon black tea is hard to beat and apparent from the first sip making it an all time global favorite. Stassen black tea is naturally packed with antioxidants and numerous other health enhancing properties that are of value to all age groups. Stassen packs and seals its tea at the peak of freshness using state of the art machinery.Different types and grades of leaf tea, pack sizes, tea bags as well as private labeling for corporate clients are conveniently available for discerning customers.");
+        else if (categoryId == "2")
+            await JSRuntime.InvokeVoidAsync("setTitle", "Stassen Tea - Green Tea", "Stassen is well versed in the complex art of producing excellent quality green tea, having had the distinction of cultivating the first ever successful commercial production of green tea in Sri Lanka more than thirty years ago in 1982. Stassen green tea is a mellow, soothing brew with a delicate fragrance and all of the therapeutic benefits of premium quality green tea.Stassen green tea is available in a choice of attractive pack sizes in traditional loose leaf varieties as well as tea bag form and is gaining popular ground the world over due to its varieties of health benefits.");
+        else if (categoryId == "3")
+            await JSRuntime.InvokeVoidAsync("setTitle", "Stassen Tea - Organic Tea", "Organic tea grown at our Idulgashinna organic tea garden is certified by international certification bodies as 100% certified organic tea and is mostly consumed in Europe, Japan and the USA. Stassen’s organically grown garden fresh teas have enjoyed remarkable success and acceptance from a growing clientele that values tea that is free of synthetic fertilizer, pesticides, and herbicides.Stassen’s organic teas help sustain the ecosystem, soil conditions, and the health of growers and users alike. Our Idulgashinna Bio Tea Garden produces a range of teas that are 100 % organic and 100 % natural, and includes a premium selection of black, green, flavoured, and designer teas that are in demand by an eager and expanding client base across the world.");
+        else if (categoryId == "4")
+            await JSRuntime.InvokeVoidAsync("setTitle", "Stassen Tea - Herbal Infusions", "Given the growing demand for health oriented beverages, our Stassen Herbal Infusion teas have witnessed a resurgence in recent times and is available in the following popular variants. Chamomile, Peppermint, Hibiscus and Liquorice. These carefully formulated and delicately balanced refreshing herbal infusions offer good therapeutic value while being naturally caffeine-free.Herbal infusions are an ideal stress relief for the body and soul.");
+        else if (categoryId == "5")
+            await JSRuntime.InvokeVoidAsync("setTitle", "Stassen Tea - Luxury Gift Packs", "Stassen Tea connoisseurs now have the perfect opportunity to gift their favorite teas to those near and dear in attractive purpose built caddies or wooden canisters. These purpose built caddies are designed to preserve the factory packed freshness of tea and are offered in five popular loose leaf varieties.Corporate clients also have a unique opportunity to create their own private label gift packs with Stassen Tea.");*@
+    }
+}
