@@ -9,101 +9,21 @@
 @inject IFavProduct favProduct
 @inject IJSRuntime JSRuntime
 
+
 <CascadingValue Value="this">
+   
     <div class="main" id="main">
-        @*<div class="row p-0 m-0">
-                <div class="col-12 p-0 m-0">
-                    <div class="covidBox">
-                        <ul class="navbar-nav d-inline">
-                            @if (appState.user != null)
-                            {
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Profile">
-                                    My Account
-                                </a>
-                            </li>
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link" href="/fav">
-                                    Wishlist
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/cart">
-                                    My Cart
-                                </a>
-                            </li>
-                            @if (appState.user == null)
-                            {
-                            <li class="nav-item">
-                                <a class="nav-link" href="/register">
-                                    Register
-                                </a>
-                            </li>
+         @*Landing page
+         <div class="containerA">
+               <img class="abc" src="images/logo1.png" alt="..." />
+                <p class="subtitle"> Coming Soon</p>
+                @*<i class="fas fa-arrow-alt-circle-down"></i>
 
-                            }
-                            @if (appState.user == null)
-                            {
-                            <li class="nav-item">
-                                <a href="/login/null" class="nav-link">Login</a>
-                            </li>
-                            }
-                            @if (appState.user != null)
-                            {
-                            <li class="nav-item">
-                                <button class="btn nav-link p-0" @onclick="Logout"><span class="d-inline-flex">Logout</span></button>
-                            </li>
-
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>*@
-        <div class="top-row px-4 mobileRow d-lg-none">
-            <div class="container">
-                <div class="row pt-2">
-                    <div class="col-12 centerColLeft">
-                        <div class="row pt-2 pt-md-0 w-100 m-0">
-                            <div class="col-12 col-md-4 pt-3 pb-1 pb-md-0 pt-md-0 mobileCurr">
-                                <div class="leftSideItems d-lg-none">
-                                    <button class="btn navDropBtn"><i class="fas fa-bars"></i></button>
-                                </div>
-                                <a href="/" class="topBtn ml-5"><img src="images/logo1.png" class="logo" /></a>
-                                <div class="form-group p-0 currencyDrop d-lg-none">
-                                    <select class="form-control" id="currType" value="@currType" @onchange="CurrencyChange">
-                                        <option value="LKR">LKR</option>
-                                        <option value="USD">USD</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-8 pt-1 pt-md-0 pb-3 pb-md-0 centerColRightNav">
-                                <div class="text-center">
-                                    @if (appState.user == null)
-                                    {
-                                        <a href="/login/null" class="nav-link"><i class="fas fa-user"></i></a>
-                                    }
-                                    @if (appState.user != null)
-                                    {
-                                        <a href="/Profile" class="nav-link"><i class="fas fa-user"></i></a>
-                                        <button class="btn nav-link" @onclick="Logout"><i class="fas fa-sign-out-alt"></i></button>
-
-                                    }
-                                    <a href="/cart" class="topBtn cartBtn"><i class="topIcons fas fa-shopping-cart"></i> <span class="cartCount">@appState.cartItemCount</span></a>
-                                    <a href="fav" class="topBtn cartBtn ml-2"><i class="topIcons fas fa-heart"></i> <span class="cartCount">@appState.favProductCount </span></a>
-                                    @*<span><a href="fav" class="topBtn cartBtn ml-2"><i class="topIcons fas fa-heart"></i> <span class="cartCount">@appState.favProductCount </span></a></span>
-                                        @if (appState.user != null)
-                                        {
-                                            <button class="btn topBtn" @onclick="Logout"><i class="topIcons fas fa-sign-out-alt"></i> <span class="d-none d-md-inline-flex">Logout</span></button>
-                                        }*@
-                                </div>
-                            </div>
-                          </div>
-               </div>
-                </div>
-            </div>
-        </div>
-           
-    
+                <form>
+                    <input type="email" class="input-field" placeholder="Enter Your Email ...">
+                    <button class="btn">Submit</button>
+                </form>*@
+          @*</div>*@
         <div class="container-fluid navbarFixedTop scrolled fixed-top pb-md-0">
             <div class="navItemsBar row">
                 <div class="col-12 text-center currCon">
@@ -111,93 +31,124 @@
                         <li class="nav-item d-none d-lg-inline">
                             <a href="/" class="topBtn d-none d-lg-inline"><img src="images/logo1.png" class="logo" /></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-itemMobile" href="#">
+
+                        <li class="nav-item" style="margin-left:2px;">
+                            <a class="nav-link nav-itemMobile" href="/">
                                 Home
                             </a>
                         </li>
-                        @*Hidden*@
-                         @*<li class="nav-item dropdown">
-                            <a class="nav-link whiteText" @onclick:preventDefault data-bs-toggle="dropdown">  Home <i class="fas fa-caret-down"></i>  </a>
-                            
-                           <ul class="dropdown-menu">
-                                <li><a class="dropdown-item nav-itemMobile" href="/ChairpersonMessage"> Letter from the Chairperson</a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/aboutus"> About Us</a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/executiveteam"> Executive Team </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/motherSriLankaAmbassadors"> Mother Sri Lanka Ambassadors </a></li>
-                            </ul>
-                        </li>*@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link whiteText" @onclick:preventDefault data-bs-toggle="dropdown">  Category <i class="fas fa-caret-down"></i>  </a>
-                             @*Hidden*@
-                            @*<ul class="dropdown-menu">
-                                <li><a class="dropdown-item nav-itemMobile" href="/OurWorkWithChildren"> Our Work With Children</a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/OurWorkWithYouth"> Our Work With Youth </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/OurWorkwiththeCommunity"> Our Work With the Community </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/BestRunProjects"> Some of the Best Run Projects </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/LoveSriLanka"> Love Sri Lanka Festival </a></li>
-                            </ul>*@
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Electronics</a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Home Appliances</a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Health & Beauty Care </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Baby Care</a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/">Groceries & Pet Products </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Lifestyle </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/">Fashion </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Accessories </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Sports & Outdoor Products </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/"> Automotive</a></li>
-                                @*<li><a class="dropdown-item nav-itemMobile" href="#"> Sports &amp; Outdoor </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="#"> Automotive &amp; Motorbike </a></li>*@
-                              
-                                
-                                       
-                            </ul>
-                        </li>
-                         @*Hidden*@
-                        @*<li class="nav-item">
-                            <a class="nav-link nav-itemMobile" href="/OurPartners">
-                                Our partners
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link whiteText" @onclick:preventDefault data-bs-toggle="dropdown">  Support Us <i class="fas fa-caret-down"></i> </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item nav-itemMobile" href="/joinasVolunteer"> Join as Volunteer</a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/joinSchoolsClubs"> Join Mother Sri Lanka Schools Clubs </a></li>
-                                <li><a class="dropdown-item nav-itemMobile" href="/supportUs"> Support Us</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-itemMobile" href="/dynamicGallery">
-                                Gallery
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-itemMobile" href="/eventsDynamic">
-                                What's New
-                            </a>
-                        </li>*@
-                        <li class="nav-item">
+                        <li class="nav-item" style="margin-left:2px; ">
                             <a class="nav-link nav-itemMobile" href="/contact">
-                                Contact Us
+                                Contact us
                             </a>
                         </li>
-                        <li class="nav-item pr-0">
+                        <li class="nav-item" style="margin-left:2px;">
+                            <a class="nav-link nav-itemMobile" href="/">
+                                News Events
+                            </a>
+                        </li>
+                        <li class="nav-item" style="margin-left:2px;">
+                            <a class="nav-link nav-itemMobile" href="/AboutUs">
+                                About us
+                            </a>
+                        </li>
+                        <li class="nav-item pr-0" style="margin-right:15px;">
                             <a class="nav-link nav-itemMobile shopNow" href="/allproducts/-1">
                                 Shop Now
                             </a>
                         </li>
                         @if (appState.user == null)
                         {
+                            <li class="nav-item" style="margin-right:15px;">
+                                <a href="/login/null" class="nav-link d-none d-lg-inline" style="color:black;"><i class="fas fa-user"></i></a>
+                            </li>
+                        }
+                        @if (appState.user != null)
+                        {
+                            <li class="nav-item" style="margin-right:15px;">
+                                <a href="/Profile" class="nav-link d-none d-lg-inline" ><i class="fas fa-user" style="color:black;"></i></a>
+                            </li>
                             <li class="nav-item">
+                                <button class="btn nav-link p-0 d-none d-lg-inline" @onclick="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                            </li>
+
+                        }
+                        <li class="nav-item p-0" style="margin-right:15px;">
+                            <a href="/cart" class="topBtn cartBtn d-none d-lg-inline"><i class="topIcons fas fa-shopping-cart" style="color:black;"></i> <span class="cartCount">@appState.cartItemCount</span></a>
+                        </li>
+                        <li class="nav-item p-0" style="margin-right:15px;">
+                            <a href="/fav" class="topBtn cartBtn d-none d-lg-inline"><i class="topIcons fas fa-heart" style="color:black;"></i> <span class="cartCount">@appState.favProductCount </span></a>
+                        </li>
+                        <li class="nav-item pl-0" style="margin-right:15px;">
+                            <div class="form-group p-0 currencyDrop d-none d-lg-inline">
+                                <select class="" id="currType" value="@currType" @onchange="CurrencyChange" style="color:black;">
+                                    <option value="LKR">LKR</option >
+                                    <option value="USD">USD</option >
+                                </select>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>        
+           
+    
+       @*<CascadingValue Value="this">
+    <div class="main" id="main">
+        <div class="containerA">
+               <img class="abc" src="images/logo1.png" alt="..." />
+                <p class="subtitle"> Coming Soon</p>
+                @*<i class="fas fa-arrow-alt-circle-down"></i>
+
+                <form>
+                    <input type="email" class="input-field" placeholder="Enter Your Email ...">
+                    <button class="btn">Submit</button>
+                </form>
+          </div>
+       
+        <div class="container-fluid navbarFixedTop scrolled fixed-top pb-md-0">
+            <div class="navItemsBar row">
+                <div class="col-12 text-center currCon">
+                    <ul class="navbar-nav navbarMain d-none d-lg-inline">
+                        <li class="nav-item d-none d-lg-inline">
+                            <a href="/" class="topBtn d-none d-lg-inline"><img src="images/logo1.png" class="logo" /></a>
+                        </li>
+
+                        <li class="nav-item" style="margin-left:4px;">
+                            <a class="nav-link nav-itemMobile" href="/">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item" style="margin-left:4px;">
+                            <a class="nav-link nav-itemMobile" href="/contact">
+                                Contact us
+                            </a>
+                        </li>
+                        <li class="nav-item" style="margin-left:4px;">
+                            <a class="nav-link nav-itemMobile" href="/contact">
+                                News Events
+                            </a>
+                        </li>
+                        <li class="nav-item" style="margin-left:7px;">
+                            <a class="nav-link nav-itemMobile" href="/AboutUs">
+                                About us
+                            </a>
+                        </li>
+                        <li class="nav-item pr-0" style="margin-left:8px;">
+                            <a class="nav-link nav-itemMobile shopNow" href="/allproducts/-1">
+                                Shop Now
+                            </a>
+                        </li>
+                        @if (appState.user == null)
+                        {
+                            <li class="nav-item" style="margin-left:7px;">
                                 <a href="/login/null" class="nav-link d-none d-lg-inline"><i class="fas fa-user"></i></a>
                             </li>
                         }
                         @if (appState.user != null)
                         {
-                            <li class="nav-item">
+                            <li class="nav-item" style="margin-left:7px;">
                                 <a href="/Profile" class="nav-link d-none d-lg-inline"><i class="fas fa-user"></i></a>
                             </li>
                             <li class="nav-item">
@@ -205,13 +156,13 @@
                             </li>
 
                         }
-                        <li class="nav-item p-0">
+                        <li class="nav-item p-0" style="margin-left:7px;">
                             <a href="/cart" class="topBtn cartBtn d-none d-lg-inline"><i class="topIcons fas fa-shopping-cart"></i> <span class="cartCount">@appState.cartItemCount</span></a>
                         </li>
-                        <li class="nav-item p-0">
+                        <li class="nav-item p-0" style="margin-left:7px;">
                             <a href="/fav" class="topBtn cartBtn d-none d-lg-inline"><i class="topIcons fas fa-heart"></i> <span class="cartCount">@appState.favProductCount </span></a>
                         </li>
-                        <li class="nav-item pl-0">
+                        <li class="nav-item pl-0" style="margin-left:7px;">
                             <div class="form-group p-0 currencyDrop d-none d-lg-inline">
                                 <select class="" id="currType" value="@currType" @onchange="CurrencyChange">
                                     <option value="LKR">LKR</option>
@@ -223,7 +174,27 @@
 
                 </div>
             </div>
-        </div>
+        </div>*@
+       
+        @*<header class="masthead bg-primary text-white text-center">*@
+            @*otherway- landing page
+            <div class="masthead text-white >
+            <div class="container d-flex align-items-center flex-column">
+                <!-- Masthead Avatar Image-->
+                <img class="masthead-avatar mb-5" src="images/logo1.png" alt="..." />
+                <!-- Masthead Heading-->
+                <h1 class="masthead-heading text-uppercase mb-0">COMING SOON</h1><br /><br /><br>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- Masthead Subheading-->
+                @*<p class="masthead-subheading font-weight-light mb-0">Graphic Artist - Web Designer - Illustrator</p>*@
+            @*</div> otherway- landing page*@
+            
+        @*</header>*@
             
         <div class="content">
             @Body
@@ -238,18 +209,24 @@
                             <div class="row">
                                 <div class="col-12 col-md-7 col-lg-7 centerColLeft">
                                     <div>
-                                        <img src="images/logo1.png" class="footerLogo mb-4" />
-                                        <p class="footerParas"><i class="fas fa-map-marker-alt"></i> Address <br />@*&nbsp;&nbsp;&nbsp;NO : 614, SRI JAYAWARDENEPURA ROAD, KOTTE*@</p>
+                                        <img src="images/FCCISL Logo.jpg" class="footerLogo mb-4" />
+                                        <img src="images/SBN HR Logo.png" class="footerLogo mb-4" />
+                                        <p class="footerParas"><i class="fas fa-map-marker-alt"></i> Address <br />&nbsp;&nbsp;&nbsp; Federation House, No. 17/1, 1st Lane, Gothami Road, Colombo 0080</p>
                                         <p class="footerParas"><i class="fas fa-phone-alt"></i> TEL: <a href="tel:0112867505">@*011 286 7505*@</a></p>
-                                        <p class="footerParas"><i class="fas fa-envelope-open"></i> Email - <a href="mailto:mothersrilankatrust2015@gmail.com">@*mothersrilankatrust2015@gmail.com*@</a></p>
+                                        <p class="footerParas"><i class="fas fa-envelope-open">
+
+                                        </i> Email - <a href="mailto: wanijalk@gmail.com"> wanijalk@gmail.com</a></p>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-3 col-lg-5 centerCol2">
                                     <div class="">
                                         <h4>Quick Links</h4>
                                         <p><a href="#">Home</a></p>
-                                        <p><a href="/joinasVolunteer">Category</a></p>
                                         <p><a href="/supportUs">Contact Us</a></p>
+                                         <p><a href="/news">NewsEvents</a></p>
+                                        <p><a href="/joinasVolunteer">AboutUs</a></p>
+                                       
+                                        
                                         @*Hidden*@
                                         @*<p><a href="/gallery">Gallery</a></p>
                                         <p><a href="/news">News</a></p>

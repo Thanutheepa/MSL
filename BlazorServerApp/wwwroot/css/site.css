@@ -17,8 +17,9 @@
     src: url('../fonts/Varta/Varta Bold.ttf');
 }
 html, body {
-    font-family: sans-serif !important;
-    overflow-x:hidden;
+    font-family: Nunito Sans /*sans-serif*/ !important;
+    overflow-x: hidden;
+    
 }
 body{
     background-color:white !important;
@@ -28,10 +29,10 @@ body{
     overflow-x:hidden;
 }
 .readMore {
-    border: 1px solid #F05D24;
+    border: 1px solid #00ADD5; /*#F05D24;*/
     border-radius: 10px;
-    color: #F05D24;
-    padding:2px 15px;
+    color: #00ADD5;
+    padding: 2px 15px;
 }
 .readMore2 {
     border: 1px solid white;
@@ -122,7 +123,7 @@ app {
 }
 /*nav bar color change*/
 .navbarFixedTop.scrolled {
-    background-color: #f5821f /*#FF5454*/ /*#FFB554;*/
+    background-color: white;/*#f5821f*/ /*#FF5454*/ /*#FFB554;*/
     !important;
     transition: background-color 200ms linear;
 }
@@ -130,7 +131,7 @@ app {
         border: 1px solid white;
     }
     .navbarFixedTop.scrolled .nav-item a:hover {
-        color: white;
+        color: #00ADD5;
     }
 
 .mobileRow .fas{
@@ -335,18 +336,23 @@ app {
 .main {
     flex: 1;
 }
-    .main .logo{
-        width:250px;
-        margin-left:-280px;
-        
+    .main .logo {
+        width: 200px;
+        /*margin-left:-280px;*/
+        margin-right: 200px;
         
     }
 
 .navItemsBar {
-    background-color: transparent;
-    padding: 15px;
+    /*background-color: transparent;
+    padding: 9px;
     font-size: 16px;
-    
+    padding-left: 700px;*/
+    background: rgb(0,0,0);
+    background: rgb(0,0,0,0.1);
+    padding:15px;
+    font-size: 15px;
+
 }
     .main .top-row {
         padding-top: 40px;
@@ -401,7 +407,7 @@ app {
     }
 
     .sidebar .nav-item {
-        font-size: 0.9rem;
+        font-size: 10rem;
         padding-bottom: 0.5rem;
     }
 
@@ -672,13 +678,13 @@ app {
 .productBox .title {
     height: 3rem;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 16px;
     overflow: hidden;
     white-space: pre-wrap;
     text-overflow: ellipsis;
     text-decoration: none !important;
     margin-bottom: 0px;
-    font-family: VartaBold;
+    font-family: Nunito sans-serif;/*VartaBold;*/
 }
 .productBoxNew .title {
     height: 4.5rem;
@@ -702,13 +708,14 @@ app {
 }
 
 .productBox .price {
-    font-size: 13px;
+    font-size: 16px;
+    
     /*font-weight: bold;*/
 }
 
 .addToCartBtn {
     border-radius: 10px;
-    background-color: #8B1E29;
+    background-color: #00ADD5; /*#8B1E29;*/
     border: none;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -718,8 +725,8 @@ app {
 }
     .addToCartBtn:hover {
         background-color: white;
-        color: #8B1E29;
-        border: 1px solid #8B1E29;
+        color: #00ADD5; /*#8B1E29;*/
+        border: 1px solid #00ADD5;
     }
 
     .addToCartBtn.disabled, addToCartBtn.disabled:hover {
@@ -852,10 +859,10 @@ app {
         margin-bottom:5px;
     }
     .catTextCon button {
-        background-color: #F05D24;
+        background-color: #00ADD5; /*#F05D24;*/
         color:white;
-        padding:2px 5px;
-        font-size:0.8em;
+        padding: 2px 5px;
+        font-size: 0.8em;
     }
     .catTextCon button:hover {
         color:white;
@@ -1079,14 +1086,14 @@ app {
     }
 /*contact us submit btn style*/
 .checkoutBtn {
-    background-color: #FFB554; /*#8B1E29;*/
+    background-color: #00ADD5;/*#FFB554;*/ /*#8B1E29;*/
     border-radius: 10px;
     color: white;
 }
     .checkoutBtn:hover {
-        color: #FFB554; /*#8B1E29;*/
+        color: #00ADD5; /*#FFB554;*/ /*#8B1E29;*/
         background-color: white;
-        border-color: #FFB554; /*#8B1E29;*/
+        border-color: #00ADD5; /*#FFB554;*/ /*#8B1E29;*/
     }
 .reviewBtn {
     border-radius: 10px;
@@ -1127,8 +1134,8 @@ button.nav-link .fas{
     text-decoration: underline;
 }
 .shopNow {
-    background-color: white;
-    color: #f5821f !important;
+    background-color: #00ADD5;
+    color: black !important;
     padding: 5px 10px !important;
     border-radius: 15px;
 }
@@ -1145,7 +1152,7 @@ button.nav-link .fas{
     top: 8px;
     right: 8px;
     border-radius: 50px;
-    background-color: #f5821f;
+    background-color: #00ADD5; /*#f5821f;*/
     color: white;
     height: 14px;
     width: 14px;
@@ -1208,8 +1215,9 @@ button.nav-link .fas{
     display:flex;
     justify-content:center
 }
-.navbar-nav{
-    white-space:nowrap !important;
+.navbar-nav {
+    white-space: nowrap !important;
+    
 }
 .item{
     position:relative;
@@ -1229,18 +1237,18 @@ button.nav-link .fas{
         color: rgb(134, 151, 145);
         font-size:2em;
     }
-.productSlider .owl-dots .owl-dot span, .productSlider2 .owl-dots .owl-dot span{
-    background: rgba(240, 93, 36, 0.5) !important;
+.productSlider .owl-dots .owl-dot span, .productSlider2 .owl-dots .owl-dot span {
+    background: #00AAD5;/*rgba(240, 93, 36, 0.5)*/ !important;
 }
 .productSlider .owl-dots .owl-dot.active span, .productSlider2 .owl-dots .owl-dot.active span {
-    background: rgba(240, 93, 36, 1) !important;
+    background: #00AAD5; /*rgba(240, 93, 36, 1)*/ !important;
 }
 .productSlider .owl-nav, .productSlider2 .owl-nav {
-    color: #F05D24;
+    color: #00AAD5;
     font-size: 1.5em;
 }
     .productSlider .owl-nav [class*=owl-]:hover, .productSlider2 .owl-nav [class*=owl-]:hover {
-        color: #F05D24 !important;
+        color: /*#00AAD5;*/ #F05D24 !important;
     }
 .owl-dot:focus, .owl-next:focus, .owl-prev:focus{
     box-shadow: none;
@@ -1381,7 +1389,7 @@ button.nav-link .fas{
 /*footer styling*/
 .footerBack {
     /*background-image:url(../images/Footer.png);*/
-    background-color: #f5821f;
+    background-color: white; /*#f5821f;*/
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1389,13 +1397,13 @@ button.nav-link .fas{
 .footer {
     width: 100%;
     background-color: transparent !important;
-    color: white;
+    color: black;
     padding: 15px 5px;
 
     padding: 55px 40px 40px 40px;
 }
     .footer .bottomLine {
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid black;
     }
     .footerTuition {
         position: fixed;
@@ -1451,7 +1459,7 @@ button.nav-link .fas{
     position: fixed;
     bottom: 15px;
     right: 15px;
-    background-color: #FFB554; /*f5821f;*/
+    background-color: #00ADD5; /*#FFB554;*/ /*f5821f;*/
     color: white;
     width: 50px;
     height: 50px;
@@ -1490,13 +1498,13 @@ button.nav-link .fas{
     color: white !important;
 }
 .footer .fas, .footer .fab {
-    color: white;
+    color: black;
 }
 .footer .icons {
     font-size: 1.2em;
 }
 .footer a:hover {
-    color: white !important;
+    color: black !important;
 }
 .footer .contactNumber{
     font-size:1.5em;
@@ -1505,14 +1513,14 @@ button.nav-link .fas{
     margin-bottom:20px;
 }
 .footer .upperPart, .footer .upperPart a {
-    color: white;
+    color:black;
 }
     .footer .upperPart h4 {
-        color: white;
+        color: black;
         font-weight: 600;
     }
     .footer .upperPart a {
-        color: white !important;
+        color:black !important;
     }
 .footerCatelog {
     margin-left: auto;
@@ -1588,21 +1596,21 @@ button.nav-link .fas{
 }
 /*Nav item*/
 .nav-item a {
-    color: white;
+    color: black;
     font-weight: lighter;
     margin-right:auto;
     
     
 }
 .nav-item .whiteText{
-    color:white !important;
+    color:black !important;
     cursor:pointer;
 }
 .nav-item a:hover {
     color: #FFB554; /*#f5821f;*/
 }
 .nav-item.dropdown a {
-    color: white;
+    color: black;
 }
     .nav-item.dropdown a:hover {
         color: #FFB554; /*#f5821f;*/
@@ -1686,7 +1694,7 @@ button.nav-link .fas{
         }
 
 .heading {
-    background-color: #8B1E29;
+    background-color: #00ADD5;/*#8B1E29;*/
     padding: 10px 15px;
     border-radius: 10px;
     color: white;
@@ -2320,13 +2328,15 @@ h2.page-header-title {
     border:none;
     color:white;
     font-size:1em;
+    /*padding-left:10px;
+    margin-left:10px;*/
 }
     #currType:focus {
         border: none;
         box-shadow:none;
     }
     #currType option {
-        color: #f5821f;
+        color: #00ADD5;/*#f5821f;*/
     }
 @media (min-width: 576px) {
     .modal-dialog {
@@ -2362,19 +2372,18 @@ h2.page-header-title {
     .main .top-row{
         height:50px;
     }
-    .navItemsBar{
+    .navItemsBar {
         padding:0px !important;
         
     }
-    .navbar-nav.navbarMain .nav-item {
+    .navbar-nav.navbarMain.nav-item {
         display: block !important;
-        padding: 50px;
+        padding: 0px ;
         margin-left: 0px;
-        
-
+       
     }
     .navbarFixedTop {
-        background-color: #f5821f !important;
+        background-color: #f5821f  !important;
     }
 
         .navbarFixedTop.fixed-top {
@@ -2786,11 +2795,13 @@ h2.page-header-title {
 
     .navItemsBar {
         padding: unset !important;
+       
     }
-    .navItemsBar.row{
-        padding-top:0px;
-        padding-bottom:0px;
-    }
+        .navItemsBar.row {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            
+        }
     .productBoxNew .title{
         font-size:1em;
     }
@@ -2832,6 +2843,7 @@ h2.page-header-title {
         padding: 15px 15px 10px 0px;
     }*/
     .currencyDrop {
+        
         position: absolute;
         top: 15px;
         right: -8%;
@@ -2860,7 +2872,7 @@ h2.page-header-title {
 .secondary-btn {
     border-radius: 8px;
     color: white;
-    background-color: #FF5454;
+    background-color: #00ADD5;/*#FF5454;*/
     height: 45px;
     border: 1px solid;
     outline: solid;
@@ -2870,16 +2882,95 @@ h2.page-header-title {
 
 .primary-btn:hover {
     color: white;
-    background: #FFB554;/*#7a0202;*/
+    background: #00ADD5; /*#7a0202;*/
     transition: 0.3s ease-in-out;
 }
 
 .secondary-btn:hover {
     color: white;
-    outline: 2px solid #FF5454;
+    outline: 2px solid #00ADD5;
     transition: 0.2s ease-in-out;
 }
-.nav-link nav-itemMobile1{
-    margin-right:auto;
+
+/*.logo{
+    margin-left: -280px;
+  
+}*/
+
+
+/*Landing Page Without Bakground image*/
+.masthead {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #FFB554;
+    height: 600px;
 }
 
+    .masthead .masthead-heading {
+        font-size: 24px;
+        line-height: 14px;
+        margin-left: 380px;
+        margin-right: 350px;
+    }
+
+    /*.masthead .masthead-subheading {
+        font-size: 1.25rem;
+    }*/
+
+    .masthead .masthead-avatar {
+        width: 680px;
+        margin-left: 300px;
+        margin-right: 300px;
+    }
+    .masthead .divider-custom {
+        
+        margin-left: 600px;
+        margin-right: 600px;
+      
+    }
+
+@media (min-width: 992px) {
+    .masthead {
+        padding-top: 180px;
+        padding-bottom: 180px;
+    }
+
+        .masthead .masthead-heading {
+            font-size: 60px;
+            line-height: 13px;
+            margin-left: 380px;
+        }
+
+    /*.masthead .masthead-subheading {
+            font-size: 1.5rem;
+        }*/
+}
+
+/*Land Page With Bakground*/
+.containerA {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 600px;
+    line-height: 1.4;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../images/bg1.jpg) no-repeat center/cover;
+    max-width: 1500px;
+    margin: auto;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+    .containerA .abc {
+        width: 680px;
+        margin-left: 300px;
+        margin-right: 300px;
+    }
+
+p.subtitle {
+    color: #fff;
+    letter-spacing: 1px;
+    margin: 1rem 0;
+    font-size: 2.5rem;
+    font-style: italic;
+}
